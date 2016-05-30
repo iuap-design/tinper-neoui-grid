@@ -47,7 +47,7 @@ var globs = {
     css: 'css/grid.css'
 };
 
-gulp.task('gridJs', function() {
+gulp.task('Js', function() {
     return gulp.src(globs.js.js)
         .pipe(concat('grid.js'))
         .pipe(gulp.dest('dist/js'))
@@ -57,7 +57,7 @@ gulp.task('gridJs', function() {
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('uGridJs', ['gridJs'], function(){
+gulp.task('uJs', ['Js'], function(){
     return gulp.src(globs.js.dtJs)
         .pipe(concat('u-grid.js'))
         .pipe(gulp.dest('dist/js'))
@@ -67,7 +67,7 @@ gulp.task('uGridJs', ['gridJs'], function(){
         .pipe(gulp.dest('dist/js'));
 })
 
-gulp.task('gridCss',function(){
+gulp.task('css',function(){
     return gulp.src(globs.css)
         .pipe(gulp.dest('dist/css'))
         .pipe(minifycss())
@@ -76,5 +76,5 @@ gulp.task('gridCss',function(){
 })
 
 
-gulp.task('dist', ['uGridJs', 'gridCss'], function(){
+gulp.task('dist', ['uJs', 'css'], function(){
 });
