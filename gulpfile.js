@@ -46,7 +46,7 @@ var globs = {
     },
     css: 'css/grid.css'
 };
-
+/* 生成dist begin*/
 gulp.task('Js', function() {
     return gulp.src(globs.js.js)
         .pipe(concat('grid.js'))
@@ -75,6 +75,13 @@ gulp.task('css',function(){
         .pipe(gulp.dest('dist/css'));
 })
 
+gulp.task('distWatch',function(){
+    gulp.watch(globs.js.js,['uJs']);
+    gulp.watch(globs.js.dtJs,['uJs']);
+    gulp.watch(globs.css,['css'])
+})
 
 gulp.task('dist', ['uJs', 'css'], function(){
+    gulp.run('distWatch');
 });
+/* 生成dist end*/

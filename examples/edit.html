@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Title</title>
+<link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="../vendor/uui/css/u.css">
+<link rel="stylesheet" type="text/css" href="../vendor/uui/css/u-extend.css">
+<link rel="stylesheet" type="text/css" href="../vendor/uui/css/tree.css">
+<link rel="stylesheet" type="text/css" href="../vendor/uui/css/grid.css">
+<style id="demo-style" media="screen">
+
+</style>
+</head>
+<body>
+
+<div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"editable":true,"editType":"default"}'>
+	<div options='{"field":"name","dataType":"String","title":"姓名","editType":"string"}'></div>
+	<div options='{"field":"time","dataType":"time","title":"日期","editType":"eidtTypeFun"}'></div>
+	<div options='{"field":"distance","dataType":"String","title":"距离","editType":"float"}'></div>
+	<div options='{"field":"currency","dataType":"String","title":"金额","editType":"float"}'></div>
+	<div options='{"field":"comboField","dataType":"String","title":"下拉","editType":"combo","editOptions":{"id":"combobox1","type":"combo","datasource":"comItems"},"renderType":"comboRender"}'></div>
+</div>
+<script src="../vendor/jquery/jquery-1.11.2.js"></script>
+<script src="../vendor/knockout/knockout-3.2.0.debug.js"></script>
+<script src="../vendor/uui/js/u-polyfill.js"></script>
+<script src="../vendor/uui/js/u.js"></script>
+<script src="../vendor/uui/js/u-tree.js"></script>
+<script src="../vendor/uui/js/u-grid.js"></script>
+<script src="../vendor/requirejs/require.debug.js"></script>
+<script>
+viewModel = {
+    dataTable: new u.DataTable({
+      meta: {
+        "name": "",
+        "time": "",
+        "distance": "",
+        "currency": ""
+      }
+    }, this),
+    comItems: [{
+      "value": "001",
+      "name": "1122"
+    }, {
+      "value": "002",
+      "name": "3344"
+    }, {
+      "value": "003",
+      "name": "4455"
+    }, {
+      "value": "004",
+      "name": "5566"
+    }, { 
+      "value": "005",
+      "name": "6677"
+    }, {
+      "value": "006",
+      "name": "7788"
+    }, {
+      "value": "007",
+      "name": "8899"
+    }],
+    eidtTypeFun:function(obj){
+      var gridObj = obj.gridObj;
+      var viewModel = gridObj.viewModel;
+      var field = obj.field;
+      var ele = obj.element;
+      var dataTableId = gridObj.dataTable.id;
+      var innerStr = '<div class=\'u-datepicker\' style="width:100%;padding:0px;" u-meta=\'{"id":"' + field + '","type":"u-datetime","data":"' + dataTableId + '","field":"' + field + '"}\'><input class="u-input" type="text"></div>';
+      var innerDom = u.makeDOM(innerStr);
+      ele.innerHTML = '';
+      ele.appendChild(innerDom);
+      var comp = app.createComp(innerDom,viewModel);
+      comp.comp.on('select',function(){
+        // gridObj.nextEditShow();
+      });
+      comp.modelValueChange(obj.value);
+    },
+  }; 
+  var app = new u.createApp();
+  //console.log(viewModel)
+  app.init(viewModel);
+  var data = {
+    "pageIndex": 1,
+    "pageSize": 10,
+    "rows": [
+      {
+        "status": "nrm",
+        "data": {
+          "name": "赵四",
+          "time": "2016-05-16",
+          "distance": "25",
+          "currency": {
+            "value": "200.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "王一",
+          "time": "2016-05-12",
+          "distance": "25",
+          "currency": {
+            "value": "200.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "李三",
+          "time": "2016-11-16",
+          "distance": "50",
+          "currency": {
+            "value": "300.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "彰武",
+          "time": "2012-05-16",
+          "distance": "50",
+          "currency": {
+            "value": "300.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }
+    ]
+  }
+  viewModel.dataTable.removeAllRows();
+  viewModel.dataTable.setData(data);
+  
+</script>
+</body>
+</html>
