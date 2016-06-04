@@ -1,42 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Title</title>
-<link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.css">
-<link rel="stylesheet" type="text/css" href="../vendor/uui/css/u.css">
-<link rel="stylesheet" type="text/css" href="../vendor/uui/css/u-extend.css">
-<link rel="stylesheet" type="text/css" href="../vendor/uui/css/tree.css">
-<link rel="stylesheet" type="text/css" href="../vendor/uui/css/grid.css">
-<style id="demo-style" media="screen">
-
-</style>
-</head>
-<body>
-<div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"showTree":true,"keyField":"id","parentKeyField":"pid"}'>
-	<div options='{"field":"name","dataType":"String","title":"姓名"}'></div>
-	<div options='{"field":"time","dataType":"time","title":"日期"}'></div>
-	<div options='{"field":"distance","dataType":"String","title":"距离"}'></div>
-	<div options='{"field":"currency","dataType":"String","title":"金额"}'></div>
-</div>
-<script src="../vendor/jquery/jquery-1.11.2.js"></script>
-<script src="../vendor/knockout/knockout-3.2.0.debug.js"></script>
-<script src="../vendor/uui/js/u-polyfill.js"></script>
-<script src="../vendor/uui/js/u.js"></script>
-<script src="../vendor/uui/js/u-tree.js"></script>
-<script src="../vendor/uui/js/u-grid.js"></script>
-<script src="../vendor/requirejs/require.debug.js"></script>
-<script>
 viewModel = {
     dataTable: new u.DataTable({
       meta: {
         "name": "",
         "time": "",
         "distance": "",
-        "currency": "",
-        "id":"",
-        "pid":""
+        "currency": ""
       }
     }, this),
   }; 
@@ -61,9 +29,7 @@ viewModel = {
               "min": "0",
               "curSymbol": "$"
             }
-          },
-          "pid": "",
-          "id": "04"
+          }
         }
       }, {
         "status": "nrm",
@@ -79,9 +45,7 @@ viewModel = {
               "min": "0",
               "curSymbol": "$"
             }
-          },
-        "pid": "04",
-        "id": "01"
+          }
         }
       }, {
         "status": "nrm",
@@ -97,9 +61,7 @@ viewModel = {
               "min": "0",
               "curSymbol": "$"
             }
-          },
-        "pid": "",
-        "id": "02"
+          }
         }
       }, {
         "status": "nrm",
@@ -115,9 +77,7 @@ viewModel = {
               "min": "0",
               "curSymbol": "$"
             }
-          },
-        "pid": "01",
-        "id": "03"
+          }
         }
       }
     ]
@@ -125,6 +85,3 @@ viewModel = {
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   
-</script>
-</body>
-</html>
