@@ -277,6 +277,5 @@ function replaceMdFun(filePath,type,lastFlag,mdStr){
 			}
 		})
 	},5000);
-
 }
 /* 处理docs文件夹 end*/
