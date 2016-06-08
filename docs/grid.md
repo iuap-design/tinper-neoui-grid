@@ -156,6 +156,7 @@
 	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
 	&lt;div options='{"field":"currency","dataType":"String","title":"金额"}'>&lt;/div>
 &lt;/div></code></pre>
+
 <pre><code>viewModel = {
     dataTable: new u.DataTable({
       meta: {
@@ -243,7 +244,6 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
-
 ### drag
 <pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":true,"sortable":false,"canSwap":false}'>
 	&lt;div options='{"field":"name","dataType":"String","title":"姓名"}'>&lt;/div>
@@ -474,119 +474,8 @@
   viewModel.dataTable.setData(data);
   </code></pre>
 
-### editForm
-<pre><code>
-&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"editable":true,"editType":"form"}'>
-	&lt;div options='{"field":"name","dataType":"String","title":"姓名","editType":"string"}'>&lt;/div>
-	&lt;div options='{"field":"time","dataType":"time","title":"日期","editType":"eidtTypeFun"}'>&lt;/div>
-	&lt;div options='{"field":"distance","dataType":"String","title":"距离","editType":"float"}'>&lt;/div>
-	&lt;div options='{"field":"currency","dataType":"String","title":"金额","editType":"float"}'>&lt;/div>
-&lt;/div></code></pre>
-<pre><code>viewModel = {
-    dataTable: new u.DataTable({
-      meta: {
-        "name": "",
-        "time": "",
-        "distance": "",
-        "currency": ""
-      }
-    }, this),
-    eidtTypeFun:function(obj){
-      var gridObj = obj.gridObj;
-      var viewModel = gridObj.viewModel;
-      var field = obj.field;
-      var ele = obj.element;
-      var dataTableId = gridObj.dataTable.id;
-      var innerStr = '&lt;div class=\'u-datepicker\' style="width:100%;padding:0px;" u-meta=\'{"id":"' + field + '","type":"u-date","data":"' + dataTableId + '","field":"' + field + '"}\'>&lt;input class="u-input" type="text">&lt;/div>';
-      var innerDom = u.makeDOM(innerStr);
-      ele.innerHTML = '';
-      ele.appendChild(innerDom);
-      var comp = app.createComp(innerDom,viewModel);
-      comp.comp.on('select',function(){
-        // gridObj.nextEditShow();
-      });
-      comp.modelValueChange(obj.value);
-    },
-  }; 
-  var app = new u.createApp();
-  //console.log(viewModel)
-  app.init(viewModel);
-  var data = {
-    "pageIndex": 1,
-    "pageSize": 10,
-    "rows": [
-      {
-        "status": "nrm",
-        "data": {
-          "name": "赵四",
-          "time": "2016-05-16",
-          "distance": "25",
-          "currency": {
-            "value": "200.00",
-            "meta": {
-              "precision": "2",
-              "max": "3000",
-              "min": "0",
-              "curSymbol": "$"
-            }
-          }
-        }
-      }, {
-        "status": "nrm",
-        "data": {
-          "name": "王一",
-          "time": "2016-05-12",
-          "distance": "25",
-          "currency": {
-            "value": "200.00",
-            "meta": {
-              "precision": "2",
-              "max": "3000",
-              "min": "0",
-              "curSymbol": "$"
-            }
-          }
-        }
-      }, {
-        "status": "nrm",
-        "data": {
-          "name": "李三",
-          "time": "2016-11-16",
-          "distance": "50",
-          "currency": {
-            "value": "300.00",
-            "meta": {
-              "precision": "2",
-              "max": "3000",
-              "min": "0",
-              "curSymbol": "$"
-            }
-          }
-        }
-      }, {
-        "status": "nrm",
-        "data": {
-          "name": "彰武",
-          "time": "2012-05-16",
-          "distance": "50",
-          "currency": {
-            "value": "300.00",
-            "meta": {
-              "precision": "2",
-              "max": "3000",
-              "min": "0",
-              "curSymbol": "$"
-            }
-          }
-        }
-      }
-    ]
-  }
-  viewModel.dataTable.removeAllRows();
-  viewModel.dataTable.setData(data);
-  </code></pre>
-
 ### fixed
+
 <pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false}'>
 	&lt;div options='{"field":"name","dataType":"String","title":"姓名","fixed":true}'>&lt;/div>
 	&lt;div options='{"field":"time","dataType":"time","title":"日期"}'>&lt;/div>
@@ -700,15 +589,13 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
-
-### headerLevel
-
-<pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"maxHeaderLevel":2}'>
-	&lt;div options='{"field":"nameTime","title":"姓名+日期","headerLevel":2}'>&lt;/div>
-	&lt;div options='{"field":"name","dataType":"String","title":"姓名","parentHeader":"nameTime"}'>&lt;/div>
-	&lt;div options='{"field":"time","dataType":"time","title":"日期","parentHeader":"nameTime"}'>&lt;/div>
-	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
-	&lt;div options='{"field":"currency","dataType":"String","title":"金额"}'>&lt;/div>
+### editForm
+<pre><code>
+&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"editable":true,"editType":"form"}'>
+	&lt;div options='{"field":"name","dataType":"String","title":"姓名","editType":"string"}'>&lt;/div>
+	&lt;div options='{"field":"time","dataType":"time","title":"日期","editType":"eidtTypeFun"}'>&lt;/div>
+	&lt;div options='{"field":"distance","dataType":"String","title":"距离","editType":"float"}'>&lt;/div>
+	&lt;div options='{"field":"currency","dataType":"String","title":"金额","editType":"float"}'>&lt;/div>
 &lt;/div></code></pre>
 <pre><code>viewModel = {
     dataTable: new u.DataTable({
@@ -719,6 +606,22 @@
         "currency": ""
       }
     }, this),
+    eidtTypeFun:function(obj){
+      var gridObj = obj.gridObj;
+      var viewModel = gridObj.viewModel;
+      var field = obj.field;
+      var ele = obj.element;
+      var dataTableId = gridObj.dataTable.id;
+      var innerStr = '&lt;div class=\'u-datepicker\' style="width:100%;padding:0px;" u-meta=\'{"id":"' + field + '","type":"u-date","data":"' + dataTableId + '","field":"' + field + '"}\'>&lt;input class="u-input" type="text">&lt;/div>';
+      var innerDom = u.makeDOM(innerStr);
+      ele.innerHTML = '';
+      ele.appendChild(innerDom);
+      var comp = app.createComp(innerDom,viewModel);
+      comp.comp.on('select',function(){
+        // gridObj.nextEditShow();
+      });
+      comp.modelValueChange(obj.value);
+    },
   }; 
   var app = new u.createApp();
   //console.log(viewModel)
@@ -797,17 +700,8 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
+
 ### overWidthHidden
-<pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"overWidthHiddenColumn":true}'>
-	&lt;div options='{"field":"name","dataType":"String","title":"姓名","hiddenLevel":8}'>&lt;/div>
-	&lt;div options='{"field":"time","dataType":"time","title":"日期","hiddenLevel":7}'>&lt;/div>
-	&lt;div options='{"field":"distance","dataType":"String","title":"距离","hiddenLevel":6}'>&lt;/div>
-	&lt;div options='{"field":"currency","dataType":"String","title":"金额","hiddenLevel":5}'>&lt;/div>
-	&lt;div options='{"field":"column11","dataType":"String","title":"列1","hiddenLevel":4}'>&lt;/div>
-	&lt;div options='{"field":"column22","dataType":"String","title":"列2","hiddenLevel":3}'>&lt;/div>
-	&lt;div options='{"field":"column33","dataType":"String","title":"列3","hiddenLevel":2}'>&lt;/div>
-	&lt;div options='{"field":"column44","dataType":"String","title":"列4","hiddenLevel":1}'>&lt;/div>
-&lt;/div></code></pre>
 
 <pre><code>viewModel = {
     dataTable: new u.DataTable({
@@ -912,10 +806,116 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
+<pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"overWidthHiddenColumn":true}'>
+	&lt;div options='{"field":"name","dataType":"String","title":"姓名","hiddenLevel":8}'>&lt;/div>
+	&lt;div options='{"field":"time","dataType":"time","title":"日期","hiddenLevel":7}'>&lt;/div>
+	&lt;div options='{"field":"distance","dataType":"String","title":"距离","hiddenLevel":6}'>&lt;/div>
+	&lt;div options='{"field":"currency","dataType":"String","title":"金额","hiddenLevel":5}'>&lt;/div>
+	&lt;div options='{"field":"column11","dataType":"String","title":"列1","hiddenLevel":4}'>&lt;/div>
+	&lt;div options='{"field":"column22","dataType":"String","title":"列2","hiddenLevel":3}'>&lt;/div>
+	&lt;div options='{"field":"column33","dataType":"String","title":"列3","hiddenLevel":2}'>&lt;/div>
+	&lt;div options='{"field":"column44","dataType":"String","title":"列4","hiddenLevel":1}'>&lt;/div>
+&lt;/div></code></pre>
 ### sort
 <pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":true,"canSwap":false}'>
 	&lt;div options='{"field":"name","dataType":"String","title":"姓名"}'>&lt;/div>
 	&lt;div options='{"field":"time","dataType":"time","title":"日期"}'>&lt;/div>
+	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
+	&lt;div options='{"field":"currency","dataType":"String","title":"金额"}'>&lt;/div>
+&lt;/div></code></pre>
+
+<pre><code>viewModel = {
+    dataTable: new u.DataTable({
+      meta: {
+        "name": "",
+        "time": "",
+        "distance": "",
+        "currency": ""
+      }
+    }, this),
+  }; 
+  var app = new u.createApp();
+  //console.log(viewModel)
+  app.init(viewModel);
+  var data = {
+    "pageIndex": 1,
+    "pageSize": 10,
+    "rows": [
+      {
+        "status": "nrm",
+        "data": {
+          "name": "赵四",
+          "time": "2016-05-16",
+          "distance": "25",
+          "currency": {
+            "value": "200.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "王一",
+          "time": "2016-05-12",
+          "distance": "25",
+          "currency": {
+            "value": "200.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "李三",
+          "time": "2016-11-16",
+          "distance": "50",
+          "currency": {
+            "value": "300.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }, {
+        "status": "nrm",
+        "data": {
+          "name": "彰武",
+          "time": "2012-05-16",
+          "distance": "50",
+          "currency": {
+            "value": "300.00",
+            "meta": {
+              "precision": "2",
+              "max": "3000",
+              "min": "0",
+              "curSymbol": "$"
+            }
+          }
+        }
+      }
+    ]
+  }
+  viewModel.dataTable.removeAllRows();
+  viewModel.dataTable.setData(data);
+  </code></pre>
+### headerLevel
+<pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":false,"maxHeaderLevel":2}'>
+	&lt;div options='{"field":"nameTime","title":"姓名+日期","headerLevel":2}'>&lt;/div>
+	&lt;div options='{"field":"name","dataType":"String","title":"姓名","parentHeader":"nameTime"}'>&lt;/div>
+	&lt;div options='{"field":"time","dataType":"time","title":"日期","parentHeader":"nameTime"}'>&lt;/div>
 	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
 	&lt;div options='{"field":"currency","dataType":"String","title":"金额"}'>&lt;/div>
 &lt;/div></code></pre>
@@ -1014,7 +1014,6 @@
 	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
 	&lt;div options='{"field":"currency","dataType":"String","title":"金额","sumCol":true}'>&lt;/div>
 &lt;/div></code></pre>
-
 <pre><code>viewModel = {
     dataTable: new u.DataTable({
       meta: {
@@ -1102,6 +1101,7 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
+
 ### swap
 <pre><code>&lt;div id="gridTest" u-meta='{"id":"grid","type":"grid","data":"dataTable","columnMenu":false,"canDrag":false,"sortable":false,"canSwap":true}'>
 	&lt;div options='{"field":"name","dataType":"String","title":"姓名"}'>&lt;/div>
@@ -1204,7 +1204,6 @@
 	&lt;div options='{"field":"distance","dataType":"String","title":"距离"}'>&lt;/div>
 	&lt;div options='{"field":"currency","dataType":"String","title":"金额"}'>&lt;/div>
 &lt;/div></code></pre>
-
 <pre><code>viewModel = {
     dataTable: new u.DataTable({
       meta: {
@@ -1302,6 +1301,7 @@
   viewModel.dataTable.removeAllRows();
   viewModel.dataTable.setData(data);
   </code></pre>
+
 
 
 <!--### 示例1
