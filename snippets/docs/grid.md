@@ -8,7 +8,7 @@
 
 # 示例
 
-replaceUi
+replaceui
 
 <!--### 示例1
 
@@ -54,7 +54,7 @@ replaceUi
 
 ## 示例
 
-replaceDatatable
+replacedatatable
 
 <!--### 示例1
 

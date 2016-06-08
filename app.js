@@ -129,7 +129,6 @@ copyExamp(basePath + '/grid',22);
 /* 处理docs文件夹 begin*/
 function copyDocs(path){
 	// path:snippets/docs
-	var mdStr = ''
 	fs.readdir(path,function(err, files){
 		if(err){
 			console.log('docs read dir err:' + path);
@@ -141,17 +140,18 @@ function copyDocs(path){
 					if(stat.isFile()){
 						// 判断文件类型,只针对.md文件进行处理，如果遍历到md文件，则snippets\examples下对应目录存放示例
 						var index = item.indexOf('.md');
+						var itemName = item.substring(0,index);
 						if(index > -1){
 							fs.readFile(filePath,function(err,data){
-								var mdStr = '';
+								eval(itemName + '=\'\'');
 								if(err){
 									console.log('read md err:' + htmlPath)
 								}else{
-									mdStr = data.toString();
+									eval(itemName + '= data.toString();');
 								}
 								// 读取示例中的内容替换$ui$以及$datatable$ begin
-								replaceMdFun(filePath,'datatable',false,mdStr);
-								replaceMdFun(filePath,'ui',true,mdStr);
+								replaceMdFun(filePath,'datatable',itemName);
+								replaceMdFun(filePath,'ui',itemName);
 					        })
 						}
 						
@@ -180,7 +180,7 @@ function copyDocs(path){
 copyDocs(docPath)
 
 
-function replaceMdFun(filePath,type,lastFlag,mdStr){
+function replaceMdFun(filePath,type,itemName){
 	//filePath:snippets/docs/grid.md
 	var exampPath = filePath.replace('docs','examples').replace('.md','');// snippets/examples/grid
 	var exampPathArr  = exampPath.split('/');			
@@ -243,15 +243,16 @@ function replaceMdFun(filePath,type,lastFlag,mdStr){
 	})
 	// 延迟执行保证testa目录下的文件已经生成
 	setTimeout(function(){
-		var tempPath = filePath.replace('docs','temp/datatable').replace('.md','');
+		var tempPath = filePath.replace('docs','temp/' + type).replace('.md','');
 		fs.exists(tempPath, function(exist) {
 			if(!exist){
 				fs.mkdirSync(tempPath);
 			}
 		});
 		fs.readdir(tempPath,function(err,files){
-			if(err){
-				console.log('setTimeout err' + tempPath);
+			if(err){ //没有子目录会进入此分支
+				// console.log('setTimeout err' + tempPath);
+				var l = now = 1;
 			}else{
 				var l = files.length,now = 0 ;
 				files.forEach(function(item){
@@ -261,20 +262,22 @@ function replaceMdFun(filePath,type,lastFlag,mdStr){
 						now++;
 					})
 				})
-				var iii = setInterval(function(){
-					if(l == now){
-						mdStr = mdStr.replace('replace' + type,replaceStr)
-						if(lastFlag){
-							fs.writeFile(filePath.replace('snippets/',''),mdStr,function(err){
-					        	if(err){
-					        		console.log('write err:' + filePath.replace('snippets/',''));
-					        	}
-					        })
-						}
-						clearInterval(iii);
-					}
-				},100);
+				
 			}
+			var iii = setInterval(function(){
+				if(l == now){
+					eval(itemName + '=' + itemName +'.replace("replace' + type + '",replaceStr)');
+					// item = item.replace('replace' + type,replaceStr);
+					if(type == 'ui'){
+						fs.writeFile(filePath.replace('snippets/',''),eval(itemName),function(err){
+				        	if(err){
+				        		console.log('write err:' + filePath.replace('snippets/',''));
+				        	}
+				        })
+					}
+					clearInterval(iii);
+				}
+			},100);
 		})
 	},5000);
 }
