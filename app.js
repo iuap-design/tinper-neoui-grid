@@ -37,6 +37,23 @@ deleteChildFolderRecursive('examples');
 deleteChildFolderRecursive('docs');
 deleteChildFolderRecursive('snippets/temp/datatable');
 deleteChildFolderRecursive('snippets/temp/ui');
+
+fs.exists('snippets/temp',function(exist) {
+	if(!exist){
+		fs.mkdirSync('snippets/temp');
+	}
+})
+fs.exists('snippets/temp/datatable',function(exist) {
+	if(!exist){
+		fs.mkdirSync('snippets/temp/datatable');
+	}
+})
+fs.exists('snippets/temp/ui',function(exist) {
+	if(!exist){
+		fs.mkdirSync('snippets/temp/ui');
+	}
+})
+
 /* 初始化处理 end */
 
 /* 处理examples文件夹 begin*/

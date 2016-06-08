@@ -25,7 +25,7 @@
     ├─docs 文档片段
     │  ├─grid.md 文档片段:replaceui将替换为ui示例，replacedatatable将替换为datatable示例。
     └─examples 示例片段
-        └─grid 与grid.md对应的目录
+        └─grid 与grid.md对应的目录,示例目录下必须存在widget.css,widget.html,widget.js,说明.txt
 			└─datatable 关联datatable示例片段
 			└─ui 单独控件示例片段
 ├─vendor 第三方库，后续删除
