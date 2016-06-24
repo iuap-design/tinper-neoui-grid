@@ -40,8 +40,7 @@ var globs = {
             'js/Tree.js',
         ],
         dtJs:[
-            'dist/js/grid.js',
-            'js/dtJs/grid.js'
+            'dist/js/grid.js'
         ]
     },
     css: 'css/grid.css'
