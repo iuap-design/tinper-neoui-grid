@@ -73,12 +73,14 @@
 		var oThis = this,l = this.dataSourceObj.rows.length;
 		// 存在树结构
 		if(this.options.showTree){
-			var hasParent = false;
+			this.hasParent = false;
 			this.hasChildF = false;
 			var keyField = this.options.keyField;
 			var parentKeyField = this.options.parentKeyField;
 			var keyValue = this.getString($(row).attr(keyField),'');
+			rowObj.keyValue = keyValue;
 			var parentKeyValue = this.getString($(row).attr(parentKeyField),'');
+			rowObj.parentKeyValue = parentKeyValue;
 			/* 判断是否存在父项/子项 */
 			$.each(this.dataSourceObj.rows,function(i){
 				var value = this.value;
@@ -86,76 +88,94 @@
 				var nowParentKeyValue = oThis.getString($(value).attr(parentKeyField),'');
 				if(nowKeyValue == parentKeyValue){
 					/* 取父项的index和父项的子index*/
-					hasParent = true;
-					parentIndex = i;
-					parentChildLength = this.childRowIndex.length;
+					oThis.hasParent = true;
+					oThis.addRowParentIndex = i;
+					parentChildLength = oThis.getAllChildRow(this).length;
 					var parentLevel = this.level;
 					rowObj.level = parentLevel + 1;
 					// 由于不止需要计算最后一个子节点，同时需要计算子节点的子节点。所以现在添加到父节点的下面一个
-					index = parentIndex + 1;
-					this.allChildRowIndex = new Array();
-
+					index = oThis.addRowParentIndex + parentChildLength + 1;
+					if(!oThis.options.needTreeSort)
+						return false;
 				}
 				if(nowParentKeyValue == keyValue){
 					oThis.hasChildF = true;
 				}
+				if(oThis.hasParent && oThis.hasChildF)
+					return false;
 			});
-			if(!hasParent){
+			if(!this.hasParent){
 				rowObj.level = 0;
 				if(index != l) {
 					// 如果没有父项则插入到最后，因为index有可能插入到其他节点的子节点之中，计算复杂
-					index = 0;
+					index = l;
 				}
 
 			}
-		}
-
-		if(hasParent){
-			var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(parentIndex);
-			if(parentChildLength > 0){
-				// 如果存在父项并且父项存在子项则需要判断父项是否展开
-				var openDiv = $('.fa-plus-square-o',$pTr);
-				if(!(openDiv.length > 0)){
-					displayFlag = 'block';
-				}
-			}else{
-				// 如果存在父项并且父项原来没有子项则需要添加图标
-				if(this.options.autoExpand){
-					displayFlag = 'block';
-				}
-				
-				var d = $("div:eq(0)",$pTr);
-				var openDiv = $('.fa-plus-square-o',$pTr);
-				var closeDiv = $('.fa-minus-square-o',$pTr);
-				if(this.options.autoExpand){
-					var spanHtml = '<span class="fa u-grid-content-tree-span fa-minus-square-o"></span>';
+			if(this.hasParent){
+				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(oThis.addRowParentIndex);
+				if(parentChildLength > 0){
+					// 如果存在父项并且父项存在子项则需要判断父项是否展开
+					var openDiv = $('.fa-plus-square-o',$pTr);
+					if(!(openDiv.length > 0)){
+						displayFlag = 'block';
+					}
 				}else{
-					var spanHtml = '<span class="fa u-grid-content-tree-span fa-plus-square-o"></span>';
-				}
-				if(d.length > 0 && openDiv.length == 0 && closeDiv.length == 0){
-					d[0].insertAdjacentHTML('afterBegin',spanHtml);
-					var oldLeft = parseInt(d[0].style.left);
-					l = oldLeft - 16;
-					if(l > 0 || l == 0){
-						d[0].style.left = l + "px";
+					// 如果存在父项并且父项原来没有子项则需要添加图标
+					if(this.options.autoExpand){
+						displayFlag = 'block';
+					}
+					
+					var d = $("div:eq(0)",$pTr);
+					var openDiv = $('.fa-plus-square-o',$pTr);
+					var closeDiv = $('.fa-minus-square-o',$pTr);
+					if(this.options.autoExpand){
+						var spanHtml = '<span class="fa u-grid-content-tree-span fa-minus-square-o"></span>';
+					}else{
+						var spanHtml = '<span class="fa u-grid-content-tree-span fa-plus-square-o"></span>';
+					}
+					if(d.length > 0 && openDiv.length == 0 && closeDiv.length == 0){
+						d[0].insertAdjacentHTML('afterBegin',spanHtml);
+						var oldLeft = parseInt(d[0].style.left);
+						l = oldLeft - 16;
+						if(l > 0 || l == 0){
+							d[0].style.left = l + "px";
+						}
+					}
+					if(openDiv.length > 0){
+						openDiv.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
 					}
 				}
-				if(openDiv.length > 0){
-					openDiv.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
-				}
 			}
 		}
+
+		
 		return index;
 	}; 
 
-	gridCompProto.addOneRowTreeHasChildF = function(){
+	gridCompProto.addOneRowTreeHasChildF = function(rowObj){
 		if(this.hasChildF){
 			//如果存在子项则重新渲染整个区域
+			this.dataSourceObj.sortRows();
 			this.repairContent();
+		}else{
+			// 修改rowObj 和parent的变量
+			if(this.hasParent){
+				var parentRowObj = this.dataSourceObj.rows[this.addRowParentIndex];
+				parentRowObj.hasChild = true;
+				parentRowObj.childRow.push(rowObj);
+				parentRowObj.childRowIndex.push(rowObj.valueIndex);
+				rowObj.parentRow = parentRowObj;
+				rowObj.parentRowIndex = this.addRowParentIndex;
+			}
+			rowObj.hasChild = false;
+			rowObj.childRow = new Array();
+			rowObj.childRowIndex = new Array();
 		}
 	};
 
 	gridCompProto.updateValueAtTree = function(rowIndex,field,value,force){
+		var oThis = this;
 		var keyField = this.options.keyField;
 		var parentKeyField = this.options.parentKeyField;
 		if(this.options.showTree && (field == keyField || field == parentKeyField)){
@@ -195,9 +215,9 @@
 	 * 获取数据行下所有子元素
 	 */
 	gridCompProto.getAllChildRow = function(row){
-		if(row.allChildRow && row.allChildRow.length > 0){
-			return row.allChildRow;
-		}
+		// if(row.allChildRow && row.allChildRow.length > 0){
+		// 	return row.allChildRow;
+		// }
 		row.allChildRow = new Array();
 		this.getAllChildRowFun(row,row.allChildRow);
 		return row.allChildRow;
@@ -210,9 +230,9 @@
 	 * 获取数据行下所有子元素的index
 	 */
 	gridCompProto.getAllChildRowIndex = function(row){
-		if(row.allChildRowIndex && row.allChildRowIndex.length > 0){
-			return row.allChildRowIndex;
-		}
+		// if(row.allChildRowIndex && row.allChildRowIndex.length > 0){
+		// 	return row.allChildRowIndex;
+		// }
 		row.allChildRowIndex = new Array();
 		this.getAllChildRowIndexFun(row,row.allChildRowIndex);
 		return row.allChildRowIndex;
@@ -238,6 +258,47 @@
 			});
 		}
 	};
+	/* 展开某个节点 */
+	gridCompProto.expandNode = function(keyValue){
+		var rowIndex = this.getRowIndexByValue(this.options.keyField,keyValue);
+		this.expandNodeByIndex(rowIndex);
+	};
+
+	gridCompProto.expandNodeByIndex = function(rowIndex){
+		var row = this.getRowByIndex(rowIndex);
+		var parentExpand = false,parentIndex,needExpanedParent = new Array();
+		var whileRow = row;
+		while(!parentExpand){
+			if(whileRow.parentKeyValue == ''){
+				parentExpand = true;
+				break;
+			}else{
+				parentIndex = whileRow.parentRowIndex;
+				whileRow = whileRow.parentRow;
+				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(parentIndex);
+				var openDiv = $('.fa-plus-square-o',$pTr);
+				if(openDiv.length > 0){ //合着
+					needExpanedParent.push(parentIndex);
+				}else{
+					parentExpand = true;
+					break;
+				}
+			}
+		}
+		if(needExpanedParent.length > 0){
+			for(var i = needExpanedParent.length - 1;i > -1;i--){
+				var index = needExpanedParent[i];
+				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(index);
+				var openDiv = $('.fa-plus-square-o',$pTr);
+				openDiv.click();
+			}
+		}
+
+		var $Tr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(rowIndex);
+		var openDiv = $('.fa-plus-square-o',$Tr);
+		openDiv.click();
+	}
+
 
 	/*
 	 * 将values转化为rows并进行排序(数表)

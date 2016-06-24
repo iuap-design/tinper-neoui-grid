@@ -56,7 +56,7 @@
 			this.transMap = $.extend({},this.transDefault,options.transMap);
 			this.gridCompColumnFixedArr = new Array();
 			this.gridCompColumnArr = new Array(); // 存储设置默认值之后的columns对象
-			this.headerHeight = 44; // header区域高度
+			// this.headerHeight = 45; // header区域高度
 			this.countContentHeight = true;// 是否计算内容区的高度（是否为流式）
 			this.minColumnWidth = 80; // 最小列宽
 			this.scrollBarHeight = 16; // 滚动条高度
@@ -69,7 +69,7 @@
 			this.columnMenuHeight = 33; // column menu的高度
 			this.gridCompColumnFixedArr = new Array(); // 存储设置默认值之后的固定列columns对象
 			this.gridCompLevelColumn = new Array(); // 存储多级表头时的多级 
-			this.headerHeight = 44 * parseInt(this.options.maxHeaderLevel);
+			this.headerHeight = 44 * parseInt(this.options.maxHeaderLevel) + 1;
 			this.gridCompHiddenLevelColumnArr = new Array(); // 存储自动隐藏时隐藏优先级排序后的column
 			this.treeLeft = 10; // 树表时每一级之间的差值
 		},
@@ -86,6 +86,7 @@
 			this.options.canSwap = this.getBoolean(this.options.canSwap);
 			this.options.showTree = this.getBoolean(this.options.showTree);
 			this.options.autoExpand = this.getBoolean(this.options.autoExpand);
+			this.options.needTreeSort = this.getBoolean(this.options.needTreeSort);
 		},
 		/*
 		 * 初始化默认参数
@@ -108,6 +109,7 @@
 				canSwap: true, // 是否可以交换列位置
 				showTree:false, // 是否显示树表
 				autoExpand:true, // 是否默认展开
+				needTreeSort:false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
 			}
 		},
 		/*
@@ -292,7 +294,7 @@
 				str += 'width:auto;';
 			}
 			if(this.options.height){
-				str += 'height:' + this.options.height + ';';
+				str += 'max-height:' + this.options.height + ';';
 			}else{
 				str += 'height:auto;';
 			}
@@ -304,7 +306,8 @@
 			this.ele.insertAdjacentHTML('afterBegin', htmlStr);
 			// 创建屏幕div,用于拖动等操作
 			var htmlStr = '<div id="' + this.options.id + '_top" class="u-grid-top"></div>';
-			this.ele.insertAdjacentHTML('afterBegin', htmlStr);
+			// this.ele.insertAdjacentHTML('afterBegin', htmlStr);
+			document.body.appendChild($(htmlStr)[0]);
 			this.initEventFun(); //创建完成之后顶层div添加监听
 			this.widthChangeFun(); // 根据整体宽度创建grid或form展示区域
 		},
@@ -485,15 +488,15 @@
 		createContent: function() {
 			var h = '',displayStr = '',bottonStr='';
 			if(this.countContentHeight){
-				var wh = $('#' + this.options.id)[0].offsetHeight;
-				this.wholeHeight = wh;
-				if (wh > 0) {
-					this.contentHeight = parseInt(wh) - this.exceptContentHeight > 0?parseInt(wh) - this.exceptContentHeight:0;
-					if(this.contentHeight > 0){
-						h = 'style="max-height:' + this.contentHeight + 'px;"';
-					}
-				}
-			}
+			 	var wh = $('#' + this.options.id)[0].offsetHeight;
+			 	this.wholeHeight = wh;
+			 	if (wh > 0) {
+			 		this.contentHeight = parseInt(wh) - this.exceptContentHeight - 1 > 0?parseInt(wh) - this.exceptContentHeight - 1:0;
+			 		if(this.contentHeight > 0){
+			 			h = 'style="height:' + this.contentHeight + 'px;"';
+			 		}
+			 	}
+			 }
 			var htmlStr = '<div id="' + this.options.id + '_content" class="u-grid-content" ' + h + '>';
 			if (this.options.showNumCol || this.options.multiSelect) {
 				htmlStr += this.createContentLeft();
@@ -520,9 +523,15 @@
 		 * 创建内容区左侧区域
 		 */
 		createContentLeft: function() {
-			var oThis = this,htmlStr = "",left = 0;
+			var oThis = this,htmlStr = "",left = 0,hStr;
+			// 高度可伸缩，暂时去掉内部的高度设置
+			// if(this.countContentHeight && parseInt(this.contentHeight) > 0){
+			// 	hStr = 'max-height:' + this.contentHeight + 'px;overflow:hidden;';
+			// }else{
+			// 	hStr = '';
+			// }
 			if(this.options.multiSelect){
-				htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;">';
+				htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
 				// 遍历生成所有行
 				if (this.dataSourceObj.rows) {
 					$.each(this.dataSourceObj.rows, function(i) {
@@ -533,7 +542,7 @@
 				left += this.multiSelectWidth;
 			}
 			if (this.options.showNumCol) {
-				htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;">';
+				htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
 				// 遍历生成所有行
 				if (this.dataSourceObj.rows) {
 					$.each(this.dataSourceObj.rows, function(i) {
@@ -578,10 +587,10 @@
 		createContentTable:function(createFlag){
 			var leftW,idStr,styleStr,hStr,cssStr,tableStyleStr;
 			if(this.countContentHeight && parseInt(this.contentHeight) > 0){
-				hStr = 'max-height:' + this.contentHeight + 'px;';
-			}else{
-				hStr = "";
-			}
+			 	hStr = 'height:' + this.contentHeight + 'px;';
+			 }else{
+			 	hStr = "";
+			 }
 			if(createFlag == 'fixed'){
 				leftW = parseInt(this.leftW);
 				idStr = 'fixed_';
@@ -697,6 +706,14 @@
 			if(gridBrowser.isIE8 || gridBrowser.isIE9){
 				var table = $('#' + this.options.id + '_content_table')[0],
 					fixedtable = $('#' + this.options.id + '_content_fixed_table')[0];
+				var className = tr.className;
+				var fixclassName = fixedtr.className;
+					table.deleteRow(rowIndex + 1);
+					fixedtable.deleteRow(rowIndex + 1);
+				var tr = table.insertRow(rowIndex + 1 );
+				u.addClass(tr,className)
+				var fixedtr = fixedtable.insertRow(rowIndex + 1);
+				u.addClass(fixedtr,fixclassName)
 				this.createContentOneRowTdForIE(tr,row)
 				this.createContentOneRowTdForIE(fixedtr,row,'fixed')
 			}else{
@@ -1007,6 +1024,8 @@
 		 * 更新最后数据行标识
 		 */
 		updateLastRowFlag: function(){
+			// 共享服务加的，没有对应的css暂时去掉
+			return;
 			var rows =$('#' + this.options.id + '_content_tbody').find('tr[role=row]')
 			for(var i=0, count = rows.length; i<count; i++){
 				if (i == count -1)
@@ -1016,6 +1035,8 @@
 			}
 		},
 		updateNumColLastRowFlag: function(){
+			// 共享服务加的，没有对应的css暂时去掉
+			return;
 			var numCols =$('#' + this.options.id + '_content_numCol').find('.u-grid-content-num')
 			for(var i=0, count = numCols.length; i<count; i++){
 				if (i == count -1)
@@ -1104,6 +1125,7 @@
 						if(td.children[0].innerHTML.indexOf('u-grid-content-tree-span')   !=  -1){
 							var span =  td.children[0].children[1];
 						}else{
+							// td.innerHTML = '<div class="u-grid-content-td-div"></div>'; //如果是树表的话第一列显示会有问题，等出现其他问题之后再修改此处
 							var span =  td.children[0];
 						}
 						if(span){
@@ -1286,8 +1308,8 @@
 			if(this.countContentHeight){
 				var oldH = this.wholeHeight,h = $('#' + this.options.id)[0].offsetHeight;
 				this.wholeHeight = h;
-				if (oldH != h) {
-					var contentH = h - this.exceptContentHeight > 0 ? h - this.exceptContentHeight : 0;
+				if (oldH != h && h > 0) {
+					var contentH = h - this.exceptContentHeight - 1 > 0 ? h - this.exceptContentHeight -1 : 0;
 					$('#' + this.options.id + '_content').css('height', contentH + 'px');
 					$('#' + this.options.id + '_content_div').css('height', contentH + 'px');
 				}
@@ -1466,7 +1488,7 @@
 				this.cleanCurrEventName =  setTimeout(function(){
 					oThis.currentEventName = null;
 					Fun.call(oThis,Arg);
-				},500);
+				},250);
 			}
 		},
 		/*
@@ -1634,13 +1656,13 @@
 			}
 		},
 		getInt:function(value,defaultValue){
-			if(value === null || value === undefined || value === 'null' || value === 'undefined' || value === "" || Number.isNaN(value)){
+			if(value === null || value === undefined || value === 'null' || value === 'undefined' || value === "" || isNaN(value)){
 				value = defaultValue;
 			}
 			return value;
 		},
 		getFloat:function(value,defaultValue){
-			if(value === null || value === undefined || value === 'null' || value === 'undefined' || value === "" || Number.isNaN(value)){
+			if(value === null || value === undefined || value === 'null' || value === 'undefined' || value === "" || isNaN(value)){
 				value = defaultValue;
 			}
 			return value;
@@ -1774,6 +1796,7 @@
 					endFlag = true;
 				}
 				rowObj.valueIndex = index;
+				rowObj.value = row;
 				this.dataSourceObj.rows.splice(index,0,rowObj);
 				this.updateEditRowIndex('+', index);
 				// 如果是在中间插入需要将后续的valueIndex + 1；
@@ -1787,22 +1810,25 @@
 				try{
 					var htmlStr = this.createContentOneRow(rowObj,'normal',displayFlag);
 					if(endFlag){
-						$('#' + this.options.id + '_content_div tbody')[0].insertAdjacentHTML('beforeEnd',htmlStr);
+						$('#' + this.options.id + '_content_tbody')[0].insertAdjacentHTML('beforeEnd',htmlStr);
 					}else{
-						if($('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]')[index])
-							$('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]')[index].insertAdjacentHTML('beforeBegin',htmlStr);
-						else if($('#' + this.options.id + '_content_div tbody')[0])
-							$('#' + this.options.id + '_content_div tbody')[0].insertAdjacentHTML('afterBegin',htmlStr);
+						var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index];
+						var $$tbody = $('#' + this.options.id + '_content_tbody')[0];
+						if($$tr)
+							$$tr.insertAdjacentHTML('beforeBegin',htmlStr);
+						else if($$tbody)
+							$$tbody.insertAdjacentHTML('afterBegin',htmlStr);
 					}
 					if($('#' + this.options.id + '_content_fixed_div').length > 0){
 						var htmlStr = this.createContentOneRow(rowObj,'fixed',displayFlag);
 						if(endFlag){
-							$('#' + this.options.id + '_content_fixed_div tbody')[0].insertAdjacentHTML('beforeEnd',htmlStr);
+							$('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('beforeEnd',htmlStr);
 						}else{
-							if($('#' + this.options.id + '_content_fixed_div').find('tbody').find('tr[role="row"]')[index])
-								$('#' + this.options.id + '_content_fixed_div').find('tbody').find('tr[role="row"]')[index].insertAdjacentHTML('beforeBegin',htmlStr);
-							else if($('#' + this.options.id + '_content_fixed_div tbody')[0])
-								$('#' + this.options.id + '_content_fixed_div tbody')[0].insertAdjacentHTML('afterBegin',htmlStr);
+							var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index]
+							if($$tr)
+								$$tr.insertAdjacentHTML('beforeBegin',htmlStr);
+							else if($('#' + this.options.id + '_content_fixed_tbody')[0])
+								$('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('afterBegin',htmlStr);
 						}
 					}
 				}catch(e){
@@ -1819,8 +1845,9 @@
 					if(endFlag){
 						$('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('beforeEnd',htmlStr);
 					}else{
-						if($('#' + this.options.id + '_content_multiSelect').find('div')[index])
-							$('#' + this.options.id + '_content_multiSelect').find('div')[index].insertAdjacentHTML('beforeBegin',htmlStr);
+						var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index]
+						if($$div)
+							$$div.insertAdjacentHTML('beforeBegin',htmlStr);
 						else
 							$('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin',htmlStr);
 					}
@@ -1830,8 +1857,9 @@
 					if(endFlag){
 						$('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('beforeEnd',htmlStr);
 					}else{
-						if($('#' + this.options.id + '_content_numCol').find('div')[index])
-							$('#' + this.options.id + '_content_numCol').find('div')[index].insertAdjacentHTML('beforeBegin',htmlStr);
+						var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index]
+						if($$div)
+							$$div.insertAdjacentHTML('beforeBegin',htmlStr);
 						else
 							$('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin',htmlStr);
 					}
@@ -1855,8 +1883,7 @@
 					this.dataSourceObj.options.values = new Array();
 				}
 				this.dataSourceObj.options.values.splice(index,0,row);
-				this.dataSourceObj.sortRows();
-				this.addOneRowTreeHasChildF();
+				this.addOneRowTreeHasChildF(rowObj);
 			}else{
 				if(this.dataSourceObj.options.values){
 
@@ -1880,8 +1907,8 @@
 			if(this.options.showTree){
 				// 树表待优化
 				var l = rows.length;
-				for(var i = l-1; i > -1;i--){
-					this.addOneRow(rows[i],index);
+				for(var i = 0; i < l;i++){
+					this.addOneRow(rows[i],l);
 				}
 				return;
 			}

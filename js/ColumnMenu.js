@@ -26,11 +26,11 @@
 		htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
 
 		// 创建显示/隐藏列
-		htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
+		/*htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
 		htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_showColumn">';
 		htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_show_column + '</span>';
 		htmlStr += '<div class="u-grid-column-menu-div3 fa fa-caret-right"></div>';
-		htmlStr += '</div></li>';
+		htmlStr += '</div></li>';*/
 
 		// 创建清除设置
 		htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
@@ -38,9 +38,7 @@
 		htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_clear_set + '</span>';
 		htmlStr += '</div></li>';
 
-		htmlStr += '</ul></div>';
 
-		// 创建数据列区域
 		htmlStr += '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
 		htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
 		$.each(this.gridCompColumnArr, function(i) {
@@ -58,6 +56,12 @@
 			}
 		});
 		htmlStr += '</ul></div>';
+
+
+		htmlStr += '</ul></div>';
+
+		// 创建数据列区域
+		
 		return htmlStr;
 	};
 
@@ -86,6 +90,23 @@
 							left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - oThis.columnMenuWidth + 1;*/
 						$('#' + oThis.options.id + '_column_menu').css('right',0);
 						$('#' + oThis.options.id + '_column_menu').css('top',oThis.headerHeight);
+
+						/*数据列多的情况下处理显示的高度*/
+						var sX = $(window).width();
+						var sH = $(window).height();
+						
+						var columnsTop = oThis.headerHeight;
+						var cY = e.clientY;
+						// 如果数据列高度高于屏幕高度则数据列高度设置为屏幕高度-10；
+						var columnsHeight = oThis.menuColumnsHeight;
+						var hh = 0;
+						if((oThis.menuColumnsHeight + 74) > sH){
+							columnsHeight = sH - 74;
+							$('#' + oThis.options.id + '_column_menu_columns').css('height',columnsHeight + 'px');
+						}else{
+							$('#' + oThis.options.id + '_column_menu_columns').css('height','');
+						}
+
 						oThis.ele.createColumnMenuFlag = true;
 					}else{
 						
@@ -112,13 +133,13 @@
 		// 扩展方法
 		var oThis = this;
 		// 列头按钮显示/隐藏
-		$('#' + this.options.id + '_header_table th').on('mousemove',function(e){
+		/*$('#' + this.options.id + '_header_table th').on('mousemove',function(e){
 			$('.u-grid-header-columnmenu',$(this)).css('display','block');
 		});
 
 		$('#' + this.options.id + '_header_table th').on('mouseout',function(e){
 			$('.u-grid-header-columnmenu',$(this)).css('display','none');
-		});
+		});*/
 
 		/*header 按钮处理开始*/
 		// column按钮
@@ -130,7 +151,7 @@
 		});
 
 		// 显示/隐藏列按钮
-		$('#' + this.options.id + '_showColumn').on('mousemove', function(e) {
+		/*$('#' + this.options.id + '_showColumn').on('mousemove', function(e) {
 			//待完善 考虑屏幕高度决定columnMenu显示形式
 
 			if(oThis.hideMenuColumns)
@@ -170,8 +191,8 @@
 				oThis.columnMenuMove = false;
 			},200);
 
-		});
-		$('#' + this.options.id + '_column_menu_columns').on('mousemove', function(e) {
+		});*/
+		/*$('#' + this.options.id + '_column_menu_columns').on('mousemove', function(e) {
 			if(oThis.hideMenuColumns)
 				clearTimeout(oThis.hideMenuColumns);
 			$('#' + oThis.options.id + '_column_menu_columns').css('display','block');
@@ -182,7 +203,7 @@
 				$('#' + oThis.options.id + '_column_menu_columns').css('display','none');
 				oThis.columnMenuMove = false;
 			},200);
-		});
+		});*/
 
 		// 清除设置按钮
 		$('#' + this.options.id + '_clearSet').on('click', function(e) {
@@ -209,8 +230,15 @@
 				}
 
 				if(document.documentMode == 8){
+					var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
+					var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
 					oThis.gridCompColumnArr[index].options.visible = false;
 					oThis.repaintGridDivs();
+					$('#' + oThis.options.id + '_column_menu').css('display','block');
+					$('#' + oThis.options.id + '_column_menu').css('right','0px');
+					$('#' + oThis.options.id + '_column_menu').css('top',oldTop);
+					$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
+
 				}else{
 					oThis.setColumnVisibleByIndex(index,false);
 					oThis.gridCompColumnArr[index].options.visible = false;
@@ -219,8 +247,14 @@
 				$(this)[0].checked = true;
 
 				if(document.documentMode == 8){
+					var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
+					var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
 					oThis.gridCompColumnArr[index].options.visible = true;
 					oThis.repaintGridDivs();
+					$('#' + oThis.options.id + '_column_menu').css('display','block');
+					$('#' + oThis.options.id + '_column_menu').css('right','0px');
+					$('#' + oThis.options.id + '_column_menu').css('top',oldTop);
+					$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
 				}else{
 					oThis.setColumnVisibleByIndex(index,true);
 					oThis.gridCompColumnArr[index].options.visible = true;

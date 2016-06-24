@@ -17,6 +17,7 @@
   -webkit-box-sizing: border-box;
   box-shadow: none;
   -webkit-box-shadow: none;
+  overflow:hidden;
 }
 .u-grid li {
   font-size: 16px;
@@ -79,7 +80,7 @@ header区域css begin
 .u-grid-header-left {
   position: absolute;
   z-index: 11;
-  background-color: #ebebeb;
+  background-color: #eeeff1;
   height: 100%;
 }
 .u-grid-header-multi-select {
@@ -119,6 +120,7 @@ header区域css begin
   border-style: solid;
   border-color: #cecece;
   border-width: 0px;
+  padding:0px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -258,6 +260,7 @@ content区域css begin
   border-color: #cecece;
   border-width: 0 0 1px 0;
   box-sizing: border-box;
+  padding:0px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   vertical-align: middle;
@@ -290,7 +293,7 @@ content区域css begin
 .u-grid-content-td-div > .right-span{
     position: absolute;
     right: 0px;
-    line-height: 2.125em;
+    line-height: inherit;
     width: 2rem;
     text-align: center;
 }
@@ -298,6 +301,7 @@ content区域css begin
   position: relative;
   zoom: 1;
   background-color: #fff ;
+  overflow: hidden;
 }
 .u-grid-content-div {
   position: relative;
@@ -612,10 +616,10 @@ columnMenu columns区域css begin
 */
 .u-grid-column-menu-columns {
   width: 160px;
-  display: none;
+  display: block;
   overflow-y: auto;
   overflow-x: hidden;
-  position: absolute;
+  position: relative;
   z-index: 13;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -641,6 +645,7 @@ columnMenu columns区域css begin
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  cursor: pointer;
 }
 .u-grid-column-menu-columns-div1 {
   display: block;

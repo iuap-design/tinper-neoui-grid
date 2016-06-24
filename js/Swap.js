@@ -114,7 +114,11 @@
 					paddingTop: $nowTh.css("paddingTop"),
 					paddingBottom: $nowTh.css("paddingBottom")
 				}).html(nowGridCompColumn.options.title || nowGridCompColumn.options.field).prepend('<span class="fa fa-ban u-grid-header-drag-status" />');
-				$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
+				try{
+					$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
+				}catch(e){
+					$('#' + this.options.id)[0].insertBefore($d[0],$('#' + this.options.id)[0].firstChild);
+				}
 				$d.on('mousemove',function(){
 					e.stopPropagation();
 				});
@@ -138,8 +142,13 @@
 				$d1.css({
 					top: '6px'
 				});
-				$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
-				$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d1[0]);
+				try{
+					$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
+					$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d1[0]);
+				}catch(e){
+					$('#' + this.options.id)[0].insertBefore($d[0],$('#' + this.options.id)[0].firstChild);
+					$('#' + this.options.id)[0].insertBefore($d1[0],$('#' + this.options.id)[0].firstChild);
+				}
 			}
 			this.canSwap = false;
 			$('#' + this.options.id + '_header_table th').each(function(i) {

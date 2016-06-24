@@ -16,6 +16,17 @@
 		var $td = $(e.target).closest('td');
 		var colIndex = $td.index();
 		if(this.options.editable && (this.eidtRowIndex != index || (this.options.editType == 'default' && this.editColIndex != colIndex))){
+			if(typeof this.options.onBeforeEditFun == 'function'){
+				var obj = {};
+				obj.gridObj = this;
+				obj.rowObj = this.dataSourceObj.rows[index];
+				obj.rowIndex = index;
+				obj.colIndex = colIndex;
+				obj.e = e;
+				if(!this.options.onBeforeEditFun(obj)){
+					return;
+				}
+			}
 			this.editRowFun($tr,colIndex);
 		}
 	};
@@ -262,7 +273,11 @@
 		if(!row)
 			return;
 			if(this.options.editType != 'form'){
-				this.repaintRow(this.eidtRowIndex);
+				//this.repaintRow(this.eidtRowIndex);
+				var obj = {};
+				obj.begin = this.eidtRowIndex;
+				obj.length = 1;
+				this.renderTypeFun(obj);
 			}
 
 		$('#' +this.options.id + '_content_edit_menu').css('display','none');
