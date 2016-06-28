@@ -16,71 +16,67 @@ var util = require('gulp-util');
  * @param  {[type]} err [description]
  * @return {[type]}     [description]
  */
-function errHandle(err) {
-    util.log(err.fileName + '文件编译出错，出错行数为' + err.lineNumber + '，具体错误信息为：' + err.message);
+var errHandle = function ( err ) {
+    // 报错文件名
+    var fileName = err.fileName;
+    // 报错类型
+    var name = err.name;
+    // 报错信息
+    var message = err.message;
+    // 出错代码位置
+    var loc = err.loc;
+
+    var logInfo = '报错文件：' + fileName + '报错类型：' + name + '出错代码位置：' + loc.line + ',' + loc.column;
+
+    util.log( logInfo );
+
     this.end();
-};
+}
 
 
 var globs = {
-    js: {
-        js:[
-            'js/gridComp.js',
-            'js/ColumnMenu.js',
-            'js/Drag.js',
-            'js/Edit.js',
-            'js/EditForm.js',
-            'js/Fixed.js',
-            'js/FormShow.js',
-            'js/HeaderLevel.js',
-            'js/OverWidthHidden.js',
-            'js/Sort.js',
-            'js/SumRow.js',
-            'js/Swap.js',
-            'js/Tree.js',
-        ],
-        dtJs:[
-            'dist/js/grid.js'
-        ]
-    },
+    js:[
+        'js/gridComp.js',
+        'js/ColumnMenu.js',
+        'js/Drag.js',
+        'js/Edit.js',
+        'js/EditForm.js',
+        'js/Fixed.js',
+        'js/FormShow.js',
+        'js/HeaderLevel.js',
+        'js/OverWidthHidden.js',
+        'js/Sort.js',
+        'js/SumRow.js',
+        'js/Swap.js',
+        'js/Tree.js',
+    ],
     css: 'css/grid.css'
 };
-/* 生成dist begin*/
-gulp.task('Js', function() {
-    return gulp.src(globs.js.js)
-        .pipe(concat('grid.js'))
+
+gulp.task('js', function() {
+    return gulp.src(globs.js)
+        .pipe(concat('u-grid.js'))
         .pipe(gulp.dest('dist/js'))
-        .pipe(uglify())
-        .on('error', errHandle)
-        .pipe(rename('grid.min.js'))
+        .pipe(uglify().on('error', errHandle))
+        .pipe(rename('u-grid.min.js'))
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('uJs', ['Js'], function(){
-    return gulp.src(globs.js.dtJs)
-        .pipe(concat('u-grid.js'))
-        .pipe(gulp.dest('dist/js'))
-        .pipe(uglify())
-        .on('error', errHandle)
-        .pipe(rename('u-grid.min.js'))
-        .pipe(gulp.dest('dist/js'));
-})
 
 gulp.task('css',function(){
     return gulp.src(globs.css)
+        .pipe(rename('u-grid.css'))
         .pipe(gulp.dest('dist/css'))
         .pipe(minifycss())
-        .pipe(rename('grid.min.css'))
+        .pipe(rename('u-grid.min.css'))
         .pipe(gulp.dest('dist/css'));
 })
 
 gulp.task('distWatch',function(){
-    gulp.watch(globs.js.js,['uJs']);
-    gulp.watch(globs.js.dtJs,['uJs']);
+    gulp.watch(globs.js,['js']);
     gulp.watch(globs.css,['css'])
 })
 
-gulp.task('dist', ['uJs', 'css'], function(){
+gulp.task('dist', ['js', 'css'], function(){
     gulp.run('distWatch');
 });
-/* 生成dist end*/
