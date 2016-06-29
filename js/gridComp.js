@@ -1102,7 +1102,10 @@
 				precision = gridCompColumn.options.precision,
 				format = gridCompColumn.options.format,field = gridCompColumn.options.field,
 				end = begin,idSuffix = isFixedColumn === true ? '_content_fixed_tbody' : '_content_tbody',
-				idStr = isFixedColumn === true? 'fixed_' : '';
+				idStr = isFixedColumn === true? 'fixed_' : '',
+				visibleColIndex = this.getVisibleIndexOfColumn(gridCompColumn);
+
+			
 			if(length >0){
 				end = parseInt(begin + length - 1);
 			}
@@ -1116,6 +1119,11 @@
 			}
 			$.each(oThis.dataSourceObj.rows, function(j) {
 				if((begin >= 0 && j >= begin && j <= end) || isNaN(begin)){
+					//如果当前修改此列则将变量重置
+					if(oThis.editColIndex == visibleColIndex && oThis.eidtRowIndex == j){
+						oThis.editColIndex = -1;
+						oThis.eidtRowIndex = -1;
+					}
 					var trIndex = j;
 					if(notRowIndex != -1 && j >= notRowIndex) {
 						trIndex++;

@@ -333,8 +333,9 @@
 			});
 		}else if(typeof editType == 'function'){
 			var obj = {};
+			var $Div = $('.u-grid-content-td-div',$(td));
 			obj.gridObj = this;
-			obj.element = td;
+			obj.element = $Div[0];
 			obj.value = value;
 			obj.field = field;
 			obj.rowObj = rowObj;

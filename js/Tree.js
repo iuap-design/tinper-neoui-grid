@@ -296,7 +296,11 @@
 
 		var $Tr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(rowIndex);
 		var openDiv = $('.fa-plus-square-o',$Tr);
-		openDiv.click();
+		var firstDiv = $('.u-grid-content-td-div',$Tr);
+		if(openDiv.length > 0)
+			openDiv.click();
+		else
+			firstDiv.click();
 	}
 
 
