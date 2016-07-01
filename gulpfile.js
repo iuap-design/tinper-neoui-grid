@@ -65,10 +65,9 @@ gulp.task('js', function() {
 
 gulp.task('css',function(){
     return gulp.src(globs.css)
-        .pipe(rename('u-grid.css'))
         .pipe(gulp.dest('dist/css'))
         .pipe(minifycss())
-        .pipe(rename('u-grid.min.css'))
+        .pipe(rename('grid.min.css'))
         .pipe(gulp.dest('dist/css'));
 })
 
