@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var base64 = require('gulp-base64');
 var minifycss = require('gulp-minify-css');
 var util = require('gulp-util');
 
@@ -65,6 +66,7 @@ gulp.task('js', function() {
 
 gulp.task('css',function(){
     return gulp.src(globs.css)
+        .pipe(base64().on('error',errHandle))
         .pipe(gulp.dest('dist/css'))
         .pipe(minifycss())
         .pipe(rename('grid.min.css'))

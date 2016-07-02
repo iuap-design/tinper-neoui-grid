@@ -3396,6 +3396,7 @@
 						value = oThis.getString(value,'');
 						var obj = {};
 						obj.td = td;
+						td.innerHTML = '<div class="u-grid-content-td-div" title=""></div>';
 						obj.value = value;
 						obj.field = field;
 						obj.editType = this.options.editType;
@@ -3420,6 +3421,7 @@
 						value = oThis.getString(value,'');
 						var obj = {};
 						obj.td = td;
+						td.innerHTML = '<div class="u-grid-content-td-div" title=""></div>';
 						obj.value = value;
 						obj.field = field;
 						obj.editType = this.options.editType;
