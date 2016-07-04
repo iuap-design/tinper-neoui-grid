@@ -1,3 +1,10 @@
+/** 
+ * grid v3.0.6
+ * grid
+ * author : yonyou FED
+ * homepage : https://github.com/iuap-design/grid#readme
+ * bugs : https://github.com/iuap-design/grid/issues
+ **/ 
 ;
 (function($, window, document, undefined) {
 	var gridBrowser = {},userAgent = navigator.userAgent,ua = userAgent.toLowerCase(),s;

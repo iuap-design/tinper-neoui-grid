@@ -7,6 +7,7 @@ var rename = require('gulp-rename');
 var base64 = require('gulp-base64');
 var minifycss = require('gulp-minify-css');
 var util = require('gulp-util');
+var makeumd = require('./makeumd.js');
 
 /**
  * 公共错误处理函数
@@ -54,7 +55,7 @@ var globs = {
     css: 'css/grid.css'
 };
 
-gulp.task('js', function() {
+gulp.task('js-init', function() {
     return gulp.src(globs.js)
         .pipe(concat('u-grid.js'))
         .pipe(gulp.dest('dist/js'))
@@ -63,8 +64,15 @@ gulp.task('js', function() {
         .pipe(gulp.dest('dist/js'));
 });
 
+gulp.task('js', ['js-init'], function(){
+    makeumd.init([
+            'dist/js/u-grid.js',
+            'dist/js/u-grid.min.js',
+        ]);
+})
 
-gulp.task('css',function(){
+
+gulp.task('css-init',function(){
     return gulp.src(globs.css)
         .pipe(base64().on('error',errHandle))
         .pipe(gulp.dest('dist/css'))
@@ -73,11 +81,21 @@ gulp.task('css',function(){
         .pipe(gulp.dest('dist/css'));
 })
 
+gulp.task('css', ['css-init'], function(){
+    makeumd.init([
+            'dist/css/grid.css',
+            'dist/css/grid.min.css',
+        ]);
+})
+
 gulp.task('distWatch',function(){
     gulp.watch(globs.js,['js']);
     gulp.watch(globs.css,['css'])
 })
 
-gulp.task('dist', ['js', 'css'], function(){
+gulp.task('dev', ['js', 'css'], function(){
     gulp.run('distWatch');
+});
+
+gulp.task('dist', ['js', 'css'], function(){
 });
