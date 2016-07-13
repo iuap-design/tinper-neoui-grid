@@ -78,18 +78,6 @@ http://design.yyuap.com/static/uui/latest/js/u.js
         columns: colu
     });
 
-# 示例
-
-replaceExamp
-
-<!--### 示例1
-
-示例1说明
-
-### 示例2
-
-示例2说-->
-
 # API
 
 ## 属性

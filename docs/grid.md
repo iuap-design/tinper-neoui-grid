@@ -78,27 +78,6 @@ http://design.yyuap.com/static/uui/latest/js/u.js
         columns: colu
     });
 
-# 示例
-
-
-
-<div class="example-content"><div class="grid-body">
-	<div class="grid" id="grid-comp1"></div>
-</div></div>
-<div class="examples-code"><pre><code>&lt;div class="grid-body">
-	&lt;div class="grid" id="grid-comp1">&lt;/div>
-&lt;/div></code></pre>
-</div>
-
-
-<!--### 示例1
-
-示例1说明
-
-### 示例2
-
-示例2说-->
-
 # API
 
 ## 属性
