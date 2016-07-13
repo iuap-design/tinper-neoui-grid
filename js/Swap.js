@@ -113,7 +113,7 @@
 					lineHeight: $nowTh.height() + "px",
 					paddingTop: $nowTh.css("paddingTop"),
 					paddingBottom: $nowTh.css("paddingBottom")
-				}).html(nowGridCompColumn.options.title || nowGridCompColumn.options.field).prepend('<span class="fa fa-ban u-grid-header-drag-status" />');
+				}).html(nowGridCompColumn.options.title || nowGridCompColumn.options.field).prepend('<span class="uf uf-bancirclesymbol u-grid-header-drag-status" />');
 				try{
 					$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
 				}catch(e){
@@ -134,11 +134,11 @@
 
 			// 创建提示div
 			if ($('#' + this.options.id + '_swap_top').length == 0) {
-				var $d = $('<span class="fa fa-sort-desc u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
+				var $d = $('<span class="uf uf-sortdown u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
 				$d.css({
 					top: $nowTh.height() - 6 + 'px'
 				});
-				var $d1 = $('<span class="fa fa-sort-asc u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
+				var $d1 = $('<span class="uf uf-sortup u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
 				$d1.css({
 					top: '6px'
 				});
@@ -187,11 +187,11 @@
 				}
 			});
 			if (this.canSwap) {
-				$('.u-grid-header-drag-status').removeClass('fa-ban').addClass('fa-plus-circle');
+				$('.u-grid-header-drag-status').removeClass('uf-bancirclesymbol').addClass('uf-plussigninablackcircle');
 			} else {
 				$('#' + this.options.id + '_swap_top').css('display', 'none');
 				$('#' + this.options.id + '_swap_down').css('display', 'none');
-				$('.u-grid-header-drag-status').removeClass('fa-plus-circle').addClass('fa-ban');
+				$('.u-grid-header-drag-status').removeClass('uf-plussigninablackcircle').addClass('uf-bancirclesymbol');
 				this.swapToColumnEle = null;
 			}
 			$('#' + this.options.id + '_top').css('display', 'block');

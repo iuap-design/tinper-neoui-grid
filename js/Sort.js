@@ -63,9 +63,9 @@
 					var p = parseInt($el.text())
 					var f = $el.closest('th').attr('field')
 					var st
-					if($el.parent().hasClass("fa-caret-up")) {
+					if($el.parent().hasClass("uf-caretarrowup")) {
 						st = 'asc'
-					} else if($el.parent().hasClass("fa-caret-down")){
+					} else if($el.parent().hasClass("uf-caretdown")){
 						st = 'desc'
 					}
 					prioArray[p-1] = {field:f, sortType:st}
@@ -73,11 +73,11 @@
 				// 页面调整
 				/*修改ue将caret调整为caret*/
 				var $caret
-				if(($caret = $ele.find('.fa-caret-up')).length > 0) {
+				if(($caret = $ele.find('.uf-caretarrowup')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 					prioArray[p-1].sortType = 'desc'
-					$caret.removeClass('fa-caret-up').addClass('fa-caret-down')
-				} else if(($caret = $ele.find('.fa-caret-down')).length > 0) {
+					$caret.removeClass('uf-caretarrowup').addClass('uf-caretdown')
+				} else if(($caret = $ele.find('.uf-caretdown')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 					for(var i=p;i<prioArray.length;i++) {
 						var $flag = $('[field='+prioArray[i].field+']').find('.u-grid-header-sort-priority')
@@ -87,24 +87,24 @@
 					$caret.remove()
 				} else {
 					prioArray.push({field:field, sortType:'asc'})
-					// $ele.first().append('<span class="fa fa-caret-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
-					$ele.first().first().append('<span class="fa fa-caret-up u-grid-header-sort-span" ></span>')
+					// $ele.first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
+					$ele.first().first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ></span>')
 				}
 				// 执行排序逻辑
 				this.dataSourceObj.sortRowsByPrio(prioArray)
 
 			} else {
-				if ($(".fa-caret-up").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
-					$(".fa-caret-up").remove();
-					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-down u-grid-header-sort-span" ></span>');
+				if ($(".uf-caretarrowup").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
+					$(".uf-caretarrowup").remove();
+					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ></span>');
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun(field,'asc')
 					}else{
 						this.dataSourceObj.sortRows(field, "asc");
 					}
-				} else if ($(".fa-caret-down").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
-					$(".fa-caret-down").remove();
+				} else if ($(".uf-caretdown").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
+					$(".uf-caretdown").remove();
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun();
 					}else{
@@ -112,10 +112,10 @@
 					}
 
 				} else { //本次为升序 
-					$(".fa-caret-up").remove();
-					$(".fa-caret-down").remove();
-					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-up u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-up u-grid-header-sort-span"></span>');
+					$(".uf-caretarrowup").remove();
+					$(".uf-caretdown").remove();
+					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"></span>');
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun(field, "desc");
 					}else{

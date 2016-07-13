@@ -29,7 +29,7 @@
 		/*htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
 		htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_showColumn">';
 		htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_show_column + '</span>';
-		htmlStr += '<div class="u-grid-column-menu-div3 fa fa-caret-right"></div>';
+		htmlStr += '<div class="u-grid-column-menu-div3 uf uf-arrowheadpointingtotheright"></div>';
 		htmlStr += '</div></li>';*/
 
 		// 创建清除设置

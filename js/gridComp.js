@@ -369,7 +369,7 @@
 			if(!this.options.showHeader)
 				headerShowStr = 'style="display:none;"';
 			var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + '>';
-			htmlStr += '<div class="u-grid-header-columnmenu fa fa-bars"></div>';
+			htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
 			if (this.options.multiSelect || this.options.showNumCol) {
 				htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">';
 				if (this.options.multiSelect) {
@@ -475,7 +475,7 @@
 				htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '" title="' + this.options.title + '" ' + colorStype + '>' + this.options.title + '</div>';
 				/*if(oThis.options.columnMenu && createFlag != 'fixed'){
 					// 创建右侧按钮图标
-					htmlStr += '<div class="u-grid-header-columnmenu fa fa-bars " field="' + this.options.field + '" style="display:none;"></div>';
+					htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption " field="' + this.options.field + '" style="display:none;"></div>';
 				}*/
 				htmlStr += '</div></th>';
 			});
@@ -753,7 +753,7 @@
 					treeStyle = 'style="position:relative;';
 					if(row.hasChild){
 						if(oThis.options.autoExpand){
-							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
 						}else{
 							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
 						}
@@ -797,7 +797,7 @@
 					treeStyle = 'style="position:relative;';
 					if(rowObj.hasChild){
 						if(oThis.options.autoExpand){
-							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
 						}else{
 							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
 						}

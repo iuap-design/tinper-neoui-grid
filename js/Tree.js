@@ -29,12 +29,12 @@
 			var row = oThis.dataSourceObj.rows[index];
 			if(row){
 				var rowChildIndex = row.childRowIndex;
-				if($target.hasClass('fa-minus-square-o') || $target.hasClass('fa-plus-square-o') ){
-					var minus = $td.find('.fa-minus-square-o');
+				if($target.hasClass('uf-minusbutton') || $target.hasClass('fa-plus-square-o') ){
+					var minus = $td.find('.uf-minusbutton');
 					var plus = $td.find('.fa-plus-square-o');
 					if(minus.length >0){
 						// 合上 需要将所有的都合上
-						minus.removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+						minus.removeClass('uf-minusbutton').addClass('fa-plus-square-o');
 						if(rowChildIndex.length > 0){
 							var allChildRowIndex = oThis.getAllChildRowIndex(row);
 							$.each(allChildRowIndex, function() {
@@ -42,7 +42,7 @@
 								$tr1.css('display','none');
 								// 左侧复选区隐藏
 								$('#' + oThis.options.id + '_content_multiSelect >div:nth-child('+(parseInt(this) +1)+ ')').css('display','none');
-								$('.fa-minus-square-o',$tr1).removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+								$('.uf-minusbutton',$tr1).removeClass('uf-minusbutton').addClass('fa-plus-square-o');
 							});
 						}
 						if(this.options.editType == 'form'){
@@ -54,7 +54,7 @@
 						return;
 					}else if(plus.length > 0){
 						// 展开
-						plus.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+						plus.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
 						if(rowChildIndex.length > 0){
 							$.each(rowChildIndex, function() {
 								var $tr1 = $('tr[role="row"]:eq(' + parseInt(this) +')',$tr.parent());
@@ -128,9 +128,9 @@
 					
 					var d = $("div:eq(0)",$pTr);
 					var openDiv = $('.fa-plus-square-o',$pTr);
-					var closeDiv = $('.fa-minus-square-o',$pTr);
+					var closeDiv = $('.uf-minusbutton',$pTr);
 					if(this.options.autoExpand){
-						var spanHtml = '<span class="fa u-grid-content-tree-span fa-minus-square-o"></span>';
+						var spanHtml = '<span class="uf u-grid-content-tree-span uf-minusbutton"></span>';
 					}else{
 						var spanHtml = '<span class="fa u-grid-content-tree-span fa-plus-square-o"></span>';
 					}
@@ -143,7 +143,7 @@
 						}
 					}
 					if(openDiv.length > 0){
-						openDiv.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+						openDiv.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
 					}
 				}
 			}

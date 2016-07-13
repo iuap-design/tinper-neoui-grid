@@ -376,7 +376,7 @@
 			if(!this.options.showHeader)
 				headerShowStr = 'style="display:none;"';
 			var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + '>';
-			htmlStr += '<div class="u-grid-header-columnmenu fa fa-bars"></div>';
+			htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
 			if (this.options.multiSelect || this.options.showNumCol) {
 				htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">';
 				if (this.options.multiSelect) {
@@ -482,7 +482,7 @@
 				htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '" title="' + this.options.title + '" ' + colorStype + '>' + this.options.title + '</div>';
 				/*if(oThis.options.columnMenu && createFlag != 'fixed'){
 					// 创建右侧按钮图标
-					htmlStr += '<div class="u-grid-header-columnmenu fa fa-bars " field="' + this.options.field + '" style="display:none;"></div>';
+					htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption " field="' + this.options.field + '" style="display:none;"></div>';
 				}*/
 				htmlStr += '</div></th>';
 			});
@@ -760,7 +760,7 @@
 					treeStyle = 'style="position:relative;';
 					if(row.hasChild){
 						if(oThis.options.autoExpand){
-							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
 						}else{
 							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
 						}
@@ -804,7 +804,7 @@
 					treeStyle = 'style="position:relative;';
 					if(rowObj.hasChild){
 						if(oThis.options.autoExpand){
-							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
 						}else{
 							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
 						}
@@ -2809,7 +2809,7 @@
 		/*htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
 		htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_showColumn">';
 		htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_show_column + '</span>';
-		htmlStr += '<div class="u-grid-column-menu-div3 fa fa-caret-right"></div>';
+		htmlStr += '<div class="u-grid-column-menu-div3 uf uf-arrowheadpointingtotheright"></div>';
 		htmlStr += '</div></li>';*/
 
 		// 创建清除设置
@@ -4067,9 +4067,9 @@
 					var p = parseInt($el.text())
 					var f = $el.closest('th').attr('field')
 					var st
-					if($el.parent().hasClass("fa-caret-up")) {
+					if($el.parent().hasClass("uf-caretarrowup")) {
 						st = 'asc'
-					} else if($el.parent().hasClass("fa-caret-down")){
+					} else if($el.parent().hasClass("uf-caretdown")){
 						st = 'desc'
 					}
 					prioArray[p-1] = {field:f, sortType:st}
@@ -4077,11 +4077,11 @@
 				// 页面调整
 				/*修改ue将caret调整为caret*/
 				var $caret
-				if(($caret = $ele.find('.fa-caret-up')).length > 0) {
+				if(($caret = $ele.find('.uf-caretarrowup')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 					prioArray[p-1].sortType = 'desc'
-					$caret.removeClass('fa-caret-up').addClass('fa-caret-down')
-				} else if(($caret = $ele.find('.fa-caret-down')).length > 0) {
+					$caret.removeClass('uf-caretarrowup').addClass('uf-caretdown')
+				} else if(($caret = $ele.find('.uf-caretdown')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 					for(var i=p;i<prioArray.length;i++) {
 						var $flag = $('[field='+prioArray[i].field+']').find('.u-grid-header-sort-priority')
@@ -4091,24 +4091,24 @@
 					$caret.remove()
 				} else {
 					prioArray.push({field:field, sortType:'asc'})
-					// $ele.first().append('<span class="fa fa-caret-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
-					$ele.first().first().append('<span class="fa fa-caret-up u-grid-header-sort-span" ></span>')
+					// $ele.first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
+					$ele.first().first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ></span>')
 				}
 				// 执行排序逻辑
 				this.dataSourceObj.sortRowsByPrio(prioArray)
 
 			} else {
-				if ($(".fa-caret-up").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
-					$(".fa-caret-up").remove();
-					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-down u-grid-header-sort-span" ></span>');
+				if ($(".uf-caretarrowup").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
+					$(".uf-caretarrowup").remove();
+					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ></span>');
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun(field,'asc')
 					}else{
 						this.dataSourceObj.sortRows(field, "asc");
 					}
-				} else if ($(".fa-caret-down").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
-					$(".fa-caret-down").remove();
+				} else if ($(".uf-caretdown").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
+					$(".uf-caretdown").remove();
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun();
 					}else{
@@ -4116,10 +4116,10 @@
 					}
 
 				} else { //本次为升序 
-					$(".fa-caret-up").remove();
-					$(".fa-caret-down").remove();
-					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-up u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="fa fa-caret-up u-grid-header-sort-span"></span>');
+					$(".uf-caretarrowup").remove();
+					$(".uf-caretdown").remove();
+					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"></span>');
 					if(typeof this.options.onSortFun == 'function'){
 						this.options.onSortFun(field, "desc");
 					}else{
@@ -4639,7 +4639,7 @@
 					lineHeight: $nowTh.height() + "px",
 					paddingTop: $nowTh.css("paddingTop"),
 					paddingBottom: $nowTh.css("paddingBottom")
-				}).html(nowGridCompColumn.options.title || nowGridCompColumn.options.field).prepend('<span class="fa fa-ban u-grid-header-drag-status" />');
+				}).html(nowGridCompColumn.options.title || nowGridCompColumn.options.field).prepend('<span class="uf uf-bancirclesymbol u-grid-header-drag-status" />');
 				try{
 					$('#' + this.options.id)[0].insertAdjacentElement('afterBegin',$d[0]);
 				}catch(e){
@@ -4660,11 +4660,11 @@
 
 			// 创建提示div
 			if ($('#' + this.options.id + '_swap_top').length == 0) {
-				var $d = $('<span class="fa fa-sort-desc u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
+				var $d = $('<span class="uf uf-sortdown u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
 				$d.css({
 					top: $nowTh.height() - 6 + 'px'
 				});
-				var $d1 = $('<span class="fa fa-sort-asc u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
+				var $d1 = $('<span class="uf uf-sortup u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
 				$d1.css({
 					top: '6px'
 				});
@@ -4713,11 +4713,11 @@
 				}
 			});
 			if (this.canSwap) {
-				$('.u-grid-header-drag-status').removeClass('fa-ban').addClass('fa-plus-circle');
+				$('.u-grid-header-drag-status').removeClass('uf-bancirclesymbol').addClass('uf-plussigninablackcircle');
 			} else {
 				$('#' + this.options.id + '_swap_top').css('display', 'none');
 				$('#' + this.options.id + '_swap_down').css('display', 'none');
-				$('.u-grid-header-drag-status').removeClass('fa-plus-circle').addClass('fa-ban');
+				$('.u-grid-header-drag-status').removeClass('uf-plussigninablackcircle').addClass('uf-bancirclesymbol');
 				this.swapToColumnEle = null;
 			}
 			$('#' + this.options.id + '_top').css('display', 'block');
@@ -4790,12 +4790,12 @@
 			var row = oThis.dataSourceObj.rows[index];
 			if(row){
 				var rowChildIndex = row.childRowIndex;
-				if($target.hasClass('fa-minus-square-o') || $target.hasClass('fa-plus-square-o') ){
-					var minus = $td.find('.fa-minus-square-o');
+				if($target.hasClass('uf-minusbutton') || $target.hasClass('fa-plus-square-o') ){
+					var minus = $td.find('.uf-minusbutton');
 					var plus = $td.find('.fa-plus-square-o');
 					if(minus.length >0){
 						// 合上 需要将所有的都合上
-						minus.removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+						minus.removeClass('uf-minusbutton').addClass('fa-plus-square-o');
 						if(rowChildIndex.length > 0){
 							var allChildRowIndex = oThis.getAllChildRowIndex(row);
 							$.each(allChildRowIndex, function() {
@@ -4803,7 +4803,7 @@
 								$tr1.css('display','none');
 								// 左侧复选区隐藏
 								$('#' + oThis.options.id + '_content_multiSelect >div:nth-child('+(parseInt(this) +1)+ ')').css('display','none');
-								$('.fa-minus-square-o',$tr1).removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+								$('.uf-minusbutton',$tr1).removeClass('uf-minusbutton').addClass('fa-plus-square-o');
 							});
 						}
 						if(this.options.editType == 'form'){
@@ -4815,7 +4815,7 @@
 						return;
 					}else if(plus.length > 0){
 						// 展开
-						plus.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+						plus.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
 						if(rowChildIndex.length > 0){
 							$.each(rowChildIndex, function() {
 								var $tr1 = $('tr[role="row"]:eq(' + parseInt(this) +')',$tr.parent());
@@ -4889,9 +4889,9 @@
 					
 					var d = $("div:eq(0)",$pTr);
 					var openDiv = $('.fa-plus-square-o',$pTr);
-					var closeDiv = $('.fa-minus-square-o',$pTr);
+					var closeDiv = $('.uf-minusbutton',$pTr);
 					if(this.options.autoExpand){
-						var spanHtml = '<span class="fa u-grid-content-tree-span fa-minus-square-o"></span>';
+						var spanHtml = '<span class="uf u-grid-content-tree-span uf-minusbutton"></span>';
 					}else{
 						var spanHtml = '<span class="fa u-grid-content-tree-span fa-plus-square-o"></span>';
 					}
@@ -4904,7 +4904,7 @@
 						}
 					}
 					if(openDiv.length > 0){
-						openDiv.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+						openDiv.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
 					}
 				}
 			}
