@@ -750,7 +750,7 @@ form展示区域css end
 /*鼠标滑过begin*/
 
 .u-grid-move-bg{
-  background: #e9f7fc;
+  background: #e9f7fc !important;;
   color:#333;
 }
 .u-grid-move-bg a{
