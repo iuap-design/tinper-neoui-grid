@@ -24,7 +24,7 @@ http://design.yyuap.com/static/uui/latest/js/u.js
 2、创建column对象
 
     var colu = [{
-        field: "id",
+         field: "id",
         title: "id"
     }, {
         field: "pid",
@@ -77,6 +77,10 @@ http://design.yyuap.com/static/uui/latest/js/u.js
         parentKeyField: 'pid',
         columns: colu
     });
+    
+# 示例
+
+replaceExamp
 
 # API
 
