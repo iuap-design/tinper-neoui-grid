@@ -280,6 +280,10 @@ content区域css begin
   line-height: 2.68em \9;
   font-size: 16px !important;
 }
+
+.u-grid-content tr{
+    border-top:0px !important;
+}
 .u-grid-content-td-div {
   height: 100%;
   margin: 0 2em 0 0.833333333em;
@@ -361,6 +365,7 @@ content区域css begin
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
     margin: 0px !important;
+    font-size: 16px !important;
 }
 .u-grid-multi-input {
   margin: 0px !important;
