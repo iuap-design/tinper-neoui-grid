@@ -437,6 +437,9 @@
 						flag = $e.closest('.' + this).length > 0?false:flag;
 					});
 				}
+				if($e.attr('role') == 'grid-for-edit'){
+					flag = false;
+				}
 				if(flag){
 					oThis.editClose();
 				}
