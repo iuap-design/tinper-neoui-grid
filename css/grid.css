@@ -636,7 +636,7 @@ columnMenu columns区域css begin
   box-sizing: content-box;
 }
 .u-grid-column-menu-columns-ul {
-  border-width: 1px 0px 1px 0px;
+  border-width: 1px 0px 0px 0px;
   border-style: solid;
   border-color: #cecece;
   background-color: #fff;
