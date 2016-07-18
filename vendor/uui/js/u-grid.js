@@ -738,7 +738,7 @@
 						if(oThis.options.autoExpand){
 							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
 						}else{
-							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-addsquarebutton2 u-grid-content-tree-span"></span>';
 						}
 					}else{
 						l += 16;
@@ -782,7 +782,7 @@
 						if(oThis.options.autoExpand){
 							spanStr = '<span class=" fa fa-minus-square-o u-grid-content-tree-span"></span>';
 						}else{
-							spanStr = '<span class=" fa fa-plus-square-o u-grid-content-tree-span"></span>';
+							spanStr = '<span class=" uf uf-addsquarebutton2 u-grid-content-tree-span"></span>';
 						}
 					}else{
 						l += 18;

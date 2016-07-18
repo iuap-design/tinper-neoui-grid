@@ -29,12 +29,12 @@
 			var row = oThis.dataSourceObj.rows[index];
 			if(row){
 				var rowChildIndex = row.childRowIndex;
-				if($target.hasClass('uf-minusbutton') || $target.hasClass('fa-plus-square-o') ){
+				if($target.hasClass('uf-minusbutton') || $target.hasClass('uf-addsquarebutton2') ){
 					var minus = $td.find('.uf-minusbutton');
-					var plus = $td.find('.fa-plus-square-o');
+					var plus = $td.find('.uf-addsquarebutton2');
 					if(minus.length >0){
 						// 合上 需要将所有的都合上
-						minus.removeClass('uf-minusbutton').addClass('fa-plus-square-o');
+						minus.removeClass('uf-minusbutton').addClass('uf-addsquarebutton2');
 						if(rowChildIndex.length > 0){
 							var allChildRowIndex = oThis.getAllChildRowIndex(row);
 							$.each(allChildRowIndex, function() {
@@ -42,7 +42,7 @@
 								$tr1.css('display','none');
 								// 左侧复选区隐藏
 								$('#' + oThis.options.id + '_content_multiSelect >div:nth-child('+(parseInt(this) +1)+ ')').css('display','none');
-								$('.uf-minusbutton',$tr1).removeClass('uf-minusbutton').addClass('fa-plus-square-o');
+								$('.uf-minusbutton',$tr1).removeClass('uf-minusbutton').addClass('uf-addsquarebutton2');
 							});
 						}
 						if(this.options.editType == 'form'){
@@ -54,7 +54,7 @@
 						return;
 					}else if(plus.length > 0){
 						// 展开
-						plus.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
+						plus.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
 						if(rowChildIndex.length > 0){
 							$.each(rowChildIndex, function() {
 								var $tr1 = $('tr[role="row"]:eq(' + parseInt(this) +')',$tr.parent());
@@ -116,7 +116,7 @@
 				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(oThis.addRowParentIndex);
 				if(parentChildLength > 0){
 					// 如果存在父项并且父项存在子项则需要判断父项是否展开
-					var openDiv = $('.fa-plus-square-o',$pTr);
+					var openDiv = $('.uf-addsquarebutton2',$pTr);
 					if(!(openDiv.length > 0)){
 						displayFlag = 'block';
 					}
@@ -127,12 +127,12 @@
 					}
 					
 					var d = $("div:eq(0)",$pTr);
-					var openDiv = $('.fa-plus-square-o',$pTr);
+					var openDiv = $('.uf-addsquarebutton2',$pTr);
 					var closeDiv = $('.uf-minusbutton',$pTr);
 					if(this.options.autoExpand){
 						var spanHtml = '<span class="uf u-grid-content-tree-span uf-minusbutton"></span>';
 					}else{
-						var spanHtml = '<span class="fa u-grid-content-tree-span fa-plus-square-o"></span>';
+						var spanHtml = '<span class="uf u-grid-content-tree-span uf-addsquarebutton2"></span>';
 					}
 					if(d.length > 0 && openDiv.length == 0 && closeDiv.length == 0){
 						d[0].insertAdjacentHTML('afterBegin',spanHtml);
@@ -143,7 +143,7 @@
 						}
 					}
 					if(openDiv.length > 0){
-						openDiv.removeClass('fa-plus-square-o').addClass('uf-minusbutton');
+						openDiv.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
 					}
 				}
 			}
@@ -276,7 +276,7 @@
 				parentIndex = whileRow.parentRowIndex;
 				whileRow = whileRow.parentRow;
 				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(parentIndex);
-				var openDiv = $('.fa-plus-square-o',$pTr);
+				var openDiv = $('.uf-addsquarebutton2',$pTr);
 				if(openDiv.length > 0){ //合着
 					needExpanedParent.push(parentIndex);
 				}else{
@@ -289,13 +289,13 @@
 			for(var i = needExpanedParent.length - 1;i > -1;i--){
 				var index = needExpanedParent[i];
 				var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(index);
-				var openDiv = $('.fa-plus-square-o',$pTr);
+				var openDiv = $('.uf-addsquarebutton2',$pTr);
 				openDiv.click();
 			}
 		}
 
 		var $Tr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(rowIndex);
-		var openDiv = $('.fa-plus-square-o',$Tr);
+		var openDiv = $('.uf-addsquarebutton2',$Tr);
 		var firstDiv = $('.u-grid-content-td-div',$Tr);
 		if(openDiv.length > 0)
 			openDiv.click();
