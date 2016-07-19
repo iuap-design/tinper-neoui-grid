@@ -292,7 +292,7 @@ content区域css begin
   white-space: nowrap;
   text-overflow: ellipsis;
   position: relative;
-  line-height: 3.5em;
+  line-height: inherit;
 }
 .u-grid-edit-div .u-grid-content-td-div {
   margin: 0 1em 0 1em;
