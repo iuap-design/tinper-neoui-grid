@@ -94,6 +94,7 @@
 		initDefault: function(){
 			this.defaults = {
 				id: 'grid',
+				editType: 'default',
 				cancelFocus:false, // 第二次点击是否取消focus
 				showHeader: true, // 是否显示表头
 				showNumCol: false, // 是否显示数字列
