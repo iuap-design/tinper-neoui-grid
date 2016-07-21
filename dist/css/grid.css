@@ -274,8 +274,8 @@ content区域css begin
   vertical-align: middle;
   white-space: nowrap;
   text-overflow: ellipsis;
-  height: 2.7em;
-  line-height: 2.7em;
+  height: 2.6875em;
+  line-height: 2.6875em;
   height: 2.68em \9;
   line-height: 2.68em \9;
   font-size: 16px !important;
@@ -285,7 +285,7 @@ content区域css begin
     border-top:0px !important;
 }
 .u-grid-content-td-div {
-  height: 100%;
+  height: inherit;
   margin: 0 2em 0 0.833333333em;
   font-size: 0.75em !important;
   overflow: hidden;
