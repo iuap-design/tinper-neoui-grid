@@ -445,6 +445,10 @@
 				}
 			}
 		});
+
+		u.on(document,'scroll',function(){
+			oThis.editClose();
+		})
 	};
 
 

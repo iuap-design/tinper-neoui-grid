@@ -856,6 +856,7 @@
 					// 点击的是数据区域
 				}
 			});
+			
 		},
 		/*
 		 * 创建完成之后grid层 div添加监听
@@ -3656,6 +3657,10 @@
 				}
 			}
 		});
+
+		u.on(document,'scroll',function(){
+			oThis.editClose();
+		})
 	};
 
 
