@@ -1244,9 +1244,9 @@
 							}
 						},300);
 					}
+					$('#' + oThis.options.id + '_header_table').css('width', oThis.contentMinWidth + 'px');
+					$('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 				}
-				$('#' + oThis.options.id + '_header_table').css('width', oThis.contentMinWidth + 'px');
-				$('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 			}
 		},
 		/*
