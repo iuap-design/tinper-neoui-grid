@@ -22,6 +22,7 @@
 				obj.rowObj = this.dataSourceObj.rows[index];
 				obj.rowIndex = index;
 				obj.colIndex = colIndex;
+				obj.$tr = $tr;
 				obj.e = e;
 				if(!this.options.onBeforeEditFun(obj)){
 					return;
