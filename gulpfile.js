@@ -7,7 +7,7 @@ var rename = require('gulp-rename');
 var base64 = require('gulp-base64');
 var minifycss = require('gulp-minify-css');
 var util = require('gulp-util');
-var makeumd = require('./makeumd.js');
+var version = require('./version.js');
 
 /**
  * 公共错误处理函数
@@ -65,7 +65,7 @@ gulp.task('js-init', function() {
 });
 
 gulp.task('js', ['js-init'], function(){
-    makeumd.init([
+    version.init([
             'dist/js/u-grid.js',
             'dist/js/u-grid.min.js',
         ]);
@@ -82,7 +82,7 @@ gulp.task('css-init',function(){
 })
 
 gulp.task('css', ['css-init'], function(){
-    makeumd.init([
+    version.init([
             'dist/css/grid.css',
             'dist/css/grid.min.css',
         ]);
