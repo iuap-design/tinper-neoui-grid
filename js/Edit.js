@@ -366,7 +366,9 @@
 
 	gridCompProto.editValueChange=function(field,value){
 		// 设置row的值为新值
-		this.updateValueAt(this.eidtRowIndex,field,value);
+		if(this.eidtRowIndex > -1 && this.eidtRowIndex < this.dataSourceObj.rows.length){
+			this.updateValueAt(this.eidtRowIndex,field,value);
+		}
 	};
 	if(typeof gridCompProto.formEditCell == 'undefined'){
 		gridCompProto.formEditCell = function(){
