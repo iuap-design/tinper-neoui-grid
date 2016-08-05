@@ -2189,7 +2189,7 @@
 				else 
 					rowTr = this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]')[rowIndex]
 			}
-			if(this.dataSourceObj.rows[rowIndex].checked && u.hasClass(rowTr,u-grid-content-sel-row))
+			if(this.dataSourceObj.rows[rowIndex].checked && u.hasClass(rowTr, "u-grid-content-sel-row"))
 				return true;
 			if (doms && doms['multiSelectDivs'])
 				selectDiv = doms['multiSelectDivs'][rowIndex]
