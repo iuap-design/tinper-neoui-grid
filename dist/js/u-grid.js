@@ -1172,8 +1172,13 @@
 									td.title = v;
 								}else if(dataType == 'Int'){
 									v = parseInt(v);
-									span.innerHTML = v;
-									td.title = v;
+									if(v){
+										span.innerHTML = v;
+										td.title = v;
+									}else{
+										span.innerHTML = "";
+										td.title = "";
+									}
 								}else if(dataType == 'Float'){
 									if(precision){
 										var o = {};
@@ -1183,8 +1188,13 @@
 									}else{
 										v = parseFloat(v);
 									}
-									span.innerHTML = v;
-									td.title = v;
+									if(v){
+										span.innerHTML = v;
+										td.title = v;
+									}else{
+										span.innerHTML = "";
+										td.title = "";
+									}
 								}else{ //此处逻辑放到渲染处，减少render执行次数。
 									v = oThis.getString(v,'');
 									var v1 = v.replace(/\</g,'\<');

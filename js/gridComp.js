@@ -1165,8 +1165,13 @@
 									td.title = v;
 								}else if(dataType == 'Int'){
 									v = parseInt(v);
-									span.innerHTML = v;
-									td.title = v;
+									if(v){
+										span.innerHTML = v;
+										td.title = v;
+									}else{
+										span.innerHTML = "";
+										td.title = "";
+									}
 								}else if(dataType == 'Float'){
 									if(precision){
 										var o = {};
@@ -1176,8 +1181,13 @@
 									}else{
 										v = parseFloat(v);
 									}
-									span.innerHTML = v;
-									td.title = v;
+									if(v){
+										span.innerHTML = v;
+										td.title = v;
+									}else{
+										span.innerHTML = "";
+										td.title = "";
+									}
 								}else{ //此处逻辑放到渲染处，减少render执行次数。
 									v = oThis.getString(v,'');
 									var v1 = v.replace(/\</g,'\<');
@@ -2120,45 +2130,49 @@
 		 * 修改某一行
 		 */
 		updateRow:function(index,row){
-			this.dataSourceObj.rows[index].value = row;
-			this.dataSourceObj.options.values[this.dataSourceObj.rows[index].valueIndex] = row;
-			if(this.showType == 'grid'){
-				var obj = {};
-				obj.begin = index;
-				obj.length = 1;
-				this.renderTypeFun(obj);
-				this.repairSumRow();
+			if(index > -1 && index < this.dataSourceObj.rows.length){
+				this.dataSourceObj.rows[index].value = row;
+				this.dataSourceObj.options.values[this.dataSourceObj.rows[index].valueIndex] = row;
+				if(this.showType == 'grid'){
+					var obj = {};
+					obj.begin = index;
+					obj.length = 1;
+					this.renderTypeFun(obj);
+					this.repairSumRow();
+				}
 			}
 		},
 		/*
 		 * 修改某个cell的值
 		 */
 		updateValueAt:function(rowIndex,field,value,force){
-			var oThis=this,oldValue = $(this.dataSourceObj.rows[rowIndex].value).attr(field),treeRowIndex = rowIndex;
-			if(oldValue != value || force){
-				$(this.dataSourceObj.rows[rowIndex].value).attr(field,value);
-				$(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field,value);
-				if(this.showType == 'grid'){
-					var obj = {};
-					obj.field = field;
-					obj.begin = rowIndex;
-					obj.length = 1;
-					this.renderTypeFun(obj);
-					// this.editColIndex = undefined;
-					// 如果编辑行为修改行则同时需要修改编辑行的显示
-					treeRowIndex = this.updateValueAtTree(rowIndex,field,value,force);
-					this.updateValueAtEdit(rowIndex,field,value,force);
-					this.repairSumRow();
-				}
-				if(typeof this.options.onValueChange == 'function'){
-					var obj = {};
-					obj.gridObj = this;
-					//因为树表更新时候可能改变rowIndex的顺序
-					obj.rowIndex = treeRowIndex;
-					obj.field = field;
-					obj.oldValue = oldValue;
-					obj.newValue = value;
-					this.options.onValueChange(obj);
+			if(rowIndex > -1 && rowIndex < this.dataSourceObj.rows.length){
+				var oThis=this,oldValue = $(this.dataSourceObj.rows[rowIndex].value).attr(field),treeRowIndex = rowIndex;
+				if(oldValue != value || force){
+					$(this.dataSourceObj.rows[rowIndex].value).attr(field,value);
+					$(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field,value);
+					if(this.showType == 'grid'){
+						var obj = {};
+						obj.field = field;
+						obj.begin = rowIndex;
+						obj.length = 1;
+						this.renderTypeFun(obj);
+						// this.editColIndex = undefined;
+						// 如果编辑行为修改行则同时需要修改编辑行的显示
+						treeRowIndex = this.updateValueAtTree(rowIndex,field,value,force);
+						this.updateValueAtEdit(rowIndex,field,value,force);
+						this.repairSumRow();
+					}
+					if(typeof this.options.onValueChange == 'function'){
+						var obj = {};
+						obj.gridObj = this;
+						//因为树表更新时候可能改变rowIndex的顺序
+						obj.rowIndex = treeRowIndex;
+						obj.field = field;
+						obj.oldValue = oldValue;
+						obj.newValue = value;
+						this.options.onValueChange(obj);
+					}
 				}
 			}
 		},
