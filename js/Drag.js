@@ -85,6 +85,7 @@
 					$('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
 					column.options.width = newWidth;
+					column.options.realWidth = newWidth;
 				}
 			}
 			$('#' + this.options.id + '_top').css('display', 'block');

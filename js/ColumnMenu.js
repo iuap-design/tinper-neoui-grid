@@ -85,16 +85,39 @@
 					if($(e.target).hasClass('u-grid-header-columnmenu')){
 						//点击的是columnmenu
 						$('#' + oThis.options.id + '_column_menu').css('display','block');
+
+
+						// 根据点击位置来显示column menu区域
+						var left = e.clientX - 160;
+						if(left < 0)
+							left = 0;
+						var top = e.clientY + 10;
+						$('#' + oThis.options.id + '_column_menu').css('left',left);
+						$('#' + oThis.options.id + '_column_menu').css('top',top);
+						/*数据列多的情况下处理显示的高度*/
+
+						var sX = $(window).width();
+						var sH = $(window).height();
+
+						// 如果数据列高度高于屏幕高度则数据列高度设置为屏幕高度-10；
+						var columnsHeight = oThis.menuColumnsHeight;
+						if((oThis.menuColumnsHeight + top + 34) > sH){
+							columnsHeight = sH - top - 34;
+							$('#' + oThis.options.id + '_column_menu_columns').css('height',columnsHeight + 'px');
+						}else{
+							$('#' + oThis.options.id + '_column_menu_columns').css('height','');
+						}
+
 						/*var left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - 20;
 						if(left + oThis.columnMenuWidth > oThis.wholeWidth)
-							left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - oThis.columnMenuWidth + 1;*/
+							left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - oThis.columnMenuWidth + 1;
 						$('#' + oThis.options.id + '_column_menu').css('right',0);
 						$('#' + oThis.options.id + '_column_menu').css('top',oThis.headerHeight);
 
-						/*数据列多的情况下处理显示的高度*/
-						var sX = $(window).width();
-						var sH = $(window).height();
-						
+						// 获取grid顶层div的位置
+						var ele = $('#' + oThis.options.id)[0];
+						off = u.getOffset(ele),scroll = u.getScroll(ele),
+
 						var columnsTop = oThis.headerHeight;
 						var cY = e.clientY;
 						// 如果数据列高度高于屏幕高度则数据列高度设置为屏幕高度-10；
@@ -106,7 +129,7 @@
 						}else{
 							$('#' + oThis.options.id + '_column_menu_columns').css('height','');
 						}
-
+						*/
 						oThis.ele.createColumnMenuFlag = true;
 					}else{
 						

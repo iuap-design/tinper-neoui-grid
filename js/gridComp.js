@@ -72,6 +72,7 @@
 			this.headerHeight = 44 * parseInt(this.options.maxHeaderLevel) + 1;
 			this.gridCompHiddenLevelColumnArr = new Array(); // 存储自动隐藏时隐藏优先级排序后的column
 			this.treeLeft = 10; // 树表时每一级之间的差值
+			this.overWidthVisibleColumnArr = new Array(); // 超出定义宽度的column集合
 		},
 		getBooleanOptions:function(){
 			this.options.cancelFocus = this.getBoolean(this.options.cancelFocus);
@@ -255,6 +256,7 @@
 		},
 		initGridCompColumnFun: function(columnOptions){
 			var column = new gridCompColumn(columnOptions, this);
+			column.options.optionsWidth = column.options.width;
 			column.options.realWidth = column.options.width;
 			this.gridCompColumnArr.push(column);
 			this.initGridCompColumnColumnMenuFun(columnOptions);
@@ -1346,10 +1348,13 @@
 			var oThis = this,
 				w = 0;
 			this.firstColumn = true;
-
+			this.overWidthVisibleColumnArr = new Array();
 			$.each(this.gridCompColumnArr,function(){
 				if(this.options.visible){
-					w+=parseInt(this.options.width);
+					w += parseInt(this.options.width);
+					if(this.options.width > this.options.realWidth){
+						oThis.overWidthVisibleColumnArr.push(this);
+					}
 					this.firstColumn = oThis.firstColumn;
 					oThis.firstColumn = false;
 					oThis.lastVisibleColumn = this;
@@ -1399,15 +1404,43 @@
 				$('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
 				newContentWidth = this.contentMinWidth;
 			}
-			$('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
-			$('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+			
 			if(newContentWidth > this.contentMinWidth){
-				$('#' + this.options.id + '_content_left_bottom').css('display','block');
-				$('#' + this.options.id + '_content_left_sum_bottom').css('bottom',16);
+				// 首先处理扩展列的宽度为原有宽度，然后再扩展最后一列
+				var l = this.overWidthVisibleColumnArr.length;
+				if(l > 0){
+					for(var i = 0; i < l; i++){
+						var overWidthColumn = this.overWidthVisibleColumnArr[i];
+						var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
+						var w = overWidthColumn.options.width;
+						var realW = overWidthColumn.options.realWidth;
+						$('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
+						$('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
+						newContentWidth = newContentWidth - (w - realW);
+						overWidthColumn.options.width = overWidthColumn.options.realWidth;
+					}
+					if(newContentWidth < this.contentMinWidth){
+						var oldW = this.lastVisibleColumn.options.width;
+						this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
+						$('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+						$('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+						this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+						newContentWidth = this.contentMinWidth;
+					}
+				}
+				if(newContentWidth > this.contentMinWidth){
+					$('#' + this.options.id + '_content_left_bottom').css('display','block');
+					$('#' + this.options.id + '_content_left_sum_bottom').css('bottom',16);
+				}else{
+					$('#' + this.options.id + '_content_left_bottom').css('display','none');
+					$('#' + this.options.id + '_content_left_sum_bottom').css('bottom',0);
+				}
 			}else{
 				$('#' + this.options.id + '_content_left_bottom').css('display','none');
 				$('#' + this.options.id + '_content_left_sum_bottom').css('bottom',0);
 			}
+			$('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+			$('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
 			return newContentWidth;
 		},
 		/*

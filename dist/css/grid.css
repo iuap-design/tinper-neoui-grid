@@ -569,7 +569,7 @@ columnMenu区域css begin
   width: 160px;
   display: none;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   z-index: 13;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
