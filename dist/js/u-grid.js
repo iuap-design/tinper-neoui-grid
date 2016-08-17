@@ -5070,8 +5070,7 @@
 		this.getAllChildRowFun(row,row.allChildRow);
 		return row.allChildRow;
 	};
-	
-	
+
 	gridCompProto.getChildRowIndex = function(row){
 		var result = [];
 		$.each(row.childRow, function() {
@@ -5079,8 +5078,6 @@
 		});
 		return result;
 	}
-
-
 
 
 	/*
