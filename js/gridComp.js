@@ -1597,7 +1597,7 @@
 					if(oThis.options.rowClickBan){
 						return;
 					}
-					var rowChildIndex = row.childRowIndex;
+					var rowChildIndex = oThis.getChildRowIndex(row);
 					if(oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus){
 						oThis.setRowUnFocus(index);
 					}else{

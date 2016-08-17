@@ -28,7 +28,7 @@
 			var index = this.getTrIndex($tr);
 			var row = oThis.dataSourceObj.rows[index];
 			if(row){
-				var rowChildIndex = row.childRowIndex;
+				var rowChildIndex = oThis.getChildRowIndex(row);
 				if($target.hasClass('uf-minusbutton') || $target.hasClass('uf-addsquarebutton2') ){
 					var minus = $td.find('.uf-minusbutton');
 					var plus = $td.find('.uf-addsquarebutton2');
@@ -223,7 +223,13 @@
 		return row.allChildRow;
 	};
 
-
+	gridCompProto.getChildRowIndex = function(row){
+		var result = [];
+		$.each(row.childRow, function() {
+				result.push(this.valueIndex)
+		});
+		return result;
+	}
 
 
 	/*
@@ -251,8 +257,8 @@
 
 	gridCompProto.getAllChildRowIndexFun = function(row,rowArry){
 		var oThis  = this;
-		if(row.childRowIndex.length > 0){
-			Array.prototype.push.apply(rowArry, row.childRowIndex);
+		if(row.childRow.length > 0){
+			Array.prototype.push.apply(rowArry, this.getChildRowIndex(row));
 			$.each(row.childRow, function() {
 				  oThis.getAllChildRowIndexFun(this,rowArry);
 			});
