@@ -225,9 +225,11 @@
 
 	gridCompProto.getChildRowIndex = function(row){
 		var result = [];
-		$.each(row.childRow, function() {
+		if(row.childRow && row.childRow.length > 0){
+			$.each(row.childRow, function() {
 				result.push(this.valueIndex)
-		});
+			});
+		}
 		return result;
 	}
 
