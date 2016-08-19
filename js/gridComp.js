@@ -548,8 +548,8 @@
 				htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
 				// 遍历生成所有行
 				if (this.dataSourceObj.rows) {
-					$.each(this.dataSourceObj.rows, function(i) {
-						htmlStr += oThis.createContentLeftNumColRow(i);
+					$.each(this.dataSourceObj.rows, function(i, row) {
+						htmlStr += oThis.createContentLeftNumColRow(i, row.value);
 					});
 				}
 				htmlStr += '</div>';
@@ -1907,7 +1907,7 @@
 					}
 				}
 				if (this.options.showNumCol) {
-					var htmlStr = this.createContentLeftNumColRow(l);
+					var htmlStr = this.createContentLeftNumColRow(l, row);
 					if(endFlag){
 						$('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('beforeEnd',htmlStr);
 					}else{
@@ -1997,14 +1997,14 @@
 				});
 			}
 			if(this.showType == 'grid' && $('#' + this.options.id + '_content_div tbody')[0]){ //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据 //lyk--需要完善隐藏之后再显示同事添加数据操作
-				$.each(rowObjArr, function(i) {
+				$.each(rowObjArr, function(i, row) {
 					htmlStr += oThis.createContentOneRow(this);
 					htmlStrFixed += oThis.createContentOneRowFixed(this);
 					if(oThis.options.multiSelect){
 						htmlStrmultiSelect += oThis.createContentLeftMultiSelectRow(this);
 					}
 					if(oThis.options.showNumCol){
-						htmlStrNumCol += oThis.createContentLeftNumColRow(l + i);
+						htmlStrNumCol += oThis.createContentLeftNumColRow(l + i,row.value);
 					}
 				});
 				try{
