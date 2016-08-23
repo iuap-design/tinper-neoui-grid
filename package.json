@@ -1,6 +1,6 @@
 {
-  "name": "grid",
-  "version": "3.0.6",
+  "name": "neoui-grid",
+  "version": "1.0.0",
   "description": "grid",
   "main": "gulpfile.js",
   "directories": {
@@ -8,7 +8,7 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "product": "gulp dist"
   },
   "repository": {
     "type": "git",
