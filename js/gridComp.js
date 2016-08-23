@@ -372,7 +372,9 @@
 			if(!this.options.showHeader)
 				headerShowStr = 'style="display:none;"';
 			var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + '>';
-			htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
+			if (this.options.columnMenu){
+				htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
+			}
 			if (this.options.multiSelect || this.options.showNumCol) {
 				htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">';
 				if (this.options.multiSelect) {
