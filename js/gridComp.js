@@ -1681,7 +1681,38 @@
 				this.resetThVariable();
 				this.saveGridCompColumnArrToLocal();
 			}
-		},				
+		},
+
+		/*
+		 * 根据field设置宽度
+		 */			
+		setCoulmnWidthByField: function(field, newWidth){
+			var column = this.getColumnByField(field);
+			this.setColumnWidth(column, newWidth);
+		},	
+
+		/*
+		 * 根据column对象设置宽度
+		 */	
+		setColumnWidth: function(column, newWidth){
+			if(column != this.lastVisibleColumn){
+				if (newWidth > this.minColumnWidth) {
+					var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
+					oldWidth = column.options.width,
+					changeWidth  = newWidth - oldWidth,
+					cWidth = this.contentWidth + changeWidth;
+					this.contentWidth = this.contentWidthChange(cWidth);
+					$('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+					$('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+
+					column.options.width = newWidth;
+					column.options.realWidth = newWidth;
+
+					this.resetThVariable();
+					this.saveGridCompColumnArrToLocal();
+				}
+			}
+		},	
 		/*
 		 * 对宽度和高度进行处理
 		 */
