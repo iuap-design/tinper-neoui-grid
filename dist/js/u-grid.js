@@ -1874,33 +1874,36 @@
 		addOneRow:function(row,index){
 			var oThis = this,displayFlag = 'none',rowObj = {},parentIndex,
 				parentChildLength = 0,l = this.dataSourceObj.rows.length,endFlag = false;
-				rowObj.value = row
+				rowObj.value = row;
+
+			index = this.addOneRowTree(row,index,rowObj);
+			if(index != 0){
+				if(index && index > 0){
+					if(l < index)
+						index = l;
+				}else{
+					index = 0;
+				}
+			}
+			if(l == index){
+				endFlag = true;
+			}
+			rowObj.valueIndex = index;
+			rowObj.value = row;
+			this.dataSourceObj.rows.splice(index,0,rowObj);
+			// 如果是在中间插入需要将后续的valueIndex + 1；
+			if(this.dataSourceObj.rows.length > (index + 1)){
+				$.each(this.dataSourceObj.rows,function(i){
+					if(i > index){
+						this.valueIndex =  this.valueIndex + 1;
+					}
+				});
+			}
+
 			if(this.showType == 'grid'){ //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
 				this.editClose();
-				index = this.addOneRowTree(row,index,rowObj);
-				if(index != 0){
-					if(index && index > 0){
-						if(l < index)
-							index = l;
-					}else{
-						index = 0;
-					}
-				}
-				if(l == index){
-					endFlag = true;
-				}
-				rowObj.valueIndex = index;
-				rowObj.value = row;
-				this.dataSourceObj.rows.splice(index,0,rowObj);
+				
 				this.updateEditRowIndex('+', index);
-				// 如果是在中间插入需要将后续的valueIndex + 1；
-				if(this.dataSourceObj.rows.length > (index + 1)){
-					$.each(this.dataSourceObj.rows,function(i){
-						if(i > index){
-							this.valueIndex =  this.valueIndex + 1;
-						}
-					});
-				}
 				try{
 					var htmlStr = this.createContentOneRow(rowObj,'normal',displayFlag);
 					if(endFlag){
