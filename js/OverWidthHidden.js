@@ -11,9 +11,9 @@
 			return;
 		var oThis = this;
 		var w = 0;
-		
+
 		this.gridCompHiddenLevelColumnArr = this.gridCompColumnArr.slice(0);
-		
+
 		this.gridCompHiddenLevelColumnArr.sort(function(a, b) {
 			var hiddenLevel1 = a.options.hiddenLevel;
 			var hiddenLevel2 = b.options.hiddenLevel;
@@ -35,7 +35,7 @@
 					if(column.options.visible){
 						column.options.visible = false;
 						columnWholeWidth = columnWholeWidth - column.options.width;
-					} 
+					}
 					if(!(columnWholeWidth > wholeWidth)){
 						break;
 					}

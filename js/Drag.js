@@ -5,7 +5,7 @@
 		initEventFunFun = gridCompProto.initEventFun,
 		initGridEventFunFun = gridCompProto.initGridEventFun;
 
-	
+
 	gridCompProto.createHeaderDrag = function(){
 		return '<div class="u-grid-header-resize-handle" id="' + this.options.id + '_resize_handle"><div class="u-grid-header-resize-handle-inner"></div></div>';
 	};
@@ -27,7 +27,7 @@
 				// 将其他列的操作按钮隐藏，显示当前列的
 				oThis.headerThDrag(e, eleTh);
 			}
-			
+
 			oThis.dragFun(e);
 			e.stopPropagation();
 		});
@@ -42,7 +42,7 @@
 
 		$('#' + this.options.id+ '_top').on('mouseup', function(e) {
 			oThis.dragEnd(e);
-		});	
+		});
 
 	};
 

@@ -101,7 +101,7 @@
 				if(this.options.dataType == 'integer' || this.options.dataType == 'float') {
 					contentStyle = 'style="text-align: right;"'
 				}
-				
+
 				var htmlStr = '<div class="u-grid-content-td-div" ' + contentStyle + '>';
 				if(this.firstColumn){
 					htmlStr += '<div class="u-gird-centent-sum-div"><span>' + oThis.transMap.ml_sum + '</span></div>';
@@ -135,7 +135,7 @@
 			this.renderSumRow();
 		}
 	};
-		
+
 	gridCompProto.renderSumRow = function(){
 		var oThis = this;
 		$.each(this.gridCompColumnFixedArr, function(i) {
@@ -157,7 +157,7 @@
 					} else if(dataType == 'integer' || dataType == 'float'){
 						sumSpan.style.textAlign = 'right';
 					}
-				}	
+				}
 			}
 		});
 		$.each(this.gridCompColumnArr, function(i) {
@@ -179,7 +179,7 @@
 					} else if(dataType == 'integer' || dataType == 'float'){
 						sumSpan.style.textAlign = 'right';
 					}
-				}	
+				}
 			}
 		});
 	};
@@ -205,7 +205,7 @@
 				} else if(dataType == 'integer' || dataType == 'float'){
 					sumSpan.style.textAlign = 'right';
 				}
-			}	
+			}
 		}
 	};
 })(jQuery, window, document);

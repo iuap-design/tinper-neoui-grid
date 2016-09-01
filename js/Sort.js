@@ -25,7 +25,7 @@
 					oThis.columnClickY = e.clientY;
 					var eleTh = $(e.target).closest('th')[0];
 					if($(e.target).hasClass('u-grid-header-columnmenu')){
-						
+
 					}else{
 						// 执行click操作,进行排序
 						oThis.canSortable(e, eleTh);
@@ -35,7 +35,7 @@
 				// 点击的是数据区域
 
 			}
-		
+
 		});
 	};
 
@@ -111,7 +111,7 @@
 						this.dataSourceObj.sortRows();
 					}
 
-				} else { //本次为升序 
+				} else { //本次为升序
 					$(".uf-caretarrowup").remove();
 					$(".uf-caretdown").remove();
 					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');

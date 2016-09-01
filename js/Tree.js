@@ -18,11 +18,11 @@
 			this.options.showNumCol = false;
 		}
 	};
-		
+
 
 	gridCompProto.clickFunTree = function(e){
 		var oThis = this,$target = $(e.target),$td = $target.closest('td');
-		
+
 		if($td.length > 0){
 			var $tr = $td.parent();
 			var index = this.getTrIndex($tr);
@@ -125,7 +125,7 @@
 					if(this.options.autoExpand){
 						displayFlag = 'block';
 					}
-					
+
 					var d = $("div:eq(0)",$pTr);
 					var openDiv = $('.uf-addsquarebutton2',$pTr);
 					var closeDiv = $('.uf-minusbutton',$pTr);
@@ -149,9 +149,9 @@
 			}
 		}
 
-		
+
 		return index;
-	}; 
+	};
 
 	gridCompProto.addOneRowTreeHasChildF = function(rowObj){
 		if(this.hasChildF){
@@ -182,7 +182,7 @@
 			// 目前已经不适用grid源生的编辑设置了，因为树表时关闭edit
 			var hasParent = false;
 			var hasChildF = false;
-			
+
 
 			$.each(this.dataSourceObj.rows,function(i){
 				var vv = this.value;
@@ -203,7 +203,7 @@
 				this.deleteOneRow(rowIndex);
 				this.addOneRow(rowValue[0]);
 			}
-			
+
 		}
 		if(this.options.showTree && (field == keyField || field == parentKeyField) && (hasChildF || hasParent)){
 			rowIndex = this.getRowIndexByValue(field,value);

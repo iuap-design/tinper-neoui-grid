@@ -316,7 +316,7 @@
 		obj.$tr = $tr;
 		obj.colIndex = colIndex;
 		oThis.newEditObj = obj;
-		
+
 		if(editType == 'text'){
 			if(this.options.editType == 'default'){
 				td.innerHTML = '<div class="u-grid-content-td-div" style="position: relative; left: 0px;"><div class="eType-input"><input id="' + this.options.id + "_edit_field_" + field + '" type="text" value="' + value +'" field="' + field+'" style="width:100%;margin:0px;min-height:20px;font-size:12px;color:#444"></div></div>';
@@ -369,7 +369,7 @@
 		if(this.eidtRowIndex > -1 && this.eidtRowIndex < this.dataSourceObj.rows.length){
 			this.updateValueAt(this.eidtRowIndex,field,value);
 		}
-		
+
 	};
 	if(typeof gridCompProto.formEditCell == 'undefined'){
 		gridCompProto.formEditCell = function(){

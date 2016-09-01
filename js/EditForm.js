@@ -54,6 +54,6 @@
 		htmlStr += '<div id="' + this.options.id + '_edit_' + field + '" class="u-grid-edit-div"></div>';
 		htmlStr += '</div>';
 		return htmlStr;
-	};	
+	};
 
 })(jQuery, window, document);

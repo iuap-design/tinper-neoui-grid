@@ -5,7 +5,7 @@
 		initEventFunFun = gridCompProto.initEventFun,
 		initGridEventFunFun = gridCompProto.initGridEventFun;
 
-	
+
 
 	gridCompProto.initEventFun = function(){
 		// 执行原有方法
@@ -34,7 +34,7 @@
 			}
 			oThis.swapColumnFun(e);
 			e.stopPropagation();
-		}); 
+		});
 
 		$('#' + this.options.id + '_top').on('mousemove', function(e) {
 			oThis.mouseMoveX = e.clientX;
@@ -49,7 +49,7 @@
 
 		$('#' + this.options.id).on('mouseup', function(e) {
 			oThis.mouseUpX = e.clientX;
-			oThis.mouseUpY = e.clientY;	
+			oThis.mouseUpY = e.clientY;
 			oThis.swapColumnEnd(e);
 			oThis.mouseUpX = 'mouseUpX';
 			oThis.mouseUpY = 'mouseUpY';

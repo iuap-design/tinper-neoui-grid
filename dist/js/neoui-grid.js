@@ -53,9 +53,14 @@
 
 	'use strict';
 	
-	var _Test = __webpack_require__(1);
+	var _dataSourceInit = __webpack_require__(1);
 	
-	document.write((0, _Test.Test)());
+	var huyue = new _dataSourceInit.dataSource('huyue');
+	
+	huyue.init = function () {
+		alert('重写了');
+	};
+	huyue.init();
 
 /***/ },
 /* 1 */
@@ -64,13 +69,23 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	       value: true
 	});
-	function Test() {
-		return "Test";
-	}
 	
-	exports.Test = Test;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var init = function init(str) {
+	       alert(str);
+	};
+	
+	var dataSource = function dataSource(str) {
+	       _classCallCheck(this, dataSource);
+	
+	       this.init = init;
+	       this.init(str);
+	};
+	
+	exports.dataSource = dataSource;
 
 /***/ }
 /******/ ]);
