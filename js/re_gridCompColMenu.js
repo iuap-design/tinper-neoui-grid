@@ -1,38 +1,27 @@
-import{
-	gridComp
-} from './gridComp'
+import {
+	initEventFun,
+    initGridEventFun
+} from './gridCompEvent';
 
-var gridComp = gridComp,
-	gridCompProto = gridComp.prototype,
-	initGridCompColumnFun = gridCompProto.initGridCompColumn,
-	initEventFunFun = gridCompProto.initEventFun,
-	initGridEventFunFun = gridCompProto.initGridEventFun;
+import {
+    initGridCompColumn
+} from './gridCompInit';
 
-
-gridCompProto.initGridCompColumnColumnMenuFun = function(columnOptions){
+const re_initGridCompColumnColumnMenuFun = function(columnOptions){
 	var column1 = new this.gridCompColumn(columnOptions, this);
 		column1.options.realWidth = column1.options.width;
 		this.basicGridCompColumnArr.push(column1);
 };
 
-gridCompProto.initGridCompColumn = function(){
-	// 执行原有方法
-	initGridCompColumnFun.apply(this,arguments);
+const colMenu_initGridCompColumn = function(){
 	// 扩展方法
 	this.menuColumnsHeight = this.gridCompColumnArr.length * this.columnMenuHeight;
 };
 
-gridCompProto.createColumnMenu = function() {
+const re_createColumnMenu = function() {
 	var oThis = this;
 	var htmlStr = '<div class="u-grid-column-menu" id="' + this.options.id + '_column_menu">';
 	htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
-
-	// 创建显示/隐藏列
-	/*htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
-	htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_showColumn">';
-	htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_show_column + '</span>';
-	htmlStr += '<div class="u-grid-column-menu-div3 uf uf-arrowheadpointingtotheright"></div>';
-	htmlStr += '</div></li>';*/
 
 	// 创建清除设置
 	htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
@@ -67,9 +56,7 @@ gridCompProto.createColumnMenu = function() {
 	return htmlStr;
 };
 
-gridCompProto.initEventFun = function(){
-	// 执行原有方法
-	initEventFunFun.apply(this,arguments);
+const colMenu_initEventFun = function(){
 	// 扩展方法
 	var oThis = this;
 	$('#' + this.options.id).on('mouseup', function(e) {
@@ -80,7 +67,6 @@ gridCompProto.initEventFun = function(){
 			//点击过程中鼠标没有移动
 			if (oThis.mouseDownX == oThis.mouseUpX && oThis.mouseDownY == oThis.mouseUpY) {
 			//或者移动距离小于5px(由于移动之后会显示屏幕div，暂时不做处理)
-//					if( Math.abs(parseInt(oThis.mouseDownX) - parseInt(oThis.mouseUpX)) <=5 && Math.abs(parseInt(oThis.mouseDownY) - parseInt(oThis.mouseUpY)) <=5){
 				oThis.columnClickX = e.clientX;
 				oThis.columnClickY = e.clientY;
 				var eleTh = $(e.target).closest('th')[0];
@@ -109,29 +95,6 @@ gridCompProto.initEventFun = function(){
 					}else{
 						$('#' + oThis.options.id + '_column_menu_columns').css('height','');
 					}
-
-					/*var left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - 20;
-					if(left + oThis.columnMenuWidth > oThis.wholeWidth)
-						left = eleTh.attrRightTotalWidth - oThis.scrollLeft + oThis.leftW + oThis.fixedWidth - oThis.columnMenuWidth + 1;
-					$('#' + oThis.options.id + '_column_menu').css('right',0);
-					$('#' + oThis.options.id + '_column_menu').css('top',oThis.headerHeight);
-
-					// 获取grid顶层div的位置
-					var ele = $('#' + oThis.options.id)[0];
-					off = u.getOffset(ele),scroll = u.getScroll(ele),
-
-					var columnsTop = oThis.headerHeight;
-					var cY = e.clientY;
-					// 如果数据列高度高于屏幕高度则数据列高度设置为屏幕高度-10；
-					var columnsHeight = oThis.menuColumnsHeight;
-					var hh = 0;
-					if((oThis.menuColumnsHeight + 74) > sH){
-						columnsHeight = sH - 74;
-						$('#' + oThis.options.id + '_column_menu_columns').css('height',columnsHeight + 'px');
-					}else{
-						$('#' + oThis.options.id + '_column_menu_columns').css('height','');
-					}
-					*/
 					oThis.ele.createColumnMenuFlag = true;
 				}else{
 
@@ -152,19 +115,9 @@ gridCompProto.initEventFun = function(){
 	});
 };
 
-gridCompProto.initGridEventFun = function(){
-	// 执行原有方法
-	initGridEventFunFun.apply(this,arguments);
+const colMenu_initGridEventFun = function(){
 	// 扩展方法
 	var oThis = this;
-	// 列头按钮显示/隐藏
-	/*$('#' + this.options.id + '_header_table th').on('mousemove',function(e){
-		$('.u-grid-header-columnmenu',$(this)).css('display','block');
-	});
-
-	$('#' + this.options.id + '_header_table th').on('mouseout',function(e){
-		$('.u-grid-header-columnmenu',$(this)).css('display','none');
-	});*/
 
 	/*header 按钮处理开始*/
 	// column按钮
@@ -174,61 +127,6 @@ gridCompProto.initGridEventFun = function(){
 	$('#' + this.options.id + '_column_menu_ul').on('mouseout', function(e) {
 		oThis.columnMenuMove = false;
 	});
-
-	// 显示/隐藏列按钮
-	/*$('#' + this.options.id + '_showColumn').on('mousemove', function(e) {
-		//待完善 考虑屏幕高度决定columnMenu显示形式
-
-		if(oThis.hideMenuColumns)
-			clearTimeout(oThis.hideMenuColumns);
-		if($('#' + oThis.options.id + '_column_menu_columns').css('display') == 'block')
-			return;
-		var sX = $(window).width();
-		var sH = $(window).height();
-
-		var menuLeft = $('#' + oThis.options.id + '_column_menu').css('left');
-		var columnsLeft = parseInt(menuLeft) + oThis.columnMenuWidth;
-		var maxLeft = oThis.columnClickX + oThis.columnMenuWidth * 2;
-		if(maxLeft > sX)
-			columnsLeft = parseInt(menuLeft) - oThis.columnMenuWidth;
-		$('#' + oThis.options.id + '_column_menu_columns').css('left',columnsLeft);
-		var columnsTop = oThis.headerHeight;
-		var cY = e.clientY;
-		// 如果数据列高度高于屏幕高度则数据列高度设置为屏幕高度-10；
-		var columnsHeight = oThis.menuColumnsHeight;
-		var hh = 0;
-		if((oThis.menuColumnsHeight + 30) > sH){
-			columnsHeight = sH - 30;
-			$('#' + oThis.options.id + '_column_menu_columns').css('height',columnsHeight + 'px');
-		}else{
-			$('#' + oThis.options.id + '_column_menu_columns').css('height','');
-		}
-		var maxHeight = cY + columnsHeight;
-		if(maxHeight > sH)
-			columnsTop = (cY - (sH - columnsHeight)) * -1 + 30;
-		$('#' + oThis.options.id + '_column_menu_columns').css('top',columnsTop);
-		$('#' + oThis.options.id + '_column_menu_columns').css('display','block');
-		oThis.columnMenuMove = true;
-	});
-	$('#' + this.options.id + '_showColumn').on('mouseout', function(e) {
-		oThis.hideMenuColumns = setTimeout(function(){
-			$('#' + oThis.options.id + '_column_menu_columns').css('display','none');
-			oThis.columnMenuMove = false;
-		},200);
-
-	});*/
-	/*$('#' + this.options.id + '_column_menu_columns').on('mousemove', function(e) {
-		if(oThis.hideMenuColumns)
-			clearTimeout(oThis.hideMenuColumns);
-		$('#' + oThis.options.id + '_column_menu_columns').css('display','block');
-		oThis.columnMenuMove = true;
-	});
-	$('#' + this.options.id + '_column_menu_columns').on('mouseout', function(e) {
-		oThis.hideMenuColumns = setTimeout(function(){
-			$('#' + oThis.options.id + '_column_menu_columns').css('display','none');
-			oThis.columnMenuMove = false;
-		},200);
-	});*/
 
 	// 清除设置按钮
 	$('#' + this.options.id + '_clearSet').on('click', function(e) {
@@ -314,14 +212,11 @@ gridCompProto.initGridEventFun = function(){
 	});
 	/*header 按钮处理结束*/
 };
-if(typeof gridCompProto.saveGridCompColumnArrToLocal == 'undefined'){
-	gridCompProto.saveGridCompColumnArrToLocal = function(){
-	};
-}
-if(typeof gridCompProto.clearLocalData == 'undefined'){
-	gridCompProto.clearLocalData = function(){
-	};
-}
+
 export{
-	gridComp
+	re_initGridCompColumnColumnMenuFun,
+	colMenu_initGridCompColumn,
+	re_createColumnMenu,
+	colMenu_initEventFun,
+	colMenu_initGridEventFun
 }

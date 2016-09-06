@@ -9,16 +9,34 @@ import {
 class dataSource{
     constructor(options, gridComp){
 
-		this.init = init;
-		this.sortRows = sortRows;
-		this.basicSortRows = basicSortRows;
-		this.treeSortRows = treeSortRows;
-		this.getSumValue = getSumValue;
-
         this.init(options, gridComp);
     	this.sortRows();
 
     }
 };
+
+var dataSourceProto = dataSource.prototype;
+
+dataSourceProto.init = init;
+dataSourceProto.sortRows = sortRows;
+dataSourceProto.basicSortRows = basicSortRows;
+dataSourceProto.treeSortRows = treeSortRows;
+dataSourceProto.getSumValue = getSumValue;
+
+
+import{re_basicSortRows} from './re_gridCompSort';
+dataSourceProto.basicSortRows = re_basicSortRows;
+
+
+/*
+ * tree
+ */
+import{
+    re_treeSortRows,
+    pushChildRows
+} from './re_gridCompTree';
+
+dataSourceProto.treeSortRows = re_treeSortRows;
+dataSourceProto.pushChildRows = pushChildRows;
 
 export{dataSource}

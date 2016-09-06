@@ -7,14 +7,22 @@ import {
 class column{
     constructor(options, gridComp){
 
-		this.init = init;
-		this.initTree = initTree;
-		this.getBooleanOptions = getBooleanOptions;
-
-
         this.init(options, gridComp);
 
     }
 };
+
+ var gridCompColumnProto = column.prototype;
+
+ gridCompColumnProto.init = init;
+ gridCompColumnProto.initTree = initTree;
+ gridCompColumnProto.getBooleanOptions = getBooleanOptions;
+
+ /*
+  * tree
+  */
+ import{re_initTree} from './re_gridCompTree';
+
+ gridCompColumnProto.initTree = re_initTree;
 
 export{column}

@@ -6,10 +6,7 @@
  import {column as gridCompColumn}  from './column';
  import {gridComp}  from './gridComp';
 
- // import {gridComp} from '.re_gridCompColMenu';
-
-
- var old = $.fn.grid;
+var old = $.fn.grid;
 // 方法扩展
 $.fn.grid = function(options) {
 	var grid = $(this).data('gridComp');
