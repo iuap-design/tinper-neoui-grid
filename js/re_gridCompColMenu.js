@@ -109,7 +109,7 @@ const colMenu_initEventFun = function(){
 
 	$(document).on('click',function(){
 		if(oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false){
-			$('#' + oThis.options.id + '_column_menu',oThis.$ele).css('display','none');
+			$('#' + oThis.options.id + '_column_menu').css('display','none');
 		}
 		oThis.ele.createColumnMenuFlag = false;
 	});

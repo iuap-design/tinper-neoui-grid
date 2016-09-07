@@ -61,7 +61,7 @@ const widthChangeGridFun = function() {
         var oldWidth = this.lastVisibleColumn.options.width;
         this.lastVisibleColumnWidth = oldWidth + (this.contentMinWidth - this.contentRealWidth);
         // modfied by tianxq1 最后一列自动扩展
-        this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth-20;
+        this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
     }else{
         this.contentWidth = this.contentRealWidth;
     }
