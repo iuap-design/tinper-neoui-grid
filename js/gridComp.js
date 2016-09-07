@@ -58,7 +58,8 @@ import {
     getFocusRowIndex,
     getAllRows,
     getRowByIndex,
-    getRowIndexByValue
+    getRowIndexByValue,
+    getChildRowIndex
 } from './gridCompGet';
 
 import {
@@ -269,6 +270,8 @@ gridComp.prototype.getFocusRowIndex = getFocusRowIndex;
 gridComp.prototype.getAllRows = getAllRows;
 gridComp.prototype.getRowByIndex = getRowByIndex;
 gridComp.prototype.getRowIndexByValue = getRowIndexByValue;
+gridComp.prototype.getChildRowIndex = getChildRowIndex;
+
 
 
 gridComp.prototype.init = init;

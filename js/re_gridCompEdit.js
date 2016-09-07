@@ -324,6 +324,18 @@ const editCell = function(obj){
 		obj.rowObj = rowObj;
 		editType.call(this,obj);
 	}
+	// input输入blur时显示下一个编辑控件
+	$('input',$(td)).on('keydown',function(e){
+		var keyCode = e.keyCode;
+        if( e.keyCode == 13 || e.keyCode == 9){// 回车
+        	this.blur(); //首先触发blur来将修改值反应到datatable中
+        	// IE11会导致先触发nextEditShow后触发blur的处理
+        	setTimeout(function(){
+        		oThis.nextEditShow();
+        	},100);
+            u.stopEvent(e);
+        }
+	});
 	if (this.options.editType == 'default')
 		$('input:first',$(td)).focus()
 

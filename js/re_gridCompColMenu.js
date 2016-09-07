@@ -41,7 +41,7 @@ const re_createColumnMenu = function() {
 				checkedStr = ' checked';
 			if(!this.options.canVisible)
 				checkedStr += ' style="display:none;"';
-			htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '></div>';
+			htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
 			htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
 			htmlStr += '</div></li>';
 		}

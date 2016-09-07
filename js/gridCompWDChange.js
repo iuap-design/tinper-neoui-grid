@@ -6,7 +6,7 @@ const widthChangeFun = function() {
     if($('#' + this.options.id)[0]){
         // 获取整体区域宽度
         var w = $('#' + this.options.id).width()  //[0].offsetWidth;
-        if(this.wholeWidth != w){
+        if(this.wholeWidth != w && this.$ele.data('gridComp') == this){
             this.wholeWidth = w;
             // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
             if (w > this.options.formMaxWidth && ((this.showType == 'form' || this.showType == '') || !$('#' + this.options.id + '_content_div tbody')[0]) || this.options.overWidthHiddenColumn) { //lyk--需要完善隐藏之后再显示同事添加数据操作

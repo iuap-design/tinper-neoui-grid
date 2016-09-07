@@ -359,7 +359,7 @@ const pushChildRows = function(row,level){
 			childRowArray.push(this);
 			var index = parseInt(oThis.rows.length - 1);
 			childRowIndexArray.push(index);
-			oThis.hasParentRows.splice(i,0);
+			oThis.hasParentRows.splice(i,1);
 			oThis.pushChildRows(this,nowLevel);
 		}
 	});

@@ -132,6 +132,14 @@ const getRowIndexByValue = function(field,value){
     return index;
 };
 
+const getChildRowIndex = function(row){
+    var result = [];
+    $.each(row.childRow, function() {
+            result.push(this.valueIndex)
+    });
+    return result;
+}
+
 export{
     getColumnAttr,
     getColumnByField,
@@ -144,5 +152,6 @@ export{
     getFocusRowIndex,
     getAllRows,
     getRowByIndex,
-    getRowIndexByValue
+    getRowIndexByValue,
+    getChildRowIndex
 }
