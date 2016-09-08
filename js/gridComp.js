@@ -673,7 +673,7 @@ import{
     re_addOneRowTreeHasChildF,
     re_updateValueAtTree,
     getAllChildRow,
-    getChildRowIndex,
+    re_getChildRowIndex,
     getAllChildRowIndex,
     getAllChildRowFun,
     getAllChildRowIndexFun,
@@ -687,7 +687,7 @@ gridCompProto.addOneRowTree = re_addOneRowTree;
 gridCompProto.addOneRowTreeHasChildF = re_addOneRowTreeHasChildF;
 gridCompProto.updateValueAtTree = re_updateValueAtTree;
 gridCompProto.getAllChildRow = getAllChildRow;
-gridCompProto.getChildRowIndex = getChildRowIndex;
+gridCompProto.getChildRowIndex = re_getChildRowIndex;
 gridCompProto.getAllChildRowIndex = getAllChildRowIndex;
 gridCompProto.getAllChildRowFun = getAllChildRowFun;
 gridCompProto.getAllChildRowIndexFun = getAllChildRowIndexFun;

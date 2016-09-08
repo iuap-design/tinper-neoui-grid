@@ -375,7 +375,7 @@ export{
     re_addOneRowTreeHasChildF,
     re_updateValueAtTree,
     getAllChildRow,
-    getChildRowIndex,
+    re_getChildRowIndex,
     getAllChildRowIndex,
     getAllChildRowFun,
     getAllChildRowIndexFun,
