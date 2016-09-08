@@ -82,7 +82,7 @@ const heightChangeFun = function() {
         var oldH = this.wholeHeight,h = $('#' + this.options.id)[0].offsetHeight;
         this.wholeHeight = h;
         if (oldH != h && h > 0) {
-            var contentH = h - this.exceptContentHeight - 1 > 0 ? h - this.exceptContentHeight -1 : 0;
+            var contentH = h - this.exceptContentHeight  > 0 ? h - this.exceptContentHeight : 0;
             $('#' + this.options.id + '_content').css('height', contentH + 'px');
             $('#' + this.options.id + '_content_div').css('height', contentH + 'px');
         }

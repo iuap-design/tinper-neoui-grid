@@ -1013,7 +1013,7 @@
 				childRowArray.push(this);
 				var index = parseInt(oThis.rows.length - 1);
 				childRowIndexArray.push(index);
-				oThis.hasParentRows.splice(i, 0);
+				oThis.hasParentRows.splice(i, 1);
 				oThis.pushChildRows(this, nowLevel);
 			}
 		});
@@ -1028,7 +1028,7 @@
 	exports.re_addOneRowTreeHasChildF = re_addOneRowTreeHasChildF;
 	exports.re_updateValueAtTree = re_updateValueAtTree;
 	exports.getAllChildRow = getAllChildRow;
-	exports.getChildRowIndex = getChildRowIndex;
+	exports.re_getChildRowIndex = re_getChildRowIndex;
 	exports.getAllChildRowIndex = getAllChildRowIndex;
 	exports.getAllChildRowFun = getAllChildRowFun;
 	exports.getAllChildRowIndexFun = getAllChildRowIndexFun;
@@ -1310,6 +1310,7 @@
 	gridComp.prototype.getAllRows = _gridCompGet.getAllRows;
 	gridComp.prototype.getRowByIndex = _gridCompGet.getRowByIndex;
 	gridComp.prototype.getRowIndexByValue = _gridCompGet.getRowIndexByValue;
+	gridComp.prototype.getChildRowIndex = _gridCompGet.getChildRowIndex;
 	
 	gridComp.prototype.init = _gridCompInit.init;
 	gridComp.prototype.getBooleanOptions = _gridCompInit.getBooleanOptions;
@@ -1607,7 +1608,7 @@
 	gridCompProto.addOneRowTreeHasChildF = _re_gridCompTree.re_addOneRowTreeHasChildF;
 	gridCompProto.updateValueAtTree = _re_gridCompTree.re_updateValueAtTree;
 	gridCompProto.getAllChildRow = _re_gridCompTree.getAllChildRow;
-	gridCompProto.getChildRowIndex = _re_gridCompTree.getChildRowIndex;
+	gridCompProto.getChildRowIndex = _re_gridCompTree.re_getChildRowIndex;
 	gridCompProto.getAllChildRowIndex = _re_gridCompTree.getAllChildRowIndex;
 	gridCompProto.getAllChildRowFun = _re_gridCompTree.getAllChildRowFun;
 	gridCompProto.getAllChildRowIndexFun = _re_gridCompTree.getAllChildRowIndexFun;
@@ -1805,7 +1806,7 @@
 	        gridCompColumnArr,
 	        trStyle = '';
 	    if (this.options.maxHeaderLevel > 1) {
-	        trStyle = 'style="height:' + this.headerHeight + 'px;"';
+	        trStyle = 'style="height:' + (this.headerHeight - 1) + 'px;"';
 	    }
 	    var htmlStr = '<tr role="row" ' + trStyle + '>';
 	    if (createFlag == 'fixed') {
@@ -1850,7 +1851,7 @@
 	        var wh = $('#' + this.options.id)[0].offsetHeight;
 	        this.wholeHeight = wh;
 	        if (wh > 0) {
-	            this.contentHeight = parseInt(wh) - this.exceptContentHeight - 1 > 0 ? parseInt(wh) - this.exceptContentHeight - 1 : 0;
+	            this.contentHeight = parseInt(wh) - this.exceptContentHeight > 0 ? parseInt(wh) - this.exceptContentHeight : 0;
 	            if (this.contentHeight > 0) {
 	                h = 'style="height:' + this.contentHeight + 'px;"';
 	            }
@@ -2529,6 +2530,14 @@
 	    return index;
 	};
 	
+	var getChildRowIndex = function getChildRowIndex(row) {
+	    var result = [];
+	    $.each(row.childRow, function () {
+	        result.push(this.valueIndex);
+	    });
+	    return result;
+	};
+	
 	exports.getColumnAttr = getColumnAttr;
 	exports.getColumnByField = getColumnByField;
 	exports.getIndexOfColumn = getIndexOfColumn;
@@ -2541,6 +2550,7 @@
 	exports.getAllRows = getAllRows;
 	exports.getRowByIndex = getRowByIndex;
 	exports.getRowIndexByValue = getRowIndexByValue;
+	exports.getChildRowIndex = getChildRowIndex;
 
 /***/ },
 /* 13 */
@@ -3892,7 +3902,7 @@
 	    if ($('#' + this.options.id)[0]) {
 	        // 获取整体区域宽度
 	        var w = $('#' + this.options.id).width(); //[0].offsetWidth;
-	        if (this.wholeWidth != w) {
+	        if (this.wholeWidth != w && this.$ele.data('gridComp') == this) {
 	            this.wholeWidth = w;
 	            // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
 	            if (w > this.options.formMaxWidth && (this.showType == 'form' || this.showType == '' || !$('#' + this.options.id + '_content_div tbody')[0]) || this.options.overWidthHiddenColumn) {
@@ -3965,7 +3975,7 @@
 	            h = $('#' + this.options.id)[0].offsetHeight;
 	        this.wholeHeight = h;
 	        if (oldH != h && h > 0) {
-	            var contentH = h - this.exceptContentHeight - 1 > 0 ? h - this.exceptContentHeight - 1 : 0;
+	            var contentH = h - this.exceptContentHeight > 0 ? h - this.exceptContentHeight : 0;
 	            $('#' + this.options.id + '_content').css('height', contentH + 'px');
 	            $('#' + this.options.id + '_content_div').css('height', contentH + 'px');
 	        }
@@ -4106,7 +4116,7 @@
 				if (oThis.options.rowClickBan) {
 					return;
 				}
-				var rowChildIndex = row.childRowIndex;
+				var rowChildIndex = oThis.getChildRowIndex(row);
 				if (oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus) {
 					oThis.setRowUnFocus(index);
 				} else {
@@ -4457,7 +4467,7 @@
 				var checkedStr = "";
 				if (this.options.visible) checkedStr = ' checked';
 				if (!this.options.canVisible) checkedStr += ' style="display:none;"';
-				htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '></div>';
+				htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
 				htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
 				htmlStr += '</div></li>';
 			}
@@ -5086,6 +5096,19 @@
 			obj.rowObj = rowObj;
 			editType.call(this, obj);
 		}
+		// input输入blur时显示下一个编辑控件
+		$('input', $(td)).on('keydown', function (e) {
+			var keyCode = e.keyCode;
+			if (e.keyCode == 13 || e.keyCode == 9) {
+				// 回车
+				this.blur(); //首先触发blur来将修改值反应到datatable中
+				// IE11会导致先触发nextEditShow后触发blur的处理
+				setTimeout(function () {
+					oThis.nextEditShow();
+				}, 100);
+				u.stopEvent(e);
+			}
+		});
 		if (this.options.editType == 'default') $('input:first', $(td)).focus();
 	};
 	/*

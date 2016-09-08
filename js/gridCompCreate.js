@@ -171,7 +171,7 @@ const createColgroup = function(createFlag) {
 const createThead = function(createFlag) {
     var oThis = this,visibleIndex = 0,gridCompColumnArr,trStyle = '';
     if(this.options.maxHeaderLevel >1){
-        trStyle = 'style="height:' + this.headerHeight + 'px;"';
+        trStyle = 'style="height:' + (this.headerHeight -1) + 'px;"';
     }
     var htmlStr = '<tr role="row" ' + trStyle + '>';
     if(createFlag == 'fixed'){
@@ -213,7 +213,7 @@ const createContent = function() {
         var wh = $('#' + this.options.id)[0].offsetHeight;
         this.wholeHeight = wh;
         if (wh > 0) {
-            this.contentHeight = parseInt(wh) - this.exceptContentHeight - 1 > 0?parseInt(wh) - this.exceptContentHeight - 1:0;
+            this.contentHeight = parseInt(wh) - this.exceptContentHeight > 0?parseInt(wh) - this.exceptContentHeight :0;
             if(this.contentHeight > 0){
                 h = 'style="height:' + this.contentHeight + 'px;"';
             }
