@@ -27,8 +27,8 @@ const init = function(ele, options){
     this.countContentHeight = true;// 是否计算内容区的高度（是否为流式）
     this.minColumnWidth = 80; // 最小列宽
     this.scrollBarHeight = 16; // 滚动条高度
-    this.numWidth = 40; // 数字列宽度
-    this.multiSelectWidth = 40; // 复选框列宽度
+    this.numWidth = this.options.numWidth || 40; // 数字列宽度
+    this.multiSelectWidth = this.options.multiSelectWidth || 40; // 复选框列宽度
     this.multiWidth = 40; // 复选框宽度
 
     this.basicGridCompColumnArr = new Array(); // 存储基本的columns对象，用于清除设置
