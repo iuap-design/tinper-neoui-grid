@@ -82,6 +82,10 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                 trIndex++;
             }
             var tr = oThis.realtimeTableRows[trIndex],td = tr.children[i];
+            if (oThis.iconSpan) {
+						var iconSpan = oThis.iconSpan;
+					}
+
             if(td){
                 if(td.children[0].innerHTML.indexOf('u-grid-content-tree-span')   !=  -1){
                     var span =  td.children[0].children[1];
@@ -146,7 +150,6 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                             td.title = v;
                             v = v.replace(/\</g,'&lt;');
                             v = v.replace(/\>/g,'&gt;');
-
                             span.innerHTML = v;
                         }
                     }else{
@@ -156,7 +159,9 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                         td.title = v;
                         v = v.replace(/\</g,'&lt;');
                         v = v.replace(/\>/g,'&gt;');
-
+                        if (i == 0 && iconSpan) {
+                        	v = iconSpan += v;
+                       }
                         span.innerHTML = v;
                     }
                 }

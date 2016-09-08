@@ -297,6 +297,15 @@ const editCell = function(obj){
 	var $tr = obj.$tr;
 	var	colIndex = obj.colIndex;
 	var oThis = this;
+	if(obj.colIndex == 0){
+			try{
+				this.iconSpan = $(td).find('.uf')[0].outerHTML;
+			}catch(e){
+
+			}
+		} else {
+			this.iconSpan = null;
+		}
 
 	var obj = {};
 	obj.td = td;
