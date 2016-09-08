@@ -71,6 +71,7 @@ const re_addOneRowTree = function(row,index,rowObj){
 		rowObj.keyValue = keyValue;
 		var parentKeyValue = this.getString($(row).attr(parentKeyField),'');
 		rowObj.parentKeyValue = parentKeyValue;
+		var parentChildLength;
 		/* 判断是否存在父项/子项 */
 		$.each(this.dataSourceObj.rows,function(i){
 			var value = this.value;
@@ -209,7 +210,7 @@ const getAllChildRow = function(row){
 	this.getAllChildRowFun(row,row.allChildRow);
 	return row.allChildRow;
 };
-const getChildRowIndex = function(row){
+const re_getChildRowIndex = function(row){
 	var result = [];
 	if(row.childRow && row.childRow.length > 0){
 		$.each(row.childRow, function() {
