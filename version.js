@@ -6,9 +6,9 @@ var data = fs.readFileSync('./package.json', 'utf8');
 var packageObj = JSON.parse(data);
 var filesArr = [];
 if(env == "dev") {
-	filesArr.push('./dist/js/neoui-grid.js');
+	filesArr.push('./dist/js/u-grid.js');
 } else if(env == "build") {
-	filesArr.push('./dist/js/neoui-grid.min.js');
+	filesArr.push('./dist/js/u-grid.min.js');
 }
 var headerStr = '/** \r\n';
 headerStr += ' * ' + packageObj.name + ' v' + packageObj.version + '\r\n';

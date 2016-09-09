@@ -82,20 +82,20 @@ gulp.task('css-init',function(){
 })
 
 gulp.task('css', ['css-init'], function(){
-    version.init([
-            'dist/css/grid.css',
-            'dist/css/grid.min.css',
-        ]);
+    // version.init([
+    //         'dist/css/grid.css',
+    //         'dist/css/grid.min.css',
+    //     ]);
 })
 
 gulp.task('distWatch',function(){
-    gulp.watch(globs.js,['js']);
+    // gulp.watch(globs.js,['js']);
     gulp.watch(globs.css,['css'])
 })
 
-gulp.task('dev', ['js', 'css'], function(){
+gulp.task('dev', [ 'css'], function(){
     gulp.run('distWatch');
 });
 
-gulp.task('dist', ['js', 'css'], function(){
+gulp.task('dist', ['css'], function(){
 });

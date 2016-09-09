@@ -731,6 +731,7 @@
 			rowObj.keyValue = keyValue;
 			var parentKeyValue = this.getString($(row).attr(parentKeyField), '');
 			rowObj.parentKeyValue = parentKeyValue;
+			var parentChildLength;
 			/* 判断是否存在父项/子项 */
 			$.each(this.dataSourceObj.rows, function (i) {
 				var value = this.value;
@@ -863,7 +864,7 @@
 		this.getAllChildRowFun(row, row.allChildRow);
 		return row.allChildRow;
 	};
-	var getChildRowIndex = function getChildRowIndex(row) {
+	var re_getChildRowIndex = function re_getChildRowIndex(row) {
 		var result = [];
 		if (row.childRow && row.childRow.length > 0) {
 			$.each(row.childRow, function () {
@@ -2594,8 +2595,8 @@
 	    this.countContentHeight = true; // 是否计算内容区的高度（是否为流式）
 	    this.minColumnWidth = 80; // 最小列宽
 	    this.scrollBarHeight = 16; // 滚动条高度
-	    this.numWidth = 40; // 数字列宽度
-	    this.multiSelectWidth = 40; // 复选框列宽度
+	    this.numWidth = this.options.numWidth || 40; // 数字列宽度
+	    this.multiSelectWidth = this.options.multiSelectWidth || 40; // 复选框列宽度
 	    this.multiWidth = 40; // 复选框宽度
 	
 	    this.basicGridCompColumnArr = new Array(); // 存储基本的columns对象，用于清除设置
@@ -3641,6 +3642,10 @@
 	            }
 	            var tr = oThis.realtimeTableRows[trIndex],
 	                td = tr.children[i];
+	            if (oThis.iconSpan) {
+	                var iconSpan = oThis.iconSpan;
+	            }
+	
 	            if (td) {
 	                if (td.children[0].innerHTML.indexOf('u-grid-content-tree-span') != -1) {
 	                    var span = td.children[0].children[1];
@@ -3706,7 +3711,6 @@
 	                            td.title = v;
 	                            v = v.replace(/\</g, '&lt;');
 	                            v = v.replace(/\>/g, '&gt;');
-	
 	                            span.innerHTML = v;
 	                        }
 	                    } else {
@@ -3716,7 +3720,9 @@
 	                        td.title = v;
 	                        v = v.replace(/\</g, '&lt;');
 	                        v = v.replace(/\>/g, '&gt;');
-	
+	                        if (i == 0 && iconSpan) {
+	                            v = iconSpan += v;
+	                        }
 	                        span.innerHTML = v;
 	                    }
 	                }
@@ -5069,6 +5075,13 @@
 		var $tr = obj.$tr;
 		var colIndex = obj.colIndex;
 		var oThis = this;
+		if (obj.colIndex == 0) {
+			try {
+				this.iconSpan = $(td).find('.uf')[0].outerHTML;
+			} catch (e) {}
+		} else {
+			this.iconSpan = null;
+		}
 	
 		var obj = {};
 		obj.td = td;
@@ -6160,4 +6173,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=neoui-grid.js.map
+//# sourceMappingURL=u-grid.js.map
