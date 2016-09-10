@@ -1,5 +1,5 @@
 /** 
- * neoui-grid v1.0.5
+ * neoui-grid v1.0.8
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/grid#readme
@@ -1045,7 +1045,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.column = undefined;
 	
@@ -1056,9 +1056,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var column = function column(options, gridComp) {
-	  _classCallCheck(this, column);
+	    _classCallCheck(this, column);
 	
-	  this.init(options, gridComp);
+	    this.init(options, gridComp);
 	};
 	
 	;
