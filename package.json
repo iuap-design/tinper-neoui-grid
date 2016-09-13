@@ -1,6 +1,6 @@
 {
   "name": "neoui-grid",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "grid",
   "main": "gulpfile.js",
   "directories": {

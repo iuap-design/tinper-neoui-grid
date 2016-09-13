@@ -1,5 +1,5 @@
 /** 
- * neoui-grid v1.0.8
+ * neoui-grid v1.0.9
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/grid#readme
@@ -710,7 +710,8 @@
 	};
 	var re_addOneRowTree = function re_addOneRowTree(row, index, rowObj) {
 		var oThis = this,
-		    l = this.dataSourceObj.rows.length;
+		    l = this.dataSourceObj.rows.length,
+		    displayFlag;
 		// 存在树结构
 		if (this.options.showTree) {
 			this.hasParent = false;
@@ -787,7 +788,10 @@
 			}
 		}
 
-		return index;
+		return {
+			index: index,
+			displayFlag: displayFlag
+		};
 	};
 	var re_addOneRowTreeHasChildF = function re_addOneRowTreeHasChildF(rowObj) {
 		if (this.hasChildF) {
@@ -940,6 +944,7 @@
 	 */
 	var re_treeSortRows = function re_treeSortRows(field, sortType) {
 		var oThis = this;
+		var spliceHasParentRows = new Array();
 		this.rows = new Array();
 		this.hasParentRows = new Array();
 		this.nothasParentRows = new Array();
@@ -972,9 +977,13 @@
 					}
 				});
 				if (!hasParent) {
-					oThis.hasParentRows.splice(i, 0);
+					spliceHasParentRows.push(this);
 					oThis.nothasParentRows.push(this);
 				}
+			});
+			$.each(spliceHasParentRows, function () {
+				var index = oThis.hasParentRows.indexOf(this);
+				oThis.hasParentRows.splice(index, 1);
 			});
 			oThis.rows = new Array();
 			var level = 0;
@@ -996,6 +1005,7 @@
 		var hasChild = false;
 		var childRowArray = new Array();
 		var childRowIndexArray = new Array();
+		var spliceHasParentRows = new Array();
 		$.each(this.hasParentRows, function (i) {
 			if (this && this.parentKeyValue == keyValue) {
 				hasChild = true;
@@ -1004,9 +1014,13 @@
 				childRowArray.push(this);
 				var index = parseInt(oThis.rows.length - 1);
 				childRowIndexArray.push(index);
-				oThis.hasParentRows.splice(i, 1);
+				spliceHasParentRows.push(this);
 				oThis.pushChildRows(this, nowLevel);
 			}
+		});
+		$.each(spliceHasParentRows, function () {
+			var index = oThis.hasParentRows.indexOf(this);
+			oThis.hasParentRows.splice(index, 1);
 		});
 		row.hasChild = hasChild;
 		row.childRow = childRowArray;
@@ -2825,9 +2839,11 @@
 	        parentChildLength = 0,
 	        l = this.dataSourceObj.rows.length,
 	        endFlag = false;
-	    rowObj.value = row;
+	    rowObj.value = row, displayFlag;
 
-	    index = this.addOneRowTree(row, index, rowObj);
+	    var treeObj = this.addOneRowTree(row, index, rowObj);
+	    index = treeObj.index;
+	    displayFlag = treeObj.displayFlag;
 	    if (index != 0) {
 	        if (index && index > 0) {
 	            if (l < index) index = l;
