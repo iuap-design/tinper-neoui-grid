@@ -60,7 +60,7 @@ const re_clickFunTree = function(e){
 	}
 };
 const re_addOneRowTree = function(row,index,rowObj){
-	var oThis = this,l = this.dataSourceObj.rows.length;
+	var oThis = this,l = this.dataSourceObj.rows.length,displayFlag;
 	// 存在树结构
 	if(this.options.showTree){
 		this.hasParent = false;
@@ -141,7 +141,10 @@ const re_addOneRowTree = function(row,index,rowObj){
 	}
 
 
-	return index;
+	return {
+		index:index,
+		displayFlag:displayFlag
+	};
 };
 const re_addOneRowTreeHasChildF = function(rowObj){
 	if(this.hasChildF){
@@ -296,6 +299,7 @@ const expandNodeByIndex = function(rowIndex){
  */
 const re_treeSortRows = function(field, sortType) {
 	var oThis = this;
+	var spliceHasParentRows = new Array();
 	this.rows = new Array();
 	this.hasParentRows = new Array();
 	this.nothasParentRows = new Array();
@@ -328,10 +332,14 @@ const re_treeSortRows = function(field, sortType) {
 				}
 			});
 			if(!hasParent){
-				oThis.hasParentRows.splice(i,0);
+				spliceHasParentRows.push(this);
 				oThis.nothasParentRows.push(this);
 			}
 		});
+		$.each(spliceHasParentRows,function(){
+			var index = oThis.hasParentRows.indexOf(this);
+			oThis.hasParentRows.splice(index,1);
+		})
 		oThis.rows = new Array();
 		var level = 0;
 		// 遍历nothasParentRows，将子项加入rows
@@ -352,6 +360,7 @@ const pushChildRows = function(row,level){
 	var hasChild = false;
 	var childRowArray = new Array();
 	var childRowIndexArray = new Array();
+	var spliceHasParentRows = new Array();
 	$.each(this.hasParentRows, function(i) {
 		if(this && this.parentKeyValue == keyValue){
 			hasChild = true;
@@ -360,9 +369,13 @@ const pushChildRows = function(row,level){
 			childRowArray.push(this);
 			var index = parseInt(oThis.rows.length - 1);
 			childRowIndexArray.push(index);
-			oThis.hasParentRows.splice(i,1);
+			spliceHasParentRows.push(this);
 			oThis.pushChildRows(this,nowLevel);
 		}
+	});
+	$.each(spliceHasParentRows,function(){
+		var index = oThis.hasParentRows.indexOf(this);
+		oThis.hasParentRows.splice(index, 1);
 	});
 	row.hasChild = hasChild;
 	row.childRow = childRowArray;

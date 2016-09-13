@@ -5,9 +5,11 @@
 const addOneRow = function(row,index){
     var oThis = this,displayFlag = 'none',rowObj = {},parentIndex,
         parentChildLength = 0,l = this.dataSourceObj.rows.length,endFlag = false;
-        rowObj.value = row;
+        rowObj.value = row,displayFlag;
 
-    index = this.addOneRowTree(row,index,rowObj);
+    var treeObj = this.addOneRowTree(row,index,rowObj);
+    index = treeObj.index;
+    displayFlag = treeObj.displayFlag;
     if(index != 0){
         if(index && index > 0){
             if(l < index)
