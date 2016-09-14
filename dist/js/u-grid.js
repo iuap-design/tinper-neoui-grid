@@ -1,5 +1,5 @@
 /** 
- * neoui-grid v1.0.10
+ * neoui-grid v1.0.11
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/grid#readme
