@@ -148,7 +148,7 @@ header区域css begin
 .u-grid-header-link {
   display: block;
   padding-left: 0.714285714285em;
-  padding-right: 2em;
+  padding-right: 0.714285714285em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
