@@ -29,7 +29,6 @@ const init = function(ele, options){
     this.scrollBarHeight = 16; // 滚动条高度
     this.numWidth = this.options.numWidth || 40; // 数字列宽度
     this.multiSelectWidth = this.options.multiSelectWidth || 40; // 复选框列宽度
-    this.multiWidth = this.options.multiWidth || 40; // 复选框宽度
 
     this.basicGridCompColumnArr = new Array(); // 存储基本的columns对象，用于清除设置
     this.columnMenuWidth = 160; // column menu的宽度
@@ -124,7 +123,7 @@ const initOptions = function() {
         this.leftW += this.numWidth;
     }
     if(this.options.multiSelect){
-        this.leftW += this.multiWidth;
+        this.leftW += this.multiSelectWidth;
     }
     this.exceptContentHeight = 0; // 内容区域之外的高度
     if(this.options.showHeader){
