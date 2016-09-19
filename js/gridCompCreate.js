@@ -12,7 +12,7 @@ const createDivs = function() {
 		str += 'width:auto;';
 	}
 	if(this.options.height){
-		str += 'max-height:' + this.options.height + ';';
+		str += 'height:' + this.options.height + ';';
 	}else{
 		str += 'height:auto;';
 	}
