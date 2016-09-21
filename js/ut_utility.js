@@ -107,6 +107,31 @@ const accAdd = function(v1,v2){
 const getTrIndex = function($tr){
     return $('tr[id!="' + this.options.id +'_edit_tr"]',$tr.parent()).index($tr);
 };
+
+/**
+ * 按字节数截取字符串 例:"e我是d".nLen(4)将返回"e我"
+ */
+String.prototype.substrCH = function(nLen) {
+    var i = 0;
+    var j = 0;
+    while (i < nLen && j < this.length) { // 循环检查制定的结束字符串位置是否存在中文字符
+        var charCode = this.charCodeAt(j);
+        if (charCode > 256 && i == nLen - 1) {
+            break;
+        }
+        //      else if(charCode >= 0x800 && charCode <= 0x10000){
+        //          i = i + 3;
+        //      }
+        else if (charCode > 256) { // 返回指定下标字符编码，大于265表示是中文字符
+            i = i + 2;
+        } //是中文字符，那计数增加2
+        else {
+            i = i + 1;
+        } //是英文字符，那计数增加1
+        j = j + 1;
+    };
+    return this.substr(0, j);
+};
 export{
     formatWidth,
     swapEle,
@@ -116,5 +141,6 @@ export{
     cloneObj,
     DicimalFormater,
     accAdd,
-    getTrIndex
+    getTrIndex,
+    substrCH
 }
