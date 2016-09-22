@@ -93,6 +93,7 @@ const editRow = function($tr,colIndex){
 			var cell = tr.insertCell();
 			cell.id = this.options.id + '_edit_td';
 			cell.style.borderBottom = '0px';
+			cell.style.background = '#fff';
 			var cWidth = parseInt(this.contentMinWidth) + parseInt(this.fixedWidth);
 			var htmlStr = '<div id="' + this.options.id + '_edit_form" class="u-grid-edit-form" style="width:' + cWidth + 'px;float:left;">';
 			htmlStr += '</div>';
@@ -397,7 +398,7 @@ const re_updateValueAtEdit = function(rowIndex,field,value,force){
 	if(this.eidtRowIndex == rowIndex){
 		if($('#' +  this.options.id + "_edit_field_" + field).length > 0){
 			if($('#' +  this.options.id + "_edit_field_" + field)[0].type == 'checkbox'){
-				if(value == 'Y' || value == 'true'){
+				if(value == 'Y' || value == 'true' || value === true){
 					$('#' +  this.options.id + "_edit_field_" + field)[0].checked = true;
 				}else{
 					$('#' +  this.options.id + "_edit_field_" + field)[0].checked = false;

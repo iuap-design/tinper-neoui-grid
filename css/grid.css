@@ -743,11 +743,11 @@ form展示区域css end
 }
 
 .u-grid-err-td{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 .u-grid-err-td *{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 /*鼠标滑过begin*/

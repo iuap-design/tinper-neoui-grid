@@ -76,7 +76,7 @@ const DicimalFormater = function(obj){
         if ("-0123456789.".indexOf(value.charAt(i)) == -1)
             return "";
     }
-    return this.checkDicimalInvalid(value, precision);
+    return checkDicimalInvalid(value, precision);
 };
 const checkDicimalInvalid = function(value,precision){
     if (value == null || isNaN(value))
@@ -141,6 +141,5 @@ export{
     cloneObj,
     DicimalFormater,
     accAdd,
-    getTrIndex,
-    substrCH
+    getTrIndex
 }

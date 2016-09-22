@@ -357,6 +357,8 @@ const updateRow = function(index,row){
 const updateValueAt = function(rowIndex,field,value,force){
     if(rowIndex > -1 && rowIndex < this.dataSourceObj.rows.length){
         var oThis=this,oldValue = $(this.dataSourceObj.rows[rowIndex].value).attr(field),treeRowIndex = rowIndex;
+        if(typeof value == 'undefined')
+            value = '';
         if(oldValue != value || force){
             $(this.dataSourceObj.rows[rowIndex].value).attr(field,value);
             $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field,value);

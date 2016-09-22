@@ -73,7 +73,7 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
     $.each(oThis.dataSourceObj.rows, function(j) {
         if((begin >= 0 && j >= begin && j <= end) || isNaN(begin)){
             //如果当前修改此列则将变量重置
-            if(oThis.editColIndex == visibleColIndex && oThis.eidtRowIndex == j){
+            if(oThis.editColIndex == visibleColIndex && oThis.eidtRowIndex == j && oThis.options.editType == 'default'){
                 oThis.editColIndex = -1;
                 oThis.eidtRowIndex = -1;
             }
