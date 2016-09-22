@@ -148,7 +148,7 @@ header区域css begin
 .u-grid-header-link {
   display: block;
   padding-left: 0.714285714285em;
-  padding-right: 2em;
+  padding-right: 0.714285714285em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -743,11 +743,11 @@ form展示区域css end
 }
 
 .u-grid-err-td{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 .u-grid-err-td *{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 /*鼠标滑过begin*/

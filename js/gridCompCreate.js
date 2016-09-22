@@ -287,12 +287,21 @@ const createContentLeftMultiSelectRow = function(row,displayFlag){
     if(!tmpcheck) {
         tmpcheck = setTimeout(function(){});
     }
+
+    var rootObj = row.value;
+    var objAry = this.selectRows;
+    var re = objCompare(rootObj, objAry);  
+
     if(gridBrowser.isIE8){
         //var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ></div>'
         var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
     }else{
+        if(re){
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-focus-row" ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+        }else{
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+        }
         //var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ><label for="checkbox'+tmpcheck+'"></label></div>'
-        var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
     }
     return htmlStr;
 };
@@ -401,7 +410,16 @@ const createContentOneRow = function(row,createFlag,displayFlag) {
     if(!this.options.autoExpand && row.level > 0 && displayFlag != 'block'){
         styleStr = 'style="display:none"';
     }
-    var htmlStr = '<tr role="row" ' + styleStr + '>';
+
+    var rootObj = row.value;
+    var objAry = this.selectRows;
+    var re = objCompare(rootObj, objAry);
+    var htmlStr = ''
+    if(re){
+        htmlStr = '<tr role="row" class="u-grid-content-focus-row" ' + styleStr + '>';
+    } else {
+        htmlStr = '<tr role="row" ' + styleStr + '>';
+    }
     htmlStr += this.createContentOneRowTd(row,createFlag);
     htmlStr += '</tr>';
     return htmlStr;
@@ -556,6 +574,20 @@ const repairContent = function(){
         $('#' +this.options.id + '_content_edit_menu').css('display','none');
     }
     this.realtimeTableRows = null;
+};
+
+/**
+ * Object Compare with Array Object
+ */
+const objCompare = function(rootObj, objAry) {
+    var aryLen = objAry.length;
+    var rootStr = JSON.stringify(rootObj);
+    var matchNum = 0;
+    for(var i=0; i<aryLen; i++){
+        var compareStr = JSON.stringify(objAry[i]);
+        matchNum += (rootStr == compareStr) ? 1 : 0;
+    }
+    return (matchNum>0) ? true : false; 
 };
 
 export{
