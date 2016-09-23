@@ -1,5 +1,5 @@
 /** 
- * neoui-grid v1.0.11
+ * neoui-grid v1.0.12
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/grid#readme
@@ -2693,6 +2693,7 @@
 	    clearInterval(this.inte);
 	    this.$ele.data('gridComp', null);
 	    this.ele.innerHTML = '';
+	    this.showTree = '';
 	};
 	/*
 	 * 对传入参数进行格式化处理
