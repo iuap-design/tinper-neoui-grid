@@ -421,6 +421,7 @@ const setEditType = function(field,editType){
  */
 const setEditable = function(editable){
 	this.options.editable = editable;
+	this.editClose();
 };
 const edit_initEventFun = function(){
 	var oThis = this;
