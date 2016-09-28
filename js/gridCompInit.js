@@ -107,6 +107,7 @@ const destroySelf = function(){
     this.$ele.data('gridComp',null);
     this.ele.innerHTML = '';
     this.showTree = '';
+    this.showType = '';
 };
 /*
  * 对传入参数进行格式化处理
