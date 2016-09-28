@@ -61,12 +61,12 @@ const dragFun = function(e) {
 		var nowTh = $('#' + this.options.id + '_resize_handle')[0].nowTh,
 			$nowTh = $(nowTh),
 			nowThIndex = $nowTh.attr('index'),
-			column = this.gridCompColumnArr[nowThIndex];
+			column = this.gridCompColumnArr[nowThIndex],
 			nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
 		if (nowTh && column != this.lastVisibleColumn) {
 			this.dragEndX = e.clientX;
 			var changeWidth = this.dragEndX - this.dragStartX,
-				newWidth = nowTh.attrWidth + changeWidth;
+				newWidth = nowTh.attrWidth + changeWidth,
 				cWidth = this.contentWidth + changeWidth;
 			if (newWidth > this.minColumnWidth) {
 				this.dragW = this.contentWidthChange(cWidth);
