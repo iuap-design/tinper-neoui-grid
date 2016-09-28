@@ -158,6 +158,7 @@ const renderSumRow = function(){
 	});
 	$.each(this.gridCompColumnArr, function(i) {
 		var sumCol = this.options.sumCol;
+		var dataType = this.options.dataType;
 		var sumRenderType = this.options.sumRenderType;
 		var idStr = '';
 		if(sumCol) {

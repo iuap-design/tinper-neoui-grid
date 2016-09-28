@@ -54,6 +54,7 @@ const getBooleanOptions = function(){
     this.options.showTree = this.getBoolean(this.options.showTree);
     this.options.autoExpand = this.getBoolean(this.options.autoExpand);
     this.options.needTreeSort = this.getBoolean(this.options.needTreeSort);
+    this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
 };
 /*
  * 初始化默认参数
@@ -78,6 +79,7 @@ const initDefault = function(){
         showTree:false, // 是否显示树表
         autoExpand:true, // 是否默认展开
         needTreeSort:false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
+        needLocalStorage:false, // 是否使用前端缓存
     }
 };
 /*
@@ -105,6 +107,7 @@ const destroySelf = function(){
     this.$ele.data('gridComp',null);
     this.ele.innerHTML = '';
     this.showTree = '';
+    this.showType = '';
 };
 /*
  * 对传入参数进行格式化处理

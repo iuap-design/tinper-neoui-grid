@@ -2,8 +2,9 @@
  * 处理参数
  */
 const init = function(options, gridComp){
-    this.gridComp = gridComp;
+    // this.gridComp = gridComp; // 在处理前端缓存将column转为string的时候会因为此属性出现死循环
     var gridOptions = gridComp.options;
+    this.gridGetBoolean = gridComp.getBoolean;
     this.defaults = {
             width:200, // 默认宽度为200
             sortable: true, // 是否可以排序
@@ -62,15 +63,15 @@ const initTree = function(options){
     return options;
 };
 const getBooleanOptions = function(){
-    this.options.sortable = this.gridComp.getBoolean(this.options.sortable);
-    this.options.canDrag = this.gridComp.getBoolean(this.options.canDrag);
-    this.options.fixed = this.gridComp.getBoolean(this.options.fixed);
-    this.options.visible = this.gridComp.getBoolean(this.options.visible);
-    this.options.canVisible = this.gridComp.getBoolean(this.options.canVisible);
-    this.options.sumCol = this.gridComp.getBoolean(this.options.sumCol);
-    this.options.editable = this.gridComp.getBoolean(this.options.editable);
-    this.options.editFormShow = this.gridComp.getBoolean(this.options.editFormShow);
-    this.options.autoExpand = this.gridComp.getBoolean(this.options.autoExpand);
+    this.options.sortable = this.gridGetBoolean(this.options.sortable);
+    this.options.canDrag = this.gridGetBoolean(this.options.canDrag);
+    this.options.fixed = this.gridGetBoolean(this.options.fixed);
+    this.options.visible = this.gridGetBoolean(this.options.visible);
+    this.options.canVisible = this.gridGetBoolean(this.options.canVisible);
+    this.options.sumCol = this.gridGetBoolean(this.options.sumCol);
+    this.options.editable = this.gridGetBoolean(this.options.editable);
+    this.options.editFormShow = this.gridGetBoolean(this.options.editFormShow);
+    this.options.autoExpand = this.gridGetBoolean(this.options.autoExpand);
 };
 
 export{

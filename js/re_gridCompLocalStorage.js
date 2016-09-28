@@ -22,7 +22,8 @@ const re_initGridCompColumnLoacl = function(){
  * 获取本地个性化存储的设置
  */
 const getLocalData = function(){
-	return null; //暂时不用缓存
+	if(!this.options.needLocalStorage)
+		return null;
 	if (window.localStorage == null)
 		return null;
 	if (this.$sd_storageData != null)
@@ -48,7 +49,8 @@ const getLocalData = function(){
  * 保存本地个性化存储的设置
  */
 const saveLocalData = function(){
-	return null; //暂时不用缓存
+	if(!this.options.needLocalStorage)
+		return null;
 	var oThis = this;
 	if(this.saveSettimeout){
 		clearTimeout(this.saveSettimeout);
@@ -68,7 +70,8 @@ const saveLocalData = function(){
  * 清除本地个性化存储的设置
  */
 const clearLocalData = function(){
-	return null; //暂时不用缓存
+	if(!this.options.needLocalStorage)
+		return null;
 	if(this.saveSettimeout){
 		clearTimeout(this.saveSettimeout);
 	}
@@ -79,7 +82,8 @@ const clearLocalData = function(){
  * 将数据列顺序保存至本地个性化存储
  */
 const saveGridCompColumnArrToLocal = function(){
-	return null; //暂时不用缓存
+	if(!this.options.needLocalStorage)
+		return null;
 	var defData = this.getLocalData();
 	defData["gridCompColumnArr"] = this.gridCompColumnArr.concat(this.gridCompColumnFixedArr);
 	this.saveLocalData();
@@ -88,7 +92,8 @@ const saveGridCompColumnArrToLocal = function(){
  * 从本地个性化存储中取出数据列顺序
  */
 const getGridCompColumnArrFromLocal = function(){
-	return null; //暂时不用缓存
+	if(!this.options.needLocalStorage)
+		return null;
 	var defData = this.getLocalData();
 	if (defData == null) return null;
 	if(defData["gridCompColumnArr"] == null) return null;
