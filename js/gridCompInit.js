@@ -60,7 +60,7 @@ const getBooleanOptions = function(){
  */
 const initDefault = function(){
     this.defaults = {
-        id: 'grid',
+        id: (new Date).valueOf(),
         editType: 'default',
         cancelFocus:false, // 第二次点击是否取消focus
         showHeader: true, // 是否显示表头
