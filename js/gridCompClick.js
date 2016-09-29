@@ -78,6 +78,13 @@ const clickFun = function(e){
 					oThis.setRowFocus(index);
 				}
 			}
+			if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect){
+				oThis.setRowUnselect(index);
+			}else{
+				if (!oThis.dataSourceObj.rows[index].checked) {
+					oThis.setRowSelect(index);
+				}
+			}
 			this.clickFunEdit(e,index);
 		}
 	}

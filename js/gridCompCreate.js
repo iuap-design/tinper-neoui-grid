@@ -309,8 +309,18 @@ const createContentLeftMultiSelectRow = function(row,displayFlag){
  * 创建内容区左侧区域数字列（一行）
  */
 const createContentLeftNumColRow = function(index){
-    var htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index+1) + '</div>';
-    return htmlStr;
+    var row = this.dataSourceObj.rows[index];
+    var rootObj = row.value;
+    var objAry = this.selectRows;
+    var re = objCompare(rootObj, objAry);  
+    var htmlStr;
+    if(re){
+        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-focus-row">' + (index+1) + '</div>';
+    }else{
+        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index+1) + '</div>';
+   
+    }
+     return htmlStr;
 };
 /*
  * 创建内容区table
