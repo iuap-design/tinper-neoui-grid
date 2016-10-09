@@ -1091,8 +1091,9 @@
 	 * 处理参数
 	 */
 	var init = function init(options, gridComp) {
-	    this.gridComp = gridComp;
+	    // this.gridComp = gridComp; // 在处理前端缓存将column转为string的时候会因为此属性出现死循环
 	    var gridOptions = gridComp.options;
+	    this.gridGetBoolean = gridComp.getBoolean;
 	    this.defaults = {
 	        width: 200, // 默认宽度为200
 	        sortable: true, // 是否可以排序
@@ -1140,15 +1141,15 @@
 	    return options;
 	};
 	var getBooleanOptions = function getBooleanOptions() {
-	    this.options.sortable = this.gridComp.getBoolean(this.options.sortable);
-	    this.options.canDrag = this.gridComp.getBoolean(this.options.canDrag);
-	    this.options.fixed = this.gridComp.getBoolean(this.options.fixed);
-	    this.options.visible = this.gridComp.getBoolean(this.options.visible);
-	    this.options.canVisible = this.gridComp.getBoolean(this.options.canVisible);
-	    this.options.sumCol = this.gridComp.getBoolean(this.options.sumCol);
-	    this.options.editable = this.gridComp.getBoolean(this.options.editable);
-	    this.options.editFormShow = this.gridComp.getBoolean(this.options.editFormShow);
-	    this.options.autoExpand = this.gridComp.getBoolean(this.options.autoExpand);
+	    this.options.sortable = this.gridGetBoolean(this.options.sortable);
+	    this.options.canDrag = this.gridGetBoolean(this.options.canDrag);
+	    this.options.fixed = this.gridGetBoolean(this.options.fixed);
+	    this.options.visible = this.gridGetBoolean(this.options.visible);
+	    this.options.canVisible = this.gridGetBoolean(this.options.canVisible);
+	    this.options.sumCol = this.gridGetBoolean(this.options.sumCol);
+	    this.options.editable = this.gridGetBoolean(this.options.editable);
+	    this.options.editFormShow = this.gridGetBoolean(this.options.editFormShow);
+	    this.options.autoExpand = this.gridGetBoolean(this.options.autoExpand);
 	};
 
 	exports.init = init;
@@ -1947,7 +1948,16 @@
 	 * 创建内容区左侧区域数字列（一行）
 	 */
 	var createContentLeftNumColRow = function createContentLeftNumColRow(index) {
-	    var htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index + 1) + '</div>';
+	    var row = this.dataSourceObj.rows[index];
+	    var rootObj = row.value;
+	    var objAry = this.selectRows;
+	    var re = objCompare(rootObj, objAry);
+	    var htmlStr;
+	    if (re) {
+	        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-focus-row">' + (index + 1) + '</div>';
+	    } else {
+	        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index + 1) + '</div>';
+	    }
 	    return htmlStr;
 	};
 	/*
@@ -2642,13 +2652,14 @@
 	    this.options.showTree = this.getBoolean(this.options.showTree);
 	    this.options.autoExpand = this.getBoolean(this.options.autoExpand);
 	    this.options.needTreeSort = this.getBoolean(this.options.needTreeSort);
+	    this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
 	};
 	/*
 	 * 初始化默认参数
 	 */
 	var initDefault = function initDefault() {
 	    this.defaults = {
-	        id: 'grid',
+	        id: new Date().valueOf(),
 	        editType: 'default',
 	        cancelFocus: false, // 第二次点击是否取消focus
 	        showHeader: true, // 是否显示表头
@@ -2665,7 +2676,8 @@
 	        canSwap: true, // 是否可以交换列位置
 	        showTree: false, // 是否显示树表
 	        autoExpand: true, // 是否默认展开
-	        needTreeSort: false };
+	        needTreeSort: false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
+	        needLocalStorage: false };
 	};
 	/*
 	 * 创建grid
@@ -2694,6 +2706,7 @@
 	    this.$ele.data('gridComp', null);
 	    this.ele.innerHTML = '';
 	    this.showTree = '';
+	    this.showType = '';
 	};
 	/*
 	 * 对传入参数进行格式化处理
@@ -4143,6 +4156,13 @@
 						oThis.setRowFocus(index);
 					}
 				}
+				if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect) {
+					oThis.setRowUnselect(index);
+				} else {
+					if (!oThis.dataSourceObj.rows[index].checked) {
+						oThis.setRowSelect(index);
+					}
+				}
 				this.clickFunEdit(e, index);
 			}
 		}
@@ -4751,13 +4771,13 @@
 			var nowTh = $('#' + this.options.id + '_resize_handle')[0].nowTh,
 			    $nowTh = $(nowTh),
 			    nowThIndex = $nowTh.attr('index'),
-			    column = this.gridCompColumnArr[nowThIndex];
-			nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
+			    column = this.gridCompColumnArr[nowThIndex],
+			    nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
 			if (nowTh && column != this.lastVisibleColumn) {
 				this.dragEndX = e.clientX;
 				var changeWidth = this.dragEndX - this.dragStartX,
-				    newWidth = nowTh.attrWidth + changeWidth;
-				cWidth = this.contentWidth + changeWidth;
+				    newWidth = nowTh.attrWidth + changeWidth,
+				    cWidth = this.contentWidth + changeWidth;
 				if (newWidth > this.minColumnWidth) {
 					this.dragW = this.contentWidthChange(cWidth);
 					$('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
@@ -5148,15 +5168,17 @@
 		}
 		// input输入blur时显示下一个编辑控件
 		$('input', $(td)).on('keydown', function (e) {
-			var keyCode = e.keyCode;
-			if (e.keyCode == 13 || e.keyCode == 9) {
-				// 回车
-				this.blur(); //首先触发blur来将修改值反应到datatable中
-				// IE11会导致先触发nextEditShow后触发blur的处理
-				setTimeout(function () {
-					oThis.nextEditShow();
-				}, 100);
-				u.stopEvent(e);
+			if (oThis.options.editType == 'form') {} else {
+				var keyCode = e.keyCode;
+				if (e.keyCode == 13 || e.keyCode == 9) {
+					// 回车
+					this.blur(); //首先触发blur来将修改值反应到datatable中
+					// IE11会导致先触发nextEditShow后触发blur的处理
+					setTimeout(function () {
+						oThis.nextEditShow();
+					}, 100);
+					u.stopEvent(e);
+				}
 			}
 		});
 		if (this.options.editType == 'default') $('input:first', $(td)).focus();
@@ -5230,6 +5252,7 @@
 	 */
 	var setEditable = function setEditable(editable) {
 		this.options.editable = editable;
+		this.editClose();
 	};
 	var edit_initEventFun = function edit_initEventFun() {
 		var oThis = this;
@@ -5609,7 +5632,7 @@
 	 * 获取本地个性化存储的设置
 	 */
 	var getLocalData = function getLocalData() {
-		return null; //暂时不用缓存
+		if (!this.options.needLocalStorage) return null;
 		if (window.localStorage == null) return null;
 		if (this.$sd_storageData != null) return this.$sd_storageData;else {
 			if (window.localStorage.getItem(this.localStorageId) == null) {
@@ -5628,7 +5651,7 @@
 	 * 保存本地个性化存储的设置
 	 */
 	var saveLocalData = function saveLocalData() {
-		return null; //暂时不用缓存
+		if (!this.options.needLocalStorage) return null;
 		var oThis = this;
 		if (this.saveSettimeout) {
 			clearTimeout(this.saveSettimeout);
@@ -5645,7 +5668,7 @@
 	 * 清除本地个性化存储的设置
 	 */
 	var clearLocalData = function clearLocalData() {
-		return null; //暂时不用缓存
+		if (!this.options.needLocalStorage) return null;
 		if (this.saveSettimeout) {
 			clearTimeout(this.saveSettimeout);
 		}
@@ -5656,7 +5679,7 @@
 	 * 将数据列顺序保存至本地个性化存储
 	 */
 	var saveGridCompColumnArrToLocal = function saveGridCompColumnArrToLocal() {
-		return null; //暂时不用缓存
+		if (!this.options.needLocalStorage) return null;
 		var defData = this.getLocalData();
 		defData["gridCompColumnArr"] = this.gridCompColumnArr.concat(this.gridCompColumnFixedArr);
 		this.saveLocalData();
@@ -5665,7 +5688,7 @@
 	 * 从本地个性化存储中取出数据列顺序
 	 */
 	var getGridCompColumnArrFromLocal = function getGridCompColumnArrFromLocal() {
-		return null; //暂时不用缓存
+		if (!this.options.needLocalStorage) return null;
 		var defData = this.getLocalData();
 		if (defData == null) return null;
 		if (defData["gridCompColumnArr"] == null) return null;
@@ -5908,6 +5931,7 @@
 		});
 		$.each(this.gridCompColumnArr, function (i) {
 			var sumCol = this.options.sumCol;
+			var dataType = this.options.dataType;
 			var sumRenderType = this.options.sumRenderType;
 			var idStr = '';
 			if (sumCol) {
