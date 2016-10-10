@@ -1,6 +1,6 @@
 {
-  "name": "neoui-grid",
-  "version": "1.0.12",
+  "name": "tinper-neoui-grid",
+  "version": "0.0.1",
   "description": "grid",
   "main": "gulpfile.js",
   "directories": {
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iuap-design/grid.git"
+    "url": "git+https://github.com/iuap-design/tinper-neoui-grid.git"
   },
   "author": "yonyou FED",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iuap-design/grid/issues"
+    "url": "https://github.com/iuap-design/tinper-neoui-grid/issues"
   },
-  "homepage": "https://github.com/iuap-design/grid#readme",
+  "homepage": "https://github.com/iuap-design/tinper-neoui-grid#readme",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-core": "^6.11.4",
