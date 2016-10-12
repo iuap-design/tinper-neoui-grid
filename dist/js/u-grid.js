@@ -1,9 +1,9 @@
 /** 
- * neoui-grid v1.0.12
+ * tinper-neoui-grid v0.1.1
  * grid
  * author : yonyou FED
- * homepage : https://github.com/iuap-design/grid#readme
- * bugs : https://github.com/iuap-design/grid/issues
+ * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
+ * bugs : https://github.com/iuap-design/tinper-neoui-grid/issues
  **/ 
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -704,6 +704,7 @@
 						}
 						return;
 					}
+					this.resetLeftHeight();
 				}
 			}
 		}
@@ -1293,6 +1294,7 @@
 	gridComp.prototype.afterRepaintGrid = _gridCompCreateCal.afterRepaintGrid;
 	gridComp.prototype.resetScrollLeft = _gridCompCreateCal.resetScrollLeft;
 	gridComp.prototype.hideEditMenu = _gridCompCreateCal.hideEditMenu;
+	gridComp.prototype.resetLeftHeight = _gridCompCreateCal.resetLeftHeight;
 
 	gridComp.prototype.initEventFun = _gridCompEvent.initEventFun;
 	gridComp.prototype.initGridEventFun = _gridCompEvent.initGridEventFun;
@@ -2361,6 +2363,7 @@
 	    this.renderTypeFun();
 	    this.resetScrollLeft();
 	    this.hideEditMenu();
+	    this.resetLeftHeight();
 	    if (typeof this.options.afterCreate == 'function') {
 	        this.options.afterCreate.call(this);
 	    }
@@ -2371,6 +2374,22 @@
 	var countRowHeight = function countRowHeight() {
 	    if ($('#' + this.options.id + '_content_tbody tr')[0]) {
 	        this.rowHeight = $('#' + this.options.id + '_content_tbody tr')[0].offsetHeight;
+	    }
+	};
+
+	/**
+	 * 根据内容区的高度调整左侧区域的高度
+	 */
+	var resetLeftHeight = function resetLeftHeight() {
+	    if (this.options.showNumCol || this.options.multiSelect) {
+	        var $trs = $('#' + this.options.id + '_content_tbody tr');
+	        var $leftNums = $('#' + this.options.id + '_content_numCol div');
+	        var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
+	        for (var i = 0; i < $trs.length; i++) {
+	            var nowRowHeight = $trs[i].offsetHeight;
+	            if ($leftNums[i]) $leftNums[i].style.height = nowRowHeight + 'px';
+	            if ($leftSelects[i]) $leftSelects[i].style.height = nowRowHeight + 'px';
+	        }
 	    }
 	};
 	/*
@@ -2419,6 +2438,7 @@
 	exports.afterRepaintGrid = afterRepaintGrid;
 	exports.resetScrollLeft = resetScrollLeft;
 	exports.hideEditMenu = hideEditMenu;
+	exports.resetLeftHeight = resetLeftHeight;
 
 /***/ },
 /* 12 */
@@ -3238,6 +3258,7 @@
 	                obj.newValue = value;
 	                this.options.onValueChange(obj);
 	            }
+	            this.resetLeftHeight();
 	        }
 	    }
 	};
@@ -4337,7 +4358,7 @@
 	exports.__esModule = true;
 	exports.getTrIndex = exports.accAdd = exports.DicimalFormater = exports.cloneObj = exports.getFloat = exports.getInt = exports.getString = exports.swapEle = exports.formatWidth = undefined;
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var _gridBrowser = __webpack_require__(10);
 
@@ -4859,6 +4880,9 @@
 				obj.$tr = $tr;
 				obj.e = e;
 				if (!this.options.onBeforeEditFun(obj)) {
+					if (this.eidtRowIndex != -1) {
+						this.editClose();
+					}
 					return;
 				}
 			}
