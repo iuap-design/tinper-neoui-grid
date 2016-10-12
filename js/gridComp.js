@@ -37,7 +37,8 @@ import {
     noRowsShowFun,
     afterRepaintGrid,
     resetScrollLeft,
-    hideEditMenu
+    hideEditMenu,
+    resetLeftHeight
 } from './gridCompCreateCal';
 
 import {
@@ -251,6 +252,7 @@ gridComp.prototype.noRowsShowFun = noRowsShowFun;
 gridComp.prototype.afterRepaintGrid = afterRepaintGrid;
 gridComp.prototype.resetScrollLeft = resetScrollLeft;
 gridComp.prototype.hideEditMenu = hideEditMenu;
+gridComp.prototype.resetLeftHeight = resetLeftHeight;
 
 
 gridComp.prototype.initEventFun = initEventFun;

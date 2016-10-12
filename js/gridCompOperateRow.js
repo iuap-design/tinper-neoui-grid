@@ -384,6 +384,7 @@ const updateValueAt = function(rowIndex,field,value,force){
                 obj.newValue = value;
                 this.options.onValueChange(obj);
             }
+            this.resetLeftHeight();
         }
     }
 };

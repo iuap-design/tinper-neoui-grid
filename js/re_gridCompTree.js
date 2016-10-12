@@ -55,6 +55,7 @@ const re_clickFunTree = function(e){
 					}
 					return;
 				}
+				this.resetLeftHeight();
 			}
 		}
 	}

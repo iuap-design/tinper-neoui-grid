@@ -49,6 +49,7 @@ const afterGridDivsCreate = function(){
     this.renderTypeFun();
     this.resetScrollLeft();
     this.hideEditMenu();
+    this.resetLeftHeight();
     if(typeof this.options.afterCreate == 'function'){
         this.options.afterCreate.call(this);
     }
@@ -61,6 +62,24 @@ const countRowHeight = function(){
         this.rowHeight = $('#' + this.options.id + '_content_tbody tr')[0].offsetHeight;
     }
 };
+
+/**
+ * 根据内容区的高度调整左侧区域的高度
+ */
+const resetLeftHeight = function(){
+    if(this.options.showNumCol || this.options.multiSelect){
+        var $trs = $('#' + this.options.id + '_content_tbody tr');
+        var $leftNums = $('#' + this.options.id + '_content_numCol div');
+        var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
+        for(var i = 0; i < $trs.length;i++){
+            var nowRowHeight = $trs[i].offsetHeight;
+            if($leftNums[i])
+                $leftNums[i].style.height = nowRowHeight + 'px';
+            if($leftSelects[i])
+                $leftSelects[i].style.height = nowRowHeight + 'px';
+        }
+    }
+}
 /*
  * 处理是否显示无数据行
  */
@@ -111,5 +130,6 @@ export{
     noRowsShowFun,
     afterRepaintGrid,
     resetScrollLeft,
-    hideEditMenu
+    hideEditMenu,
+    resetLeftHeight
 }
