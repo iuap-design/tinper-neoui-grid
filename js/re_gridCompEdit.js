@@ -20,6 +20,9 @@ const re_clickFunEdit = function(e,index){
 			obj.$tr = $tr;
 			obj.e = e;
 			if(!this.options.onBeforeEditFun(obj)){
+				if(this.eidtRowIndex != -1){
+					this.editClose();
+				}
 				return;
 			}
 		}
