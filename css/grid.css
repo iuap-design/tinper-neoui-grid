@@ -756,8 +756,8 @@ form展示区域css end
   background: #e9f7fc !important;;
   color:#333;
 }
-.u-grid-move-bg a{
-  color: #0377c1 !important;
+.u-grid .u-grid-move-bg a{
+  color: #0377c1;
 }
 .u-grid-move-bg a:hover{
   text-decoration: underline;
