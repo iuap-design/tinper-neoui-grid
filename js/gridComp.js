@@ -169,7 +169,8 @@ import{
     cloneObj,
     DicimalFormater,
     accAdd,
-    getTrIndex
+    getTrIndex,
+    getDataTableRowIdByRow
 } from './ut_utility';
 
 class gridComp{
@@ -189,6 +190,7 @@ gridComp.prototype.cloneObj = cloneObj;
 gridComp.prototype.DicimalFormater = DicimalFormater;
 gridComp.prototype.accAdd = accAdd;
 gridComp.prototype.getTrIndex = getTrIndex;
+gridComp.prototype.getDataTableRowIdByRow = getDataTableRowIdByRow;
 
 
 gridComp.prototype.updateLastRowFlag = updateLastRowFlag;

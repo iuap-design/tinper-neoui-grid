@@ -108,6 +108,10 @@ const getTrIndex = function($tr){
     return $('tr[id!="' + this.options.id +'_edit_tr"]',$tr.parent()).index($tr);
 };
 
+const getDataTableRowIdByRow = function(row){
+    return row.value['$_#_@_id'];
+}
+
 /**
  * 按字节数截取字符串 例:"e我是d".nLen(4)将返回"e我"
  */
@@ -132,6 +136,8 @@ String.prototype.substrCH = function(nLen) {
     };
     return this.substr(0, j);
 };
+
+
 export{
     formatWidth,
     swapEle,
@@ -141,5 +147,6 @@ export{
     cloneObj,
     DicimalFormater,
     accAdd,
-    getTrIndex
+    getTrIndex,
+    getDataTableRowIdByRow
 }
