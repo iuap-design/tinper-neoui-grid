@@ -6,7 +6,7 @@ import {
 	createColumnMenu,
     createHeader,
     createHeaderTable,
-    createHeaderTableFixed,
+    createHeaderTableFixed,  
     createHeaderDrag,
     createColgroup,
     createThead,
