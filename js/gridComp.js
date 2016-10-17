@@ -14,7 +14,7 @@ import {
     createContentSumRow,
     createContentLeft,
     createContentLeftMultiSelectRow,
-    createContentLeftNumColRow,
+    createContentLeftNumColRow, 
     createContentTable,
     createContentTableFixed,
     createNoRowsDiv,
