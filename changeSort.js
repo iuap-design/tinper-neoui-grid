@@ -43,7 +43,7 @@ fs.exists(filePath,function(exist) {
 					if(err){
 						console.log('write err');
 					}else{
-						console.log('write ')
+						console.log('changeLog write success');
 					}
 				})
 			}
