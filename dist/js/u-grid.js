@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v0.1.1
+ * tinper-neoui-grid v3.1.1
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1059,9 +1059,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1235,6 +1235,7 @@
 	gridComp.prototype.DicimalFormater = _ut_utility.DicimalFormater;
 	gridComp.prototype.accAdd = _ut_utility.accAdd;
 	gridComp.prototype.getTrIndex = _ut_utility.getTrIndex;
+	gridComp.prototype.getDataTableRowIdByRow = _ut_utility.getDataTableRowIdByRow;
 
 	gridComp.prototype.updateLastRowFlag = _gridCompOther.updateLastRowFlag;
 	gridComp.prototype.updateNumColLastRowFlag = _gridCompOther.updateNumColLastRowFlag;
@@ -4356,7 +4357,7 @@
 	"use strict";
 
 	exports.__esModule = true;
-	exports.getTrIndex = exports.accAdd = exports.DicimalFormater = exports.cloneObj = exports.getFloat = exports.getInt = exports.getString = exports.swapEle = exports.formatWidth = undefined;
+	exports.getDataTableRowIdByRow = exports.getTrIndex = exports.accAdd = exports.DicimalFormater = exports.cloneObj = exports.getFloat = exports.getInt = exports.getString = exports.swapEle = exports.formatWidth = undefined;
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -4468,6 +4469,10 @@
 	    return $('tr[id!="' + this.options.id + '_edit_tr"]', $tr.parent()).index($tr);
 	};
 
+	var getDataTableRowIdByRow = function getDataTableRowIdByRow(row) {
+	    return row.value['$_#_@_id'];
+	};
+
 	/**
 	 * 按字节数截取字符串 例:"e我是d".nLen(4)将返回"e我"
 	 */
@@ -4494,6 +4499,7 @@
 	    };
 	    return this.substr(0, j);
 	};
+
 	exports.formatWidth = formatWidth;
 	exports.swapEle = swapEle;
 	exports.getString = getString;
@@ -4503,6 +4509,7 @@
 	exports.DicimalFormater = DicimalFormater;
 	exports.accAdd = accAdd;
 	exports.getTrIndex = getTrIndex;
+	exports.getDataTableRowIdByRow = getDataTableRowIdByRow;
 
 /***/ },
 /* 21 */

@@ -1,13 +1,21 @@
-# 更新日志
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/iuap-design/tinper-neoui-grid/compare/3.0.6...v3.1.1) (2016-10-17)
 
-2016-06-24 v3.0.2
 
-- 更改gulp配置：去除dtJs/grid.js，此部分交由kero管理
+### Bug Fixes
 
-2016-07-04 v3.0.6
+* gird默认id绑定随机值避免冲突 ([e478905](https://github.com/iuap-design/tinper-neoui-grid/commit/e478905))
 
-- 统一更新版本号为3.0.6
+* 数表删除上的时候会导致数据丢失 ([48281f1](https://github.com/iuap-design/tinper-neoui-grid/commit/48281f1))
 
-- 规范dist产出，同时在产出文件头部增加仓库信息说明
 
-- 修复form形式下无法编辑的问题
+<a name="3.0.6"></a>
+## [3.0.6](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.0.6...3.0.6) (2016-07-04)
+
+
+
+<a name="3.0.6"></a>
+## 3.0.6 (2016-06-24)
+
+
+
