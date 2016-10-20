@@ -555,6 +555,9 @@ content no row区域css begin
   border-color: #cecece;
   border-width: 0px;
   border-bottom-width: 1px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 /*
 content no row区域css end
