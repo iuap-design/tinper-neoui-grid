@@ -55,6 +55,7 @@ const getBooleanOptions = function(){
     this.options.autoExpand = this.getBoolean(this.options.autoExpand);
     this.options.needTreeSort = this.getBoolean(this.options.needTreeSort);
     this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
+    this.options.noScroll = this.getBoolean(this.options.noScroll);
 };
 /*
  * 初始化默认参数
@@ -144,6 +145,11 @@ const initOptions = function() {
         url = url.substring(0,index);
     }
     this.localStorageId = this.options.id + url;
+    if(this.options.noScroll){
+        this.options.canSwap = false;
+        this.options.canDrag = false;
+        this.options.columnMenu = false;
+    }
 
 };
 const initOptionsTree = function(){
