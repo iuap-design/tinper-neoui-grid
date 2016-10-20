@@ -2048,7 +2048,7 @@
 	        $.each(this.dataSourceObj.rows, function (i) {
 	            htmlStr += oThis.createContentOneRow(this, createFlag);
 	        });
-	        htmlStr += this.createContentRowsSumRow();
+	        htmlStr += this.createContentRowsSumRow(createFlag);
 	        htmlStr += '</tbody>';
 	    }
 	    return htmlStr;

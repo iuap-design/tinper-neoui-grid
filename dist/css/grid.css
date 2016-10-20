@@ -551,6 +551,10 @@ content no row区域css begin
   color: #a8a8a8;
   text-align: center;
   display: none;
+  border-style: solid;
+  border-color: #cecece;
+  border-width: 0px;
+  border-bottom-width: 1px;
 }
 /*
 content no row区域css end
