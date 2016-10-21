@@ -484,6 +484,10 @@ const setRowSelect = function(rowIndex, doms){
     this.selectRowsObj.push(this.dataSourceObj.rows[rowIndex]);
     this.selectRowsIndex.push(rowIndex);
     this.dataSourceObj.rows[rowIndex].checked = true;
+    if(this.selectRows.length == this.dataSourceObj.rows.length){
+        //修改全选标记为false
+        $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+    }
     if(typeof this.options.onRowSelected == 'function'){
         var obj = {};
         obj.gridObj = this;
@@ -541,6 +545,10 @@ const setRowUnselect = function(rowIndex){
         }
     })
     this.dataSourceObj.rows[rowIndex].checked = false;
+
+    //修改全选标记为false
+    $('#' + this.options.id + '_header_multi_input').removeClass('is-checked')
+
     if(typeof this.options.onRowUnSelected == 'function'){
         var obj = {};
         obj.gridObj = this;
