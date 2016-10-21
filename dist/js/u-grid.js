@@ -583,6 +583,7 @@
 	        $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
+	        oThis.editClose();
 	    });
 	    // 数据行相关事件
 	    $('#' + this.options.id + '_content_tbody').on('click', function (e) {
