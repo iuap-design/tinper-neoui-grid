@@ -117,15 +117,15 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                                 v = u.dateTimeRender(v);
                             }
                             span.innerHTML = v;
-                            td.title = v;
+                            span.title = v;
                         }else if(dataType == 'Int'){
                             v = parseInt(v);
                             if(v){
                                 span.innerHTML = v;
-                                td.title = v;
+                                span.title = v;
                             }else{
                                 span.innerHTML = "";
-                                td.title = "";
+                                span.title = "";
                             }
                         }else if(dataType == 'Float'){
                             if(precision){
@@ -138,16 +138,16 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                             }
                             if(v){
                                 span.innerHTML = v;
-                                td.title = v;
+                                span.title = v;
                             }else{
                                 span.innerHTML = "";
-                                td.title = "";
+                                span.title = "";
                             }
                         }else{ //此处逻辑放到渲染处，减少render执行次数。
                             v = oThis.getString(v,'');
                             var v1 = v.replace(/\</g,'\<');
                             v1 = v1.replace(/\>/g,'\>');
-                            td.title = v;
+                            span.title = v;
                             v = v.replace(/\</g,'&lt;');
                             v = v.replace(/\>/g,'&gt;');
                             span.innerHTML = v;
@@ -156,7 +156,7 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                         v = oThis.getString(v,'');
                         var v1 = v.replace(/\</g,'\<');
                         v1 = v1.replace(/\>/g,'\>');
-                        td.title = v;
+                        span.title = v;
                         v = v.replace(/\</g,'&lt;');
                         v = v.replace(/\>/g,'&gt;');
                         if (i == 0 && iconSpan) {

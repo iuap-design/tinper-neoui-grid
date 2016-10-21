@@ -1834,7 +1834,7 @@
 	        if (this.options.headerColor) {
 	            colorStype = 'style="color:' + this.options.headerColor + '"';
 	        }
-	        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '" title="' + this.options.title + '" ' + colorStype + '>' + this.options.title + '</div>';
+	        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + '</div>';
 	        /*if(oThis.options.columnMenu && createFlag != 'fixed'){
 	            // 创建右侧按钮图标
 	            htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption " field="' + this.options.field + '" style="display:none;"></div>';
@@ -1856,7 +1856,7 @@
 	        var wh = $('#' + this.options.id)[0].offsetHeight;
 	        this.wholeHeight = wh;
 	        if (wh > 0) {
-	            this.contentHeight = parseInt(wh) - this.exceptContentHeight > 0 ? parseInt(wh) - this.exceptContentHeight : 0;
+	            this.contentHeight = parseInt(wh) - this.exceptContentHeight - 1 > 0 ? parseInt(wh) - this.exceptContentHeight - 1 : 0;
 	            if (this.contentHeight > 0) {
 	                h = 'style="height:' + this.contentHeight + 'px;"';
 	            }
@@ -2176,7 +2176,7 @@
 	            iconStr = '<span class="' + this.options.icon + '"></span>';
 	        }
 	        // title="' + v + '" 创建td的时候不在设置title，在renderType中设置,处理现实xml的情况
-	        htmlStr += '<td role="rowcell"  ' + tdStyle + ' title="' + v.replace(/\</g, '\<').replace(/\>/g, '\>') + '"><div class="u-grid-content-td-div" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
+	        htmlStr += '<td role="rowcell"  ' + tdStyle + ' ><div class="u-grid-content-td-div" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
 	    });
 	    return htmlStr;
 	};
@@ -2207,7 +2207,7 @@
 	            htmlStr = '',
 	            newCell = row.insertCell();
 	        newCell.setAttribute("role", "rowcell");
-	        newCell.title = v.replace(/\</g, '\<').replace(/\>/g, '\>');
+	        // newCell.title = v.replace(/\</g,'\<').replace(/\>/g,'\>');
 	        if (oThis.options.showTree && this.firstColumn) {
 	            var l = parseInt(oThis.treeLeft) * parseInt(rowObj.level);
 	            treeStyle = 'style="position:relative;';
@@ -3753,15 +3753,15 @@
 	                                v = u.dateTimeRender(v);
 	                            }
 	                            span.innerHTML = v;
-	                            td.title = v;
+	                            span.title = v;
 	                        } else if (dataType == 'Int') {
 	                            v = parseInt(v);
 	                            if (v) {
 	                                span.innerHTML = v;
-	                                td.title = v;
+	                                span.title = v;
 	                            } else {
 	                                span.innerHTML = "";
-	                                td.title = "";
+	                                span.title = "";
 	                            }
 	                        } else if (dataType == 'Float') {
 	                            if (precision) {
@@ -3774,17 +3774,17 @@
 	                            }
 	                            if (v) {
 	                                span.innerHTML = v;
-	                                td.title = v;
+	                                span.title = v;
 	                            } else {
 	                                span.innerHTML = "";
-	                                td.title = "";
+	                                span.title = "";
 	                            }
 	                        } else {
 	                            //此处逻辑放到渲染处，减少render执行次数。
 	                            v = oThis.getString(v, '');
 	                            var v1 = v.replace(/\</g, '\<');
 	                            v1 = v1.replace(/\>/g, '\>');
-	                            td.title = v;
+	                            span.title = v;
 	                            v = v.replace(/\</g, '&lt;');
 	                            v = v.replace(/\>/g, '&gt;');
 	                            span.innerHTML = v;
@@ -3793,7 +3793,7 @@
 	                        v = oThis.getString(v, '');
 	                        var v1 = v.replace(/\</g, '\<');
 	                        v1 = v1.replace(/\>/g, '\>');
-	                        td.title = v;
+	                        span.title = v;
 	                        v = v.replace(/\</g, '&lt;');
 	                        v = v.replace(/\>/g, '&gt;');
 	                        if (i == 0 && iconSpan) {
