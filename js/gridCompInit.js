@@ -81,6 +81,7 @@ const initDefault = function(){
         autoExpand:true, // 是否默认展开
         needTreeSort:false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
         needLocalStorage:false, // 是否使用前端缓存
+        noScroll:false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
     }
 };
 /*
@@ -145,12 +146,6 @@ const initOptions = function() {
         url = url.substring(0,index);
     }
     this.localStorageId = this.options.id + url;
-    if(this.options.noScroll){
-        this.options.canSwap = false;
-        this.options.canDrag = false;
-        this.options.columnMenu = false;
-    }
-
 };
 const initOptionsTree = function(){
 };
@@ -232,6 +227,9 @@ const initGridCompColumnVar = function(){
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
     column.options.optionsWidth = column.options.width;
+    if(column.options.optionsWidth.indexOf("%") > 0){
+        this.options.noScroll = 'true';
+    }
     column.options.realWidth = column.options.width;
     this.gridCompColumnArr.push(column);
     this.initGridCompColumnColumnMenuFun(columnOptions);

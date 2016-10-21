@@ -119,7 +119,7 @@ const createHeader = function() {
  * 创建header区域table
  */
 const createHeaderTable = function(createFlag){
-    var leftW,positionStr,idStr,noScrollStr;
+    var leftW,positionStr,idStr;
     if(createFlag == 'fixed'){
         leftW = parseInt(this.leftW);
         positionStr = 'absolute;width:'+this.fixedWidth+'px;z-index:11;background:#F9F9F9;';
@@ -132,10 +132,7 @@ const createHeaderTable = function(createFlag){
             positionStr += 'width:'+this.contentMinWidth+'px;';
         }
     }
-    if(this.options.noScroll){
-        noScrollStr = 'table-layout:auto;';
-    }
-    var htmlStr = '<table role="grid" id="' + this.options.id + '_header_'+idStr+'table" style="position:'+ positionStr+';left:' + leftW + 'px;' + noScrollStr + '">';
+    var htmlStr = '<table role="grid" id="' + this.options.id + '_header_'+idStr+'table" style="position:'+ positionStr+';left:' + leftW + 'px;">';
     htmlStr += this.createColgroup(createFlag);
     htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_header_'+idStr+'thead">';
     htmlStr += this.createThead(createFlag);
@@ -329,15 +326,13 @@ const createContentLeftNumColRow = function(index){
  * 创建内容区table
  */
 const createContentTable = function(createFlag){
-    var leftW,idStr,styleStr,hStr,cssStr,tableStyleStr,noScrollStr;
+    var leftW,idStr,styleStr,hStr,cssStr,tableStyleStr;
     if(this.countContentHeight && parseInt(this.contentHeight) > 0){
         hStr = 'height:' + this.contentHeight + 'px;';
-     }else{
+    }else{
         hStr = "";
-     }
-    if(this.options.noScroll){
-        noScrollStr = 'table-layout:auto;';
     }
+    
     if(createFlag == 'fixed'){
         leftW = parseInt(this.leftW);
         idStr = 'fixed_';
@@ -352,17 +347,20 @@ const createContentTable = function(createFlag){
         if(this.contentMinWidth > 0){
             styleStr += 'width:' + this.contentMinWidth + 'px;';
         }
+        if(this.options.noScroll){
+            styleStr += 'overflow-x:hidden;'
+        }
         styleStr += '"';
         tableStyleStr = '';
         if(this.contentMinWidth > 0){
-            /*if(this.contentWidth > 0){ //后续待确定
-                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;' + noScrollStr + '"';
-            }else{*/
-                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;' + noScrollStr + '"';
-            /*}*/
+            if(this.contentWidth > 0){
+                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;"';
+            }else{
+                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;"';
+            }
         }
     }
-    
+
     var  htmlStr = '<div id="' + this.options.id + '_content_'+idStr+'div" class="u-grid-content-'+cssStr+'div" '+styleStr+'>';
     htmlStr += '<div style="height:30px;position:absolute;top:-30px;width:100%;"></div><table role="grid" id="' + this.options.id + '_content_'+idStr+'table" ' + tableStyleStr+'>';
     htmlStr += this.createColgroup(createFlag);

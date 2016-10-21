@@ -1136,7 +1136,7 @@
 	    } catch (e) {}
 
 	    // 转成数字
-	    this.options.width = parseInt(this.options.width);
+	    this.options.width = this.options.width;
 	    this.firstColumn = false;
 	};
 	var initTree = function initTree(options) {
@@ -1377,6 +1377,7 @@
 	gridComp.prototype.widthChangeGridFunOverWidthHidden = _gridCompWDChange.widthChangeGridFunOverWidthHidden;
 	gridComp.prototype.heightChangeFun = _gridCompWDChange.heightChangeFun;
 	gridComp.prototype.contentWidthChange = _gridCompWDChange.contentWidthChange;
+	gridComp.prototype.noScrollWidthReset = _gridCompWDChange.noScrollWidthReset;
 
 	var gridCompProto = gridComp.prototype;
 
@@ -1751,7 +1752,7 @@
 	 * 创建header区域table
 	 */
 	var createHeaderTable = function createHeaderTable(createFlag) {
-	    var leftW, positionStr, idStr, noScrollStr;
+	    var leftW, positionStr, idStr;
 	    if (createFlag == 'fixed') {
 	        leftW = parseInt(this.leftW);
 	        positionStr = 'absolute;width:' + this.fixedWidth + 'px;z-index:11;background:#F9F9F9;';
@@ -1764,10 +1765,7 @@
 	            positionStr += 'width:' + this.contentMinWidth + 'px;';
 	        }
 	    }
-	    if (this.options.noScroll) {
-	        noScrollStr = 'table-layout:auto;';
-	    }
-	    var htmlStr = '<table role="grid" id="' + this.options.id + '_header_' + idStr + 'table" style="position:' + positionStr + ';left:' + leftW + 'px;' + noScrollStr + '">';
+	    var htmlStr = '<table role="grid" id="' + this.options.id + '_header_' + idStr + 'table" style="position:' + positionStr + ';left:' + leftW + 'px;">';
 	    htmlStr += this.createColgroup(createFlag);
 	    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_header_' + idStr + 'thead">';
 	    htmlStr += this.createThead(createFlag);
@@ -1971,15 +1969,13 @@
 	 * 创建内容区table
 	 */
 	var createContentTable = function createContentTable(createFlag) {
-	    var leftW, idStr, styleStr, hStr, cssStr, tableStyleStr, noScrollStr;
+	    var leftW, idStr, styleStr, hStr, cssStr, tableStyleStr;
 	    if (this.countContentHeight && parseInt(this.contentHeight) > 0) {
 	        hStr = 'height:' + this.contentHeight + 'px;';
 	    } else {
 	        hStr = "";
 	    }
-	    if (this.options.noScroll) {
-	        noScrollStr = 'table-layout:auto;';
-	    }
+
 	    if (createFlag == 'fixed') {
 	        leftW = parseInt(this.leftW);
 	        idStr = 'fixed_';
@@ -1994,14 +1990,17 @@
 	        if (this.contentMinWidth > 0) {
 	            styleStr += 'width:' + this.contentMinWidth + 'px;';
 	        }
+	        if (this.options.noScroll) {
+	            styleStr += 'overflow-x:hidden;';
+	        }
 	        styleStr += '"';
 	        tableStyleStr = '';
 	        if (this.contentMinWidth > 0) {
-	            /*if(this.contentWidth > 0){ //后续待确定
-	                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;' + noScrollStr + '"';
-	            }else{*/
-	            tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;' + noScrollStr + '"';
-	            /*}*/
+	            if (this.contentWidth > 0) {
+	                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;"';
+	            } else {
+	                tableStyleStr = 'style="min-width:' + this.contentMinWidth + 'px;"';
+	            }
 	        }
 	    }
 
@@ -2707,7 +2706,8 @@
 	        showTree: false, // 是否显示树表
 	        autoExpand: true, // 是否默认展开
 	        needTreeSort: false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
-	        needLocalStorage: false };
+	        needLocalStorage: false, // 是否使用前端缓存
+	        noScroll: false };
 	};
 	/*
 	 * 创建grid
@@ -2773,11 +2773,6 @@
 	        url = url.substring(0, index);
 	    }
 	    this.localStorageId = this.options.id + url;
-	    if (this.options.noScroll) {
-	        this.options.canSwap = false;
-	        this.options.canDrag = false;
-	        this.options.columnMenu = false;
-	    }
 	};
 	var initOptionsTree = function initOptionsTree() {};
 	/*
@@ -2858,6 +2853,9 @@
 	var initGridCompColumnFun = function initGridCompColumnFun(columnOptions) {
 	    var column = new _column.column(columnOptions, this);
 	    column.options.optionsWidth = column.options.width;
+	    if (column.options.optionsWidth.indexOf("%") > 0) {
+	        this.options.noScroll = 'true';
+	    }
 	    column.options.realWidth = column.options.width;
 	    this.gridCompColumnArr.push(column);
 	    this.initGridCompColumnColumnMenuFun(columnOptions);
@@ -3982,8 +3980,9 @@
 	        var w = $('#' + this.options.id).width(); //[0].offsetWidth;
 	        if (this.wholeWidth != w && this.$ele.data('gridComp') == this) {
 	            this.wholeWidth = w;
+
 	            // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
-	            if (w > this.options.formMaxWidth && (this.showType == 'form' || this.showType == '' || !$('#' + this.options.id + '_content_div tbody')[0]) || this.options.overWidthHiddenColumn) {
+	            if (w > this.options.formMaxWidth && (this.showType == 'form' || this.showType == '' || !$('#' + this.options.id + '_content_div tbody')[0]) || this.options.overWidthHiddenColumn || this.options.noScroll) {
 	                //lyk--需要完善隐藏之后再显示同事添加数据操作
 	                oThis.widthChangeGridFun();
 	            } else if (w > 0 && w < this.options.formMaxWidth && (this.showType == 'grid' || this.showType == '')) {}
@@ -4013,6 +4012,8 @@
 	            }
 	            $('#' + oThis.options.id + '_header_table').css('width', oThis.contentMinWidth + 'px');
 	            $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
+
+	            this.preWholeWidth = w;
 	        }
 	    }
 	};
@@ -4022,6 +4023,7 @@
 	var widthChangeGridFun = function widthChangeGridFun() {
 	    var oThis = this,
 	        halfWholeWidth = parseInt(this.wholeWidth / 2);
+	    this.noScrollWidthReset();
 	    this.widthChangeGridFunFixed(halfWholeWidth);
 	    /* 如果宽度不足处理自动隐藏*/
 	    this.widthChangeGridFunOverWidthHidden();
@@ -4041,6 +4043,33 @@
 	    this.createGridDivs();
 	    $('#' + this.options.id + '_form').css('display', 'none');
 	    $('#' + this.options.id + '_grid').css('display', 'block');
+	};
+
+	/**
+	 * 不显示滚动条的情况下需要重置每列的宽度
+	 */
+	var noScrollWidthReset = function noScrollWidthReset() {
+	    if (this.options.noScroll) {
+	        if (this.hasNoScrollRest) {
+	            //先按100%来处理
+	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+	                var column = this.gridCompColumnArr[i];
+	                var nowWidth = column.options.width;
+	                var newWidth = nowWidth / this.preWholeWidth * this.wholeWidth;
+	                this.setColumnWidth(column, newWidth);
+	            }
+	        } else {
+	            //先按100%来处理
+	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+	                var column = this.gridCompColumnArr[i];
+	                var nowWidth = column.options.width;
+	                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
+	                this.setColumnWidth(column, newWidth);
+	            }
+	        }
+
+	        this.hasNoScrollRest = true;
+	    }
 	};
 	var widthChangeGridFunFixed = function widthChangeGridFunFixed(halfWholeWidth) {};
 	var widthChangeGridFunOverWidthHidden = function widthChangeGridFunOverWidthHidden() {};
@@ -4115,6 +4144,7 @@
 	exports.widthChangeGridFunOverWidthHidden = widthChangeGridFunOverWidthHidden;
 	exports.heightChangeFun = heightChangeFun;
 	exports.contentWidthChange = contentWidthChange;
+	exports.noScrollWidthReset = noScrollWidthReset;
 
 /***/ },
 /* 18 */

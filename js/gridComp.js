@@ -132,7 +132,8 @@ import {
     widthChangeGridFunFixed,
     widthChangeGridFunOverWidthHidden,
     heightChangeFun,
-    contentWidthChange
+    contentWidthChange,
+    noScrollWidthReset
 } from './gridCompWDChange';
 
 import {
@@ -343,6 +344,7 @@ gridComp.prototype.widthChangeGridFunFixed = widthChangeGridFunFixed;
 gridComp.prototype.widthChangeGridFunOverWidthHidden = widthChangeGridFunOverWidthHidden;
 gridComp.prototype.heightChangeFun = heightChangeFun;
 gridComp.prototype.contentWidthChange = contentWidthChange;
+gridComp.prototype.noScrollWidthReset = noScrollWidthReset;
 
 var gridCompProto = gridComp.prototype;
 
