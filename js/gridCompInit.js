@@ -56,6 +56,7 @@ const getBooleanOptions = function(){
     this.options.needTreeSort = this.getBoolean(this.options.needTreeSort);
     this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
     this.options.noScroll = this.getBoolean(this.options.noScroll);
+    this.options.cancelSelect = this.getBoolean(this.options.cancelSelect);
 };
 /*
  * 初始化默认参数
@@ -64,7 +65,8 @@ const initDefault = function(){
     this.defaults = {
         id: (new Date).valueOf(),
         editType: 'default',
-        cancelFocus:false, // 第二次点击是否取消focus
+        cancelFocus:true, // 第二次点击是否取消focus
+        cancelSelect:true, // 第二次点击是否取消select
         showHeader: true, // 是否显示表头
         showNumCol: false, // 是否显示数字列
         multiSelect:false, // 是否显示复选框
