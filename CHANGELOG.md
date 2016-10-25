@@ -1,5 +1,5 @@
-<a name="3.1.2"></a>
-## [3.1.2](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.2) (2016-10-24)
+<a name="3.1.3"></a>
+## [3.1.3](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.3) (2016-10-25)
 
 
 ### Bug Fixes
@@ -10,6 +10,8 @@
 * pro-IUAPDESIGN-89:友云采：grid没有数据的话下面的边线没有显示 ([bfa688f](https://github.com/iuap-design/tinper-neoui-grid/commit/bfa688f))
 
 * pro-IUAPDESIGN-92:友云采：关联计算的数据在合计行的显示 ([f67aad8](https://github.com/iuap-design/tinper-neoui-grid/commit/f67aad8))
+
+* pro-IUAPDESIGN-95:友云采：内容区点击之后第一次选中，第二次取消选中 ([b42059a](https://github.com/iuap-design/tinper-neoui-grid/commit/b42059a))
 
 * pro-IUAPDESIGN-96:友云采：grid中取消选中之后的全选显示不对 ([eafb2dc](https://github.com/iuap-design/tinper-neoui-grid/commit/eafb2dc))
 
