@@ -114,7 +114,8 @@ import {
 import {
 	renderTypeFun,
     renderTypeByColumn,
-    renderTypeSumRow
+    renderTypeSumRow,
+    getRenderOverFlag
 } from './gridCompRenderType';
 
 import {
@@ -328,6 +329,7 @@ gridComp.prototype.resetNumCol = resetNumCol;
 gridComp.prototype.renderTypeFun = renderTypeFun;
 gridComp.prototype.renderTypeByColumn = renderTypeByColumn;
 gridComp.prototype.renderTypeSumRow = renderTypeSumRow;
+gridComp.prototype.getRenderOverFlag = getRenderOverFlag;
 
 
 gridComp.prototype.setColumnVisibleByColumn = setColumnVisibleByColumn;
