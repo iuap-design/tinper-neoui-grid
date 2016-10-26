@@ -1060,9 +1060,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1363,6 +1363,7 @@
 	gridComp.prototype.renderTypeFun = _gridCompRenderType.renderTypeFun;
 	gridComp.prototype.renderTypeByColumn = _gridCompRenderType.renderTypeByColumn;
 	gridComp.prototype.renderTypeSumRow = _gridCompRenderType.renderTypeSumRow;
+	gridComp.prototype.getRenderOverFlag = _gridCompRenderType.getRenderOverFlag;
 
 	gridComp.prototype.setColumnVisibleByColumn = _gridCompSet.setColumnVisibleByColumn;
 	gridComp.prototype.setColumnVisibleByIndex = _gridCompSet.setColumnVisibleByIndex;
@@ -2683,6 +2684,8 @@
 	    this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
 	    this.options.noScroll = this.getBoolean(this.options.noScroll);
 	    this.options.cancelSelect = this.getBoolean(this.options.cancelSelect);
+	    this.options.contentSelect = this.getBoolean(this.options.contentSelect);
+	    this.options.contentFocus = this.getBoolean(this.options.contentFocus);
 	};
 	/*
 	 * 初始化默认参数
@@ -2709,7 +2712,9 @@
 	        autoExpand: true, // 是否默认展开
 	        needTreeSort: false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
 	        needLocalStorage: false, // 是否使用前端缓存
-	        noScroll: false };
+	        noScroll: false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
+	        contentSelect: true, // 点击内容区是否执行选中逻辑
+	        contentFocus: true };
 	};
 	/*
 	 * 创建grid
@@ -2775,6 +2780,9 @@
 	        url = url.substring(0, index);
 	    }
 	    this.localStorageId = this.options.id + url;
+
+	    // select与focus保持一致
+	    this.options.contentFocus = this.options.contentSelect;
 	};
 	var initOptionsTree = function initOptionsTree() {};
 	/*
@@ -3801,16 +3809,45 @@
 	                        }
 	                        span.innerHTML = v;
 	                    }
+
+	                    /* 增加处理判断是否需要显示... */
+	                    var obj = {
+	                        span: span,
+	                        column: gridCompColumn
+	                    };
+	                    var overFlag = oThis.getRenderOverFlag(obj);
+	                    if (overFlag) {
+	                        $(span).addClass('u-grid-content-td-div-over');
+	                    }
 	                }
 	            }
 	        }
 	    });
 	    this.renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn);
 	};
+
+	var getRenderOverFlag = function getRenderOverFlag(obj) {
+	    var span = obj.span;
+	    var nowHeight = span.offsetHeight;
+	    var nowWidth = span.offsetWidth;
+	    var newSpan = $(span).clone()[0];
+	    var overFlag = false;
+	    obj.span.parentNode.appendChild(newSpan);
+	    newSpan.style.height = '';
+	    newSpan.style.maxHeight = '999999px';
+	    var newHeight = newSpan.offsetHeight;
+	    if (newHeight > nowHeight) {
+	        overFlag = true;
+	    }
+	    obj.span.parentNode.removeChild(newSpan);
+	    return overFlag;
+	};
+
 	var renderTypeSumRow = function renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn) {};
 	exports.renderTypeFun = renderTypeFun;
 	exports.renderTypeByColumn = renderTypeByColumn;
 	exports.renderTypeSumRow = renderTypeSumRow;
+	exports.getRenderOverFlag = getRenderOverFlag;
 
 /***/ },
 /* 16 */
@@ -4225,18 +4262,22 @@
 					return;
 				}
 				var rowChildIndex = oThis.getChildRowIndex(row);
-				if (oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus) {
-					oThis.setRowUnFocus(index);
-				} else {
-					if (!oThis.dataSourceObj.rows[index].focus) {
-						oThis.setRowFocus(index);
+				if (oThis.options.contentFocus || !oThis.options.multiSelect) {
+					if (oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus) {
+						oThis.setRowUnFocus(index);
+					} else {
+						if (!oThis.dataSourceObj.rows[index].focus) {
+							oThis.setRowFocus(index);
+						}
 					}
 				}
-				if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect) {
-					oThis.setRowUnselect(index);
-				} else {
-					if (!oThis.dataSourceObj.rows[index].checked) {
-						oThis.setRowSelect(index);
+				if (oThis.options.contentSelect || !oThis.options.multiSelect) {
+					if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect) {
+						oThis.setRowUnselect(index);
+					} else {
+						if (!oThis.dataSourceObj.rows[index].checked) {
+							oThis.setRowSelect(index);
+						}
 					}
 				}
 				this.clickFunEdit(e, index);
@@ -4932,6 +4973,7 @@
 		var $td = $(e.target).closest('td');
 		var colIndex = $td.index();
 		if (this.options.editable && (this.eidtRowIndex != index || this.options.editType == 'default' && this.editColIndex != colIndex)) {
+			this.editClose();
 			if (typeof this.options.onBeforeEditFun == 'function') {
 				var obj = {};
 				obj.gridObj = this;

@@ -71,18 +71,22 @@ const clickFun = function(e){
 				return;
 			}
 			var rowChildIndex = oThis.getChildRowIndex(row);
-			if(oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus){
-				oThis.setRowUnFocus(index);
-			}else{
-				if(!oThis.dataSourceObj.rows[index].focus){
-					oThis.setRowFocus(index);
+			if(oThis.options.contentFocus || !oThis.options.multiSelect){
+				if(oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus){
+					oThis.setRowUnFocus(index);
+				}else{
+					if(!oThis.dataSourceObj.rows[index].focus){
+						oThis.setRowFocus(index);
+					}
 				}
 			}
-			if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect){
-				oThis.setRowUnselect(index);
-			}else{
-				if (!oThis.dataSourceObj.rows[index].checked) {
-					oThis.setRowSelect(index);
+			if(oThis.options.contentSelect || !oThis.options.multiSelect){
+				if (oThis.dataSourceObj.rows[index].checked && oThis.options.cancelSelect){
+					oThis.setRowUnselect(index);
+				}else{
+					if (!oThis.dataSourceObj.rows[index].checked) {
+						oThis.setRowSelect(index);
+					}
 				}
 			}
 			this.clickFunEdit(e,index);
