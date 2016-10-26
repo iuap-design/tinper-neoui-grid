@@ -300,7 +300,7 @@ const createContentLeftMultiSelectRow = function(row,displayFlag){
         var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
     }else{
         if(re){
-            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-focus-row" ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-sel-row" ><span class="u-grid-checkbox-outline  is-checked" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
         }else{
             var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox'+tmpcheck+'" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
         }
@@ -318,7 +318,7 @@ const createContentLeftNumColRow = function(index){
     var re = objCompare(rootObj, objAry);  
     var htmlStr;
     if(re){
-        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-focus-row">' + (index+1) + '</div>';
+        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-sel-row">' + (index+1) + '</div>';
     }else{
         htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index+1) + '</div>';
    
@@ -434,7 +434,7 @@ const createContentOneRow = function(row,createFlag,displayFlag) {
     var re = objCompare(rootObj, objAry);
     var htmlStr = ''
     if(re){
-        htmlStr = '<tr role="row" class="u-grid-content-focus-row" ' + styleStr + '>';
+        htmlStr = '<tr role="row" class="u-grid-content-sel-row" ' + styleStr + '>';
     } else {
         htmlStr = '<tr role="row" ' + styleStr + '>';
     }
