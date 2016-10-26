@@ -4,7 +4,7 @@ import {gridBrowser} from './gridBrowser';
  * 添加顶层div相关监听
  */
 const createDivs = function() {
-	var oThis = this,styleStr = '',str = '';
+	var oThis = this,styleStr = '',str = '', mobileClass = '';
 	this.ele.innerHTML = '';
 	if(this.options.width){
 		str += 'width:' + this.options.width + ';';
@@ -19,7 +19,10 @@ const createDivs = function() {
 	if(str != ''){
 		styleStr = 'style="' + str + '"';
 	}
-	var htmlStr = '<div id="' + this.options.id + '" data-role="grid" class="u-grid" ' + styleStr + '>';
+    if(gridBrowser.isMobile){
+        mobileClass = 'u-grid-mobile';
+    }
+	var htmlStr = '<div id="' + this.options.id + '" data-role="grid" class="u-grid ' + mobileClass + '" ' + styleStr + '>';
 	htmlStr += '</div>';
 	this.ele.insertAdjacentHTML('afterBegin', htmlStr);
 	// 创建屏幕div,用于拖动等操作

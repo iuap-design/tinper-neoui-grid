@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.3
+ * tinper-neoui-grid v3.1.4
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1641,7 +1641,8 @@
 	var createDivs = function createDivs() {
 	    var oThis = this,
 	        styleStr = '',
-	        str = '';
+	        str = '',
+	        mobileClass = '';
 	    this.ele.innerHTML = '';
 	    if (this.options.width) {
 	        str += 'width:' + this.options.width + ';';
@@ -1656,7 +1657,10 @@
 	    if (str != '') {
 	        styleStr = 'style="' + str + '"';
 	    }
-	    var htmlStr = '<div id="' + this.options.id + '" data-role="grid" class="u-grid" ' + styleStr + '>';
+	    if (_gridBrowser.gridBrowser.isMobile) {
+	        mobileClass = 'u-grid-mobile';
+	    }
+	    var htmlStr = '<div id="' + this.options.id + '" data-role="grid" class="u-grid ' + mobileClass + '" ' + styleStr + '>';
 	    htmlStr += '</div>';
 	    this.ele.insertAdjacentHTML('afterBegin', htmlStr);
 	    // 创建屏幕div,用于拖动等操作
@@ -2297,7 +2301,7 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	exports.__esModule = true;
 	var gridBrowser = {},
@@ -2317,6 +2321,29 @@
 	        }
 	    }
 	}
+
+	if (ua.indexOf('Android') > -1 || ua.indexOf('android') > -1 || ua.indexOf('Adr') > -1 || ua.indexOf('adr') > -1) {
+	    gridBrowser.isAndroid = true;
+	}
+
+	if (gridBrowser.isAndroid) {
+	    if (window.screen.width >= 768 && window.screen.width < 1024) {
+	        gridBrowser.isAndroidPAD = true;
+	    }
+	    if (window.screen.width <= 768) {
+	        gridBrowser.isAndroidPhone = true;
+	    }
+	}
+
+	if (ua.match(/iphone/i)) {
+	    gridBrowser.isIOS = true;
+	    gridBrowser.isIphone = true;
+	}
+
+	if (gridBrowser.isIphone || gridBrowser.isAndroidPhone) {
+	    gridBrowser.isMobile = true;
+	}
+
 	exports.gridBrowser = gridBrowser;
 
 /***/ },
@@ -2862,7 +2889,7 @@
 	};
 	var initGridCompColumnFun = function initGridCompColumnFun(columnOptions) {
 	    var column = new _column.column(columnOptions, this);
-	    column.options.optionsWidth = column.options.width;
+	    column.options.optionsWidth = column.options.width + '';
 	    if (column.options.optionsWidth.indexOf("%") > 0) {
 	        this.options.noScroll = 'true';
 	    }

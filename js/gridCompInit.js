@@ -235,7 +235,7 @@ const initGridCompColumnVar = function(){
 };
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
-    column.options.optionsWidth = column.options.width;
+    column.options.optionsWidth = column.options.width + '';
     if(column.options.optionsWidth.indexOf("%") > 0){
         this.options.noScroll = 'true';
     }
