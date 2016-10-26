@@ -669,9 +669,9 @@ const setRowFocus = function(rowIndex){
         obj.rowIndex = rowIndex;
         this.options.onRowFocus(obj);
     }
-    if(!this.options.multiSelect){
+    /*if(!this.options.multiSelect){
         this.setRowSelect(rowIndex);
-    }
+    }*/
     return true;
 };
 /*
