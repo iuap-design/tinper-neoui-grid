@@ -235,10 +235,13 @@ const initGridCompColumnVar = function(){
 };
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
-    column.options.optionsWidth = column.options.width + '';
-    if(column.options.optionsWidth.indexOf("%") > 0){
+    var widthStr = column.options.width + '';
+    if(widthStr.indexOf("%") > 0){
         this.options.noScroll = 'true';
+    }else{
+        column.options.width = parseInt(column.options.width);
     }
+    column.options.optionsWidth = column.options.width;
     column.options.realWidth = column.options.width;
     this.gridCompColumnArr.push(column);
     this.initGridCompColumnColumnMenuFun(columnOptions);
