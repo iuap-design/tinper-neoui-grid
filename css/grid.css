@@ -314,6 +314,13 @@ content区域css begin
     width: 2rem;
     text-align: center;
 }
+
+/*checkbox样式*/
+
+.u-grid-content-td-div .u-checkbox-outline,.u-grid-content-td-div .u-checkbox-focus-helper {
+    top: -10px;
+}
+
 .u-grid-content {
   border-style: solid;
   border-color: #cecece;
