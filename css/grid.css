@@ -272,6 +272,7 @@ content区域css begin
   height: 2.68em \9;
   line-height: 2.68em \9;
   font-size: 16px !important;
+  overflow: hidden;
 }
 
 .u-grid tbody tr:last-child td{
@@ -304,6 +305,15 @@ content区域css begin
   text-overflow: ellipsis;
   height: 100%;
 }
+.u-grid-content-td-div-over::after{
+  content:"...";
+  font-weight:bold;
+  position:absolute;
+  bottom:15px;
+  right: -5px;
+}
+
+
 .u-grid-content-td-div > input{
     height:100%;
 }

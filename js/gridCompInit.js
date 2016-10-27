@@ -57,6 +57,8 @@ const getBooleanOptions = function(){
     this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage);
     this.options.noScroll = this.getBoolean(this.options.noScroll);
     this.options.cancelSelect = this.getBoolean(this.options.cancelSelect);
+    this.options.contentSelect = this.getBoolean(this.options.contentSelect);
+    this.options.contentFocus = this.getBoolean(this.options.contentFocus);
 };
 /*
  * 初始化默认参数
@@ -84,6 +86,8 @@ const initDefault = function(){
         needTreeSort:false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
         needLocalStorage:false, // 是否使用前端缓存
         noScroll:false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
+        contentSelect: true, // 点击内容区是否执行选中逻辑
+        contentFocus: true, // 点击内容区是否执行focus逻辑
     }
 };
 /*
@@ -148,6 +152,9 @@ const initOptions = function() {
         url = url.substring(0,index);
     }
     this.localStorageId = this.options.id + url;
+
+    // select与focus保持一致
+    this.options.contentFocus = this.options.contentSelect;
 };
 const initOptionsTree = function(){
 };
@@ -228,10 +235,13 @@ const initGridCompColumnVar = function(){
 };
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
-    column.options.optionsWidth = column.options.width;
-    if(column.options.optionsWidth.indexOf("%") > 0){
+    var widthStr = column.options.width + '';
+    if(widthStr.indexOf("%") > 0){
         this.options.noScroll = 'true';
+    }else{
+        column.options.width = parseInt(column.options.width);
     }
+    column.options.optionsWidth = column.options.width;
     column.options.realWidth = column.options.width;
     this.gridCompColumnArr.push(column);
     this.initGridCompColumnColumnMenuFun(columnOptions);

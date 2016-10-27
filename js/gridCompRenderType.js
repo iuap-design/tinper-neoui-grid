@@ -164,6 +164,16 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                        }
                         span.innerHTML = v;
                     }
+
+                    /* 增加处理判断是否需要显示... */
+                    var obj = {
+                        span: span,
+                        column: gridCompColumn
+                    };
+                    var overFlag = oThis.getRenderOverFlag(obj);
+                    if (overFlag) {
+                        $(span).addClass('u-grid-content-td-div-over');
+                    }
                 }
 
             }
@@ -171,10 +181,29 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
     });
     this.renderTypeSumRow(gridCompColumn,i,begin,length, isFixedColumn);
 };
+
+const getRenderOverFlag = function(obj){
+    var span = obj.span;
+    var nowHeight = span.offsetHeight;
+    var nowWidth = span.offsetWidth;
+    var newSpan = $(span).clone()[0];
+    var overFlag = false;
+    obj.span.parentNode.appendChild(newSpan);
+    newSpan.style.height = '';
+    newSpan.style.maxHeight = '999999px';
+    var newHeight = newSpan.offsetHeight;
+    if (newHeight > nowHeight) {
+        overFlag = true;
+    }
+    obj.span.parentNode.removeChild(newSpan);
+    return overFlag;
+};
+
 const renderTypeSumRow = function(gridCompColumn,i,begin,length, isFixedColumn){
 };
 export{
     renderTypeFun,
     renderTypeByColumn,
-    renderTypeSumRow
+    renderTypeSumRow,
+    getRenderOverFlag
 }

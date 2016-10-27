@@ -11,6 +11,7 @@ const re_clickFunEdit = function(e,index){
 	var $td = $(e.target).closest('td');
 	var colIndex = $td.index();
 	if(this.options.editable && (this.eidtRowIndex != index || (this.options.editType == 'default' && this.editColIndex != colIndex))){
+		this.editClose();
 		if(typeof this.options.onBeforeEditFun == 'function'){
 			var obj = {};
 			obj.gridObj = this;
