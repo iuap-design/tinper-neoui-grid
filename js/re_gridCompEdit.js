@@ -339,6 +339,7 @@ const editCell = function(obj){
 		editType.call(this,obj);
 	}
 	// input输入blur时显示下一个编辑控件
+	$('input',$(td)).off('keydown');
 	$('input',$(td)).on('keydown',function(e){
 		if(oThis.options.editType == 'form'){
 

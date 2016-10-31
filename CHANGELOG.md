@@ -1,11 +1,17 @@
-<a name="3.1.3"></a>
-## [3.1.3](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.3) (2016-10-25)
+<a name="3.1.4"></a>
+## [3.1.4](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.4) (2016-10-27)
 
 
 ### Bug Fixes
 * pro-IUAPDESIGN-101:友云采：grid中横向滚动时需要隐藏编辑控件 ([928fdf1](https://github.com/iuap-design/tinper-neoui-grid/commit/928fdf1))
 
+* pro-IUAPDESIGN-41:云表单：grid提供在移动端的样式修改方案 ([8b08272](https://github.com/iuap-design/tinper-neoui-grid/commit/8b08272))
+
 * pro-IUAPDESIGN-46:友云采：gird不出现左右滚动条（方案：px改为百分比） ([6c83f92](https://github.com/iuap-design/tinper-neoui-grid/commit/6c83f92))
+
+* pro-IUAPDESIGN-50:友云采：grid表格数据不显示省略号（增加各行显示） ([b6a46ac](https://github.com/iuap-design/tinper-neoui-grid/commit/b6a46ac))
+
+* pro-IUAPDESIGN-64:数字营销：grid增加参数控制点击content不触发Row选中 ([0a84f55](https://github.com/iuap-design/tinper-neoui-grid/commit/0a84f55))
 
 * pro-IUAPDESIGN-89:友云采：grid没有数据的话下面的边线没有显示 ([bfa688f](https://github.com/iuap-design/tinper-neoui-grid/commit/bfa688f))
 
@@ -16,6 +22,8 @@
 * pro-IUAPDESIGN-96:友云采：grid中取消选中之后的全选显示不对 ([eafb2dc](https://github.com/iuap-design/tinper-neoui-grid/commit/eafb2dc))
 
 * pro-IUAPDESIGN-98:友云采：grid中title显示为id，renderType存在时取消td的title。 ([fe1160a](https://github.com/iuap-design/tinper-neoui-grid/commit/fe1160a))
+
+* 修改先在datatable中选中grid中显示状态不对的问题 ([f2d1769](https://github.com/iuap-design/tinper-neoui-grid/commit/f2d1769))
 
 * 增加参数noScroll控制grid不显示滚动条 ([a20304f](https://github.com/iuap-design/tinper-neoui-grid/commit/a20304f))
 
