@@ -235,7 +235,7 @@ header区域css begin
 .u-grid-header-sort-span {
   width: 1.3em;
   text-align: center;
-  font-size: 1.3em;
+  font-size: 12px;
   position: absolute;
   height: inherit;
   line-height: inherit;
