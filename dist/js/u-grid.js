@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.4
+ * tinper-neoui-grid v3.1.5
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -3237,7 +3237,8 @@
 	        var obj = {};
 	        obj.gridObj = this;
 	        obj.index = index;
-	        if (!this.options.onRowDelete(index)) {
+	        obj.row = row;
+	        if (!this.options.onRowDelete(obj)) {
 	            return;
 	        }
 	    }
@@ -5324,6 +5325,7 @@
 			editType.call(this, obj);
 		}
 		// input输入blur时显示下一个编辑控件
+		$('input', $(td)).off('keydown');
 		$('input', $(td)).on('keydown', function (e) {
 			if (oThis.options.editType == 'form') {} else {
 				var keyCode = e.keyCode;
