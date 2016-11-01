@@ -153,8 +153,6 @@ const initOptions = function() {
     }
     this.localStorageId = this.options.id + url;
 
-    // select与focus保持一致
-    this.options.contentFocus = this.options.contentSelect;
 };
 const initOptionsTree = function(){
 };

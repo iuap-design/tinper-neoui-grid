@@ -41,7 +41,6 @@ const re_clickFunTree = function(e){
 						$('#' + this.options.id + '_edit_tr').remove(null,true);
 						$('#' + this.options.id + '_edit_tr1').remove(null,true);
 					}
-					return;
 				}else if(plus.length > 0){
 					// 展开
 					plus.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
@@ -53,7 +52,6 @@ const re_clickFunTree = function(e){
 							$('#' + oThis.options.id + '_content_multiSelect >div:nth-child('+(parseInt(this) +1)+ ')').css('display','');
 						});
 					}
-					return;
 				}
 				this.resetLeftHeight();
 			}

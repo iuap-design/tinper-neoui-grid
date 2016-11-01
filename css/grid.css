@@ -235,7 +235,7 @@ header区域css begin
 .u-grid-header-sort-span {
   width: 1.3em;
   text-align: center;
-  font-size: 1.3em;
+  font-size: 12px;
   position: absolute;
   height: inherit;
   line-height: inherit;
@@ -276,11 +276,11 @@ content区域css begin
 }
 
 .u-grid tbody tr:last-child td{
-  border-bottom-width: 0px; 
+  border-bottom-width: 0px;
 }
 
 .u-grid-content-left>div:last-child{
-  border-bottom-width: 0px; 
+  border-bottom-width: 0px;
 }
 
 .u-grid-content tr{
@@ -426,7 +426,7 @@ content区域css begin
 }
 
 .u-grid-content-focus-row {
-  background-color: #03cc71 !important;
+  background-color: #e9f7fc !important;
   //color: #FFF !important;
 }
 .u-grid-content-tree-span {
@@ -746,7 +746,7 @@ form展示区域css begin
   width: 2rem;
   text-align: center;
 }
-    
+
 .u-grid-content-td-div .checkbox label {
   top: -2px;
 }
@@ -778,7 +778,7 @@ form展示区域css end
 /*鼠标滑过begin*/
 
 .u-grid-move-bg{
-  background: #e9f7fc !important;;
+  background: #f4f8fb !important;;
   color:#333;
 }
 .u-grid .u-grid-move-bg a{

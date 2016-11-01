@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.4
+ * tinper-neoui-grid v3.1.5
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -691,7 +691,6 @@
 							$('#' + this.options.id + '_edit_tr').remove(null, true);
 							$('#' + this.options.id + '_edit_tr1').remove(null, true);
 						}
-						return;
 					} else if (plus.length > 0) {
 						// 展开
 						plus.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
@@ -703,7 +702,6 @@
 								$('#' + oThis.options.id + '_content_multiSelect >div:nth-child(' + (parseInt(this) + 1) + ')').css('display', '');
 							});
 						}
-						return;
 					}
 					this.resetLeftHeight();
 				}
@@ -1060,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1097,7 +1095,7 @@
 	    var gridOptions = gridComp.options;
 	    this.gridGetBoolean = gridComp.getBoolean;
 	    this.defaults = {
-	        width: 200, // 默认宽度为200
+	        width: '200', // 默认宽度为200
 	        sortable: true, // 是否可以排序
 	        canDrag: true, // 是否可以拖动
 	        fixed: false, // 是否固定列
@@ -2010,7 +2008,7 @@
 	    }
 
 	    var htmlStr = '<div id="' + this.options.id + '_content_' + idStr + 'div" class="u-grid-content-' + cssStr + 'div" ' + styleStr + '>';
-	    htmlStr += '<div style="height:30px;position:absolute;top:-30px;width:100%;"></div><table role="grid" id="' + this.options.id + '_content_' + idStr + 'table" ' + tableStyleStr + '>';
+	    htmlStr += '<div style="height:30px;position:absolute;top:-30px;width:100%;z-index:-1;"></div><table role="grid" id="' + this.options.id + '_content_' + idStr + 'table" ' + tableStyleStr + '>';
 	    htmlStr += this.createColgroup(createFlag);
 	    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_content_' + idStr + 'thead" style="display:none">';
 	    htmlStr += this.createThead(createFlag);
@@ -2807,9 +2805,6 @@
 	        url = url.substring(0, index);
 	    }
 	    this.localStorageId = this.options.id + url;
-
-	    // select与focus保持一致
-	    this.options.contentFocus = this.options.contentSelect;
 	};
 	var initOptionsTree = function initOptionsTree() {};
 	/*
@@ -4132,12 +4127,11 @@
 	            //先按100%来处理
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
-	                var nowWidth = column.options.width;
+	                var nowWidth = column.options.width + '';
 	                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        }
-
 	        this.hasNoScrollRest = true;
 	    }
 	};
@@ -4204,8 +4198,11 @@
 	        $('#' + this.options.id + '_content_left_bottom').css('display', 'none');
 	        $('#' + this.options.id + '_content_left_sum_bottom').css('bottom', 0);
 	    }
-	    $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
-	    $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+	    if (!this.options.noScroll) {
+	        $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+	        $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+	    }
+
 	    return newContentWidth;
 	};
 	exports.widthChangeFun = widthChangeFun;
@@ -4743,13 +4740,13 @@
 
 		$(document).on('click', function () {
 			if (oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false) {
-				$('#' + oThis.options.id + '_column_menu').css('display', 'none');
+				if (oThis.ele.offsetWidth > 0) $('#' + oThis.options.id + '_column_menu').css('display', 'none');
 			}
 			oThis.ele.createColumnMenuFlag = false;
 		});
 		$(document).on('scroll', function () {
 			if (oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false) {
-				$('#' + oThis.options.id + '_column_menu').css('display', 'none');
+				if (oThis.ele.offsetWidth > 0) $('#' + oThis.options.id + '_column_menu').css('display', 'none');
 			}
 			oThis.ele.createColumnMenuFlag = false;
 		});
@@ -4761,14 +4758,17 @@
 
 		/*header 按钮处理开始*/
 		// column按钮
+		$('#' + this.options.id + '_column_menu_ul').off('mousemove');
 		$('#' + this.options.id + '_column_menu_ul').on('mousemove', function (e) {
 			oThis.columnMenuMove = true;
 		});
+		$('#' + this.options.id + '_column_menu_ul').off('mouseout');
 		$('#' + this.options.id + '_column_menu_ul').on('mouseout', function (e) {
 			oThis.columnMenuMove = false;
 		});
 
 		// 清除设置按钮
+		$('#' + this.options.id + '_clearSet').off('click');
 		$('#' + this.options.id + '_clearSet').on('click', function (e) {
 			oThis.clearLocalData();
 			oThis.initGridCompColumn();
@@ -4780,6 +4780,7 @@
 			}
 		});
 		// 显示/隐藏列 对应所有列的点击处理
+		$('#' + this.options.id + '_column_menu_columns_ul li input').off('click');
 		$('#' + this.options.id + '_column_menu_columns_ul li input').on('click', function (e) {
 			//待完善 优化与li的click的代码整合
 			var index = $(this).closest('li').attr('index');
@@ -4825,6 +4826,7 @@
 			oThis.saveGridCompColumnArrToLocal();
 			e.stopPropagation();
 		});
+		$('#' + this.options.id + '_column_menu_columns_ul li').off('click');
 		$('#' + this.options.id + '_column_menu_columns_ul li').on('click', function (e) {
 			var index = $(this).attr('index');
 			var gridCompColumn = oThis.gridCompColumnArr[index];
@@ -5256,6 +5258,9 @@
 	 */
 	var re_editClose = function re_editClose() {
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
+		if (this.editComp) {
+			this.editComp.hide();
+		}
 		if (!row) return;
 		if (this.options.editType != 'form') {
 			//this.repaintRow(this.eidtRowIndex);
@@ -5325,6 +5330,7 @@
 			editType.call(this, obj);
 		}
 		// input输入blur时显示下一个编辑控件
+		$('input', $(td)).off('keydown');
 		$('input', $(td)).on('keydown', function (e) {
 			if (oThis.options.editType == 'form') {} else {
 				var keyCode = e.keyCode;
@@ -6243,9 +6249,15 @@
 		}
 		var oThis = this;
 		if (this.swapColumnFlag) {
-			var nowTh = this.swapColumnEle,
-			    $nowTh = $(nowTh),
-			    nowGridCompColumn = nowTh.gridCompColumn;
+			var nowTh = this.swapColumnEle;
+			if (!nowTh) {
+				return;
+			}
+			var $nowTh = $(nowTh);
+			if (!nowTh.gridCompColumn) {
+				return;
+			}
+			var nowGridCompColumn = nowTh.gridCompColumn;
 			//创建拖动区域
 			if ($('#' + this.options.id + '_clue').length == 0) {
 				var $d = $('<div class="u-grid u-grid-header-drag-clue" id="' + this.options.id + '_clue" />').css({

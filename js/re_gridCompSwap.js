@@ -91,9 +91,15 @@ const swapColumnFun = function(e) {
 	}
 	var oThis = this;
 	if (this.swapColumnFlag) {
-		var nowTh = this.swapColumnEle,
-			$nowTh = $(nowTh),
-			nowGridCompColumn = nowTh.gridCompColumn;
+		var nowTh = this.swapColumnEle;
+		if(!nowTh){
+			return;
+		}
+		var	$nowTh = $(nowTh);
+		if(!nowTh.gridCompColumn){
+			return;
+		}
+		var	nowGridCompColumn = nowTh.gridCompColumn;
 		//创建拖动区域
 		if ($('#' + this.options.id + '_clue').length == 0) {
 			var $d = $('<div class="u-grid u-grid-header-drag-clue" id="' + this.options.id + '_clue" />').css({

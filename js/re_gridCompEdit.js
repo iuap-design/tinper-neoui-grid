@@ -267,15 +267,18 @@ const editRow = function($tr,colIndex){
  */
 const re_editClose = function(){
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
+	if(this.editComp){
+		this.editComp.hide();
+	}
 	if(!row)
 		return;
-		if(this.options.editType != 'form'){
-			//this.repaintRow(this.eidtRowIndex);
-			var obj = {};
-			obj.begin = this.eidtRowIndex;
-			obj.length = 1;
-			this.renderTypeFun(obj);
-		}
+	if(this.options.editType != 'form'){
+		//this.repaintRow(this.eidtRowIndex);
+		var obj = {};
+		obj.begin = this.eidtRowIndex;
+		obj.length = 1;
+		this.renderTypeFun(obj);
+	}
 
 	$('#' +this.options.id + '_content_edit_menu').css('display','none');
 	this.repairSumRow();
@@ -339,6 +342,7 @@ const editCell = function(obj){
 		editType.call(this,obj);
 	}
 	// input输入blur时显示下一个编辑控件
+	$('input',$(td)).off('keydown');
 	$('input',$(td)).on('keydown',function(e){
 		if(oThis.options.editType == 'form'){
 

@@ -97,12 +97,11 @@ const noScrollWidthReset = function(){
             //先按100%来处理
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
-                var nowWidth = column.options.width;
+                var nowWidth = column.options.width + '';
                 var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
-                this.setColumnWidth(column,newWidth)
+                this.setColumnWidth(column,newWidth);
             }
         }
-        
         this.hasNoScrollRest = true;
     }
 }
@@ -170,8 +169,11 @@ const contentWidthChange = function(newContentWidth){
         $('#' + this.options.id + '_content_left_bottom').css('display','none');
         $('#' + this.options.id + '_content_left_sum_bottom').css('bottom',0);
     }
-    $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
-    $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+    if(!this.options.noScroll){
+        $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+        $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+    }
+   
     return newContentWidth;
 };
 export{
