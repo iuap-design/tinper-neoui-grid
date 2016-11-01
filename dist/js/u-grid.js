@@ -3237,7 +3237,8 @@
 	        var obj = {};
 	        obj.gridObj = this;
 	        obj.index = index;
-	        if (!this.options.onRowDelete(index)) {
+	        obj.row = row;
+	        if (!this.options.onRowDelete(obj)) {
 	            return;
 	        }
 	    }
