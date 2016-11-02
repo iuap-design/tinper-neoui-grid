@@ -267,7 +267,7 @@ const editRow = function($tr,colIndex){
  */
 const re_editClose = function(){
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
-	if(this.editComp){
+	if(this.editComp && this.editComp.hide){
 		this.editComp.hide();
 	}
 	if(!row)

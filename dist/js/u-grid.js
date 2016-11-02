@@ -4079,6 +4079,7 @@
 	            $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 
 	            this.preWholeWidth = w;
+	            this.resetLeftHeight();
 	        }
 	    }
 	};
@@ -4132,6 +4133,7 @@
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        }
+
 	        this.hasNoScrollRest = true;
 	    }
 	};
@@ -5258,7 +5260,7 @@
 	 */
 	var re_editClose = function re_editClose() {
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
-		if (this.editComp) {
+		if (this.editComp && this.editComp.hide) {
 			this.editComp.hide();
 		}
 		if (!row) return;
