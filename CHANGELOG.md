@@ -1,9 +1,11 @@
-<a name="3.1.4"></a>
-## [3.1.4](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.4) (2016-10-27)
+<a name="3.1.5"></a>
+## [3.1.5](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.1...v3.1.5) (2016-11-01)
 
 
 ### Bug Fixes
 * pro-IUAPDESIGN-101:友云采：grid中横向滚动时需要隐藏编辑控件 ([928fdf1](https://github.com/iuap-design/tinper-neoui-grid/commit/928fdf1))
+
+* pro-IUAPDESIGN-105:云彩：grid排序图标需要修改 ([4d923aa](https://github.com/iuap-design/tinper-neoui-grid/commit/4d923aa))
 
 * pro-IUAPDESIGN-41:云表单：grid提供在移动端的样式修改方案 ([8b08272](https://github.com/iuap-design/tinper-neoui-grid/commit/8b08272))
 
@@ -23,9 +25,13 @@
 
 * pro-IUAPDESIGN-98:友云采：grid中title显示为id，renderType存在时取消td的title。 ([fe1160a](https://github.com/iuap-design/tinper-neoui-grid/commit/fe1160a))
 
+* 优化onRowDelete传入参数 ([f33f189](https://github.com/iuap-design/tinper-neoui-grid/commit/f33f189))
+
 * 修改先在datatable中选中grid中显示状态不对的问题 ([f2d1769](https://github.com/iuap-design/tinper-neoui-grid/commit/f2d1769))
 
 * 增加参数noScroll控制grid不显示滚动条 ([a20304f](https://github.com/iuap-design/tinper-neoui-grid/commit/a20304f))
+
+* 解决grid中tab不可用的问题 ([dbe89df](https://github.com/iuap-design/tinper-neoui-grid/commit/dbe89df))
 
 
 

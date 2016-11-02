@@ -267,15 +267,18 @@ const editRow = function($tr,colIndex){
  */
 const re_editClose = function(){
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
+	if(this.editComp){
+		this.editComp.hide();
+	}
 	if(!row)
 		return;
-		if(this.options.editType != 'form'){
-			//this.repaintRow(this.eidtRowIndex);
-			var obj = {};
-			obj.begin = this.eidtRowIndex;
-			obj.length = 1;
-			this.renderTypeFun(obj);
-		}
+	if(this.options.editType != 'form'){
+		//this.repaintRow(this.eidtRowIndex);
+		var obj = {};
+		obj.begin = this.eidtRowIndex;
+		obj.length = 1;
+		this.renderTypeFun(obj);
+	}
 
 	$('#' +this.options.id + '_content_edit_menu').css('display','none');
 	this.repairSumRow();
