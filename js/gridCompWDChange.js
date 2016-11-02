@@ -10,9 +10,9 @@ const widthChangeFun = function() {
             this.wholeWidth = w;
 
             // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
-            if (w > this.options.formMaxWidth && 
-                ((this.showType == 'form' || this.showType == '') || 
-                    !$('#' + this.options.id + '_content_div tbody')[0]) || 
+            if (w > this.options.formMaxWidth &&
+                ((this.showType == 'form' || this.showType == '') ||
+                    !$('#' + this.options.id + '_content_div tbody')[0]) ||
                     this.options.overWidthHiddenColumn ||
                     this.options.noScroll) { //lyk--需要完善隐藏之后再显示同事添加数据操作
                 oThis.widthChangeGridFun();
@@ -47,6 +47,7 @@ const widthChangeFun = function() {
             $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 
             this.preWholeWidth = w;
+             this.resetLeftHeight();
         }
 
     }
@@ -92,7 +93,7 @@ const noScrollWidthReset = function(){
                 var newWidth = nowWidth/ this.preWholeWidth * this.wholeWidth;
                 this.setColumnWidth(column,newWidth)
             }
-            
+
         }else{
             //先按100%来处理
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
@@ -102,7 +103,7 @@ const noScrollWidthReset = function(){
                 this.setColumnWidth(column,newWidth)
             }
         }
-        
+
         this.hasNoScrollRest = true;
     }
 }
