@@ -270,6 +270,9 @@ const re_editClose = function(){
 	if(this.editComp && this.editComp.hide){
 		this.editComp.hide();
 	}
+	if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+		this.editComp.comp.hide();
+	}
 	$('#' + this.options.id + '_placeholder_div').remove();
 	if(!row)
 		return;
@@ -316,7 +319,7 @@ const editCell = function(obj){
 		this.iconSpan = null;
 	}
 
-	
+
 
 	var obj = {};
 	obj.td = td;
@@ -368,7 +371,7 @@ const editCell = function(obj){
 	            u.stopEvent(e);
 	        }
 		}
-		
+
 	});
 	if (this.options.editType == 'default')
 		$('input:first',$(td)).focus()
