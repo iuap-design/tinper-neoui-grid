@@ -270,6 +270,7 @@ const re_editClose = function(){
 	if(this.editComp && this.editComp.hide){
 		this.editComp.hide();
 	}
+	$('#' + this.options.id + '_placeholder_div').remove();
 	if(!row)
 		return;
 	if(this.options.editType != 'form'){
@@ -306,14 +307,16 @@ const editCell = function(obj){
 	var	colIndex = obj.colIndex;
 	var oThis = this;
 	if(obj.colIndex == 0){
-			try{
-				this.iconSpan = $(td).find('.uf')[0].outerHTML;
-			}catch(e){
+		try{
+			this.iconSpan = $(td).find('.uf')[0].outerHTML;
+		}catch(e){
 
-			}
-		} else {
-			this.iconSpan = null;
 		}
+	} else {
+		this.iconSpan = null;
+	}
+
+	
 
 	var obj = {};
 	obj.td = td;
@@ -334,8 +337,16 @@ const editCell = function(obj){
 	}else if(typeof editType == 'function'){
 		var obj = {};
 		var $Div = $('.u-grid-content-td-div',$(td));
+		$Div.removeClass('u-grid-content-td-div-over');
 		obj.gridObj = this;
 		obj.element = $Div[0];
+		if(this.options.editType == 'default'){
+			// 对于高度被撑开的情况需要放一个 div来把整体撑开
+			var nowHeight = obj.element.offsetHeight;
+			var editDivHtml = '<div id="' + this.options.id + '_placeholder_div" class="u-grid-edit-placeholder-div" style="height:' +  nowHeight + 'px;"></div>';
+			$Div[0].innerHTML = editDivHtml;
+			obj.element = $('#' + this.options.id + '_placeholder_div')[0];
+		}
 		obj.value = value;
 		obj.field = field;
 		obj.rowObj = rowObj;
