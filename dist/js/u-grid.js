@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.5
+ * tinper-neoui-grid v3.1.6
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1058,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	  _classCallCheck(this, column);
+	    _classCallCheck(this, column);
 
-	  this.init(options, gridComp);
+	    this.init(options, gridComp);
 	};
 
 	;
@@ -5263,6 +5263,7 @@
 		if (this.editComp && this.editComp.hide) {
 			this.editComp.hide();
 		}
+		$('#' + this.options.id + '_placeholder_div').remove();
 		if (!row) return;
 		if (this.options.editType != 'form') {
 			//this.repaintRow(this.eidtRowIndex);
@@ -5324,8 +5325,16 @@
 		} else if (typeof editType == 'function') {
 			var obj = {};
 			var $Div = $('.u-grid-content-td-div', $(td));
+			$Div.removeClass('u-grid-content-td-div-over');
 			obj.gridObj = this;
 			obj.element = $Div[0];
+			if (this.options.editType == 'default') {
+				// 对于高度被撑开的情况需要放一个 div来把整体撑开
+				var nowHeight = obj.element.offsetHeight;
+				var editDivHtml = '<div id="' + this.options.id + '_placeholder_div" class="u-grid-edit-placeholder-div" style="height:' + nowHeight + 'px;"></div>';
+				$Div[0].innerHTML = editDivHtml;
+				obj.element = $('#' + this.options.id + '_placeholder_div')[0];
+			}
 			obj.value = value;
 			obj.field = field;
 			obj.rowObj = rowObj;
