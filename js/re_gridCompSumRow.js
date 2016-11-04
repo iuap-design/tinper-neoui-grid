@@ -8,10 +8,10 @@ const re_createContentRowsSumRow = function(createFlag){
 };
 const re_createContentSumRow = function(bottonStr){
 	var htmlStr = '';
-	if(this.options.showSumRow){
-		htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;'+bottonStr+'">';
-		htmlStr += '</div>';
-	}
+	// if(this.options.showSumRow){
+	// 	htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;'+bottonStr+'">';
+	// 	htmlStr += '</div>';
+	// }
 	return htmlStr;
 }
 /*

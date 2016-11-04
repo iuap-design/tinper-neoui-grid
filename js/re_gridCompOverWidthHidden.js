@@ -26,7 +26,7 @@ const re_widthChangeGridFunOverWidthHidden = function(){
 				var column = this.gridCompHiddenLevelColumnArr[i];
 				if(column.options.visible){
 					column.options.visible = false;
-					columnWholeWidth = columnWholeWidth - column.options.width;
+					columnWholeWidth = parseInt(columnWholeWidth) - parseInt(column.options.width);
 				}
 				if(!(columnWholeWidth > wholeWidth)){
 					break;
@@ -37,7 +37,7 @@ const re_widthChangeGridFunOverWidthHidden = function(){
 			for(var i = this.gridCompHiddenLevelColumnArr.length -1;i>-1;i--){
 				var column = this.gridCompHiddenLevelColumnArr[i];
 				if(!column.options.visible){
-					columnWholeWidth = columnWholeWidth + column.options.width;
+					columnWholeWidth = parseInt(columnWholeWidth) + parseInt(column.options.width);
 					if(columnWholeWidth > wholeWidth){
 						break;
 					}

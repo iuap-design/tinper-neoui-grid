@@ -55,7 +55,6 @@ const init = function(options, gridComp){
 
     }
 
-    // 转成数字
     this.options.width = this.options.width;
     this.firstColumn = false;
 };

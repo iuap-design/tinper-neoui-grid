@@ -60,7 +60,8 @@ import {
     getAllRows,
     getRowByIndex,
     getRowIndexByValue,
-    getChildRowIndex
+    getChildRowIndex,
+    getColumnByVisibleIndex
 } from './gridCompGet';
 
 import {
@@ -277,6 +278,7 @@ gridComp.prototype.getAllRows = getAllRows;
 gridComp.prototype.getRowByIndex = getRowByIndex;
 gridComp.prototype.getRowIndexByValue = getRowIndexByValue;
 gridComp.prototype.getChildRowIndex = getChildRowIndex;
+gridComp.prototype.getColumnByVisibleIndex = getColumnByVisibleIndex;
 
 
 

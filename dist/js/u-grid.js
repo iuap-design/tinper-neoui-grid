@@ -1133,7 +1133,6 @@
 	        if (typeof this.options.editType == 'string') this.options.editType = eval(this.options.editType);
 	    } catch (e) {}
 
-	    // 转成数字
 	    this.options.width = this.options.width;
 	    this.firstColumn = false;
 	};
@@ -1313,6 +1312,7 @@
 	gridComp.prototype.getRowByIndex = _gridCompGet.getRowByIndex;
 	gridComp.prototype.getRowIndexByValue = _gridCompGet.getRowIndexByValue;
 	gridComp.prototype.getChildRowIndex = _gridCompGet.getChildRowIndex;
+	gridComp.prototype.getColumnByVisibleIndex = _gridCompGet.getColumnByVisibleIndex;
 
 	gridComp.prototype.init = _gridCompInit.init;
 	gridComp.prototype.getBooleanOptions = _gridCompInit.getBooleanOptions;
@@ -2544,8 +2544,11 @@
 	        j = 0;
 	    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	        if (this.gridCompColumnArr[i] == column) {
+	            if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+
+	                j++;
+	            }
 	            flag = true;
-	            continue;
 	        }
 	        if (flag == true && !($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
 	            index = j;
@@ -2625,6 +2628,20 @@
 	    return result;
 	};
 
+	var getColumnByVisibleIndex = function getColumnByVisibleIndex(index) {
+	    var nowIndex = -1;
+	    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+	        var column = this.gridCompColumnArr[i];
+	        if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+	            nowIndex++;
+	        }
+	        if (nowIndex == index) {
+	            return column;
+	        }
+	    }
+	    return null;
+	};
+
 	exports.getColumnAttr = getColumnAttr;
 	exports.getColumnByField = getColumnByField;
 	exports.getIndexOfColumn = getIndexOfColumn;
@@ -2638,6 +2655,7 @@
 	exports.getRowByIndex = getRowByIndex;
 	exports.getRowIndexByValue = getRowIndexByValue;
 	exports.getChildRowIndex = getChildRowIndex;
+	exports.getColumnByVisibleIndex = getColumnByVisibleIndex;
 
 /***/ },
 /* 13 */
@@ -3928,7 +3946,7 @@
 	                    $('#' + this.options.id + '_content col:eq(' + nextVisibleIndex + ')').before(htmlStr);
 	                }
 	            }
-	            var newContentW = this.contentWidth + column.options.width;
+	            var newContentW = this.contentWidth + parseInt(column.options.width);
 	        }
 	        // 隐藏处理
 	        if (column.options.visible == true && !visible) {
@@ -3938,7 +3956,7 @@
 	            $('#' + this.options.id + '_content col:eq(' + visibleIndex + ')').remove();
 	            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "none");
 	            // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
-	            var newContentW = this.contentWidth - column.options.width;
+	            var newContentW = this.contentWidth - parseInt(column.options.width);
 	        }
 	        column.options.visible = visible;
 	        this.columnsVisibleFun();
@@ -3962,7 +3980,7 @@
 	 */
 	var setColumnWidth = function setColumnWidth(column, newWidth) {
 	    if (column != this.lastVisibleColumn) {
-	        if (newWidth > this.minColumnWidth) {
+	        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
 	            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
 	                oldWidth = column.options.width,
 	                changeWidth = newWidth - oldWidth,
@@ -4121,7 +4139,7 @@
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width;
-	                var newWidth = nowWidth / this.preWholeWidth * this.wholeWidth;
+	                var newWidth = parseInt(nowWidth / this.preWholeWidth * this.wholeWidth);
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        } else {
@@ -4129,7 +4147,14 @@
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width + '';
-	                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
+	                if (nowWidth.indexOf('%') > 0) {
+	                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+	                } else {
+	                    var newWidth = nowWidth;
+	                }
+	                if (newWidth < this.minColumnWidth) {
+	                    newWidth = this.minColumnWidth;
+	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        }
@@ -4159,7 +4184,7 @@
 	 */
 	var contentWidthChange = function contentWidthChange(newContentWidth) {
 	    if (newContentWidth < this.contentMinWidth) {
-	        var oldW = this.lastVisibleColumn.options.width;
+	        var oldW = parseInt(this.lastVisibleColumn.options.width);
 	        this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
 	        $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
 	        $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -4173,7 +4198,7 @@
 	            for (var i = 0; i < l; i++) {
 	                var overWidthColumn = this.overWidthVisibleColumnArr[i];
 	                var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
-	                var w = overWidthColumn.options.width;
+	                var w = parseInt(overWidthColumn.options.width);
 	                var realW = overWidthColumn.options.realWidth;
 	                $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
 	                $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
@@ -4181,7 +4206,7 @@
 	                overWidthColumn.options.width = overWidthColumn.options.realWidth;
 	            }
 	            if (newContentWidth < this.contentMinWidth) {
-	                var oldW = this.lastVisibleColumn.options.width;
+	                var oldW = parseInt(this.lastVisibleColumn.options.width);
 	                this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
 	                $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
 	                $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -4388,7 +4413,7 @@
 	        var gridCompColumn = oThis.gridCompColumnArr[i];
 	        var w = 0;
 	        if (gridCompColumn.options.visible) {
-	            w = gridCompColumn.options.width;
+	            w = parseInt(gridCompColumn.options.width);
 	        }
 	        this.attrLeftTotalWidth = oThis.contentWidth;
 	        oThis.contentWidth += w;
@@ -4774,6 +4799,8 @@
 		$('#' + this.options.id + '_clearSet').on('click', function (e) {
 			oThis.clearLocalData();
 			oThis.initGridCompColumn();
+			oThis.hasNoScrollRest = false;
+			oThis.noScrollWidthReset();
 			// 清除排序
 			oThis.dataSourceObj.sortRows();
 			oThis.repaintGridDivs();
@@ -4933,16 +4960,37 @@
 			    nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
 			if (nowTh && column != this.lastVisibleColumn) {
 				this.dragEndX = e.clientX;
-				var changeWidth = this.dragEndX - this.dragStartX,
-				    newWidth = nowTh.attrWidth + changeWidth,
-				    cWidth = this.contentWidth + changeWidth;
+				var changeWidth = parseInt(this.dragEndX) - parseInt(this.dragStartX),
+				    newWidth = parseInt(nowTh.attrWidth) + parseInt(changeWidth),
+				    cWidth = parseInt(this.contentWidth) + parseInt(changeWidth);
 				if (newWidth > this.minColumnWidth) {
-					this.dragW = this.contentWidthChange(cWidth);
+					if (this.options.noScroll) {
+						// 不显示滚动条的情况下，当前列的该变量对后面一列产生影响
+						var nextVisibleThIndex = this.getNextVisibleInidexOfColumn(column);
+						if (nextVisibleThIndex > -1) {
+							var nextColumn = this.getColumnByVisibleIndex(nextVisibleThIndex);
+							if (!this.dragNextClomunWidth || this.dragNextClomunWidth < 0) this.dragNextClomunWidth = nextColumn.options.width;
+						}
+						var nextNewWidth = parseInt(this.dragNextClomunWidth) - parseInt(changeWidth);
+						if (!(nextNewWidth > this.minColumnWidth)) {
+							$('#' + this.options.id + '_top').css('display', 'block');
+							return;
+						}
+					}
+					if (!this.options.noScroll) {
+						this.dragW = this.contentWidthChange(cWidth);
+					}
 					$('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 					$('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
 					column.options.width = newWidth;
 					column.options.realWidth = newWidth;
+					if (this.options.noScroll) {
+						$('#' + this.options.id + '_header_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+						$('#' + this.options.id + '_content_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+						nextColumn.options.width = nextNewWidth;
+						nextColumn.options.realWidth = nextNewWidth;
+					}
 				}
 			}
 			$('#' + this.options.id + '_top').css('display', 'block');
@@ -4956,6 +5004,7 @@
 			this.resetThVariable();
 			this.saveGridCompColumnArrToLocal();
 		}
+		this.dragNextClomunWidth = -1;
 		this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
 		if (this.dragW) this.contentWidth = this.dragW;
 		$('#' + this.options.id + '_resize_handle')[0].nowTh = null;
@@ -5262,6 +5311,9 @@
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
 		if (this.editComp && this.editComp.hide) {
 			this.editComp.hide();
+		}
+		if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+			this.editComp.comp.hide();
 		}
 		$('#' + this.options.id + '_placeholder_div').remove();
 		if (!row) return;
@@ -5701,7 +5753,7 @@
 			var parentHeaderStr = oThis.getString(gridCompColumn.options.parentHeader, '');
 			var w = 0;
 			if (gridCompColumn.options.visible) {
-				w = gridCompColumn.options.width;
+				w = parseInt(gridCompColumn.options.width);
 			}
 			// 处理多表头
 			if (oldParentHeaderStr != '' && parentHeaderStr != oldParentHeaderStr) {
@@ -5910,7 +5962,7 @@
 					var column = this.gridCompHiddenLevelColumnArr[i];
 					if (column.options.visible) {
 						column.options.visible = false;
-						columnWholeWidth = columnWholeWidth - column.options.width;
+						columnWholeWidth = parseInt(columnWholeWidth) - parseInt(column.options.width);
 					}
 					if (!(columnWholeWidth > wholeWidth)) {
 						break;
@@ -5921,7 +5973,7 @@
 				for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
 					var column = this.gridCompHiddenLevelColumnArr[i];
 					if (!column.options.visible) {
-						columnWholeWidth = columnWholeWidth + column.options.width;
+						columnWholeWidth = parseInt(columnWholeWidth) + parseInt(column.options.width);
 						if (columnWholeWidth > wholeWidth) {
 							break;
 						}
@@ -5952,10 +6004,10 @@
 	};
 	var re_createContentSumRow = function re_createContentSumRow(bottonStr) {
 		var htmlStr = '';
-		if (this.options.showSumRow) {
-			htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;' + bottonStr + '">';
-			htmlStr += '</div>';
-		}
+		// if(this.options.showSumRow){
+		// 	htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;'+bottonStr+'">';
+		// 	htmlStr += '</div>';
+		// }
 		return htmlStr;
 	};
 	/*

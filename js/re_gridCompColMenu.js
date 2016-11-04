@@ -143,6 +143,8 @@ const colMenu_initGridEventFun = function(){
 	$('#' + this.options.id + '_clearSet').on('click', function(e) {
 		oThis.clearLocalData();
 		oThis.initGridCompColumn();
+		oThis.hasNoScrollRest = false;
+		oThis.noScrollWidthReset();
 		// 清除排序
 		oThis.dataSourceObj.sortRows();
 		oThis.repaintGridDivs();

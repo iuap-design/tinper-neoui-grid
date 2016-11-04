@@ -47,7 +47,7 @@ const widthChangeFun = function() {
             $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 
             this.preWholeWidth = w;
-             this.resetLeftHeight();
+            this.resetLeftHeight();
         }
 
     }
@@ -90,7 +90,7 @@ const noScrollWidthReset = function(){
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width;
-                var newWidth = nowWidth/ this.preWholeWidth * this.wholeWidth;
+                var newWidth = parseInt(nowWidth/ this.preWholeWidth * this.wholeWidth);
                 this.setColumnWidth(column,newWidth)
             }
 
@@ -99,7 +99,14 @@ const noScrollWidthReset = function(){
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width + '';
-                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
+                if(nowWidth.indexOf('%') > 0){
+                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+                }else{
+                    var newWidth = nowWidth;
+                }
+                if(newWidth < this.minColumnWidth){
+                    newWidth = this.minColumnWidth;
+                }
                 this.setColumnWidth(column,newWidth);
             }
         }
@@ -130,7 +137,7 @@ const heightChangeFun = function() {
  */
 const contentWidthChange = function(newContentWidth){
     if(newContentWidth < this.contentMinWidth){
-        var oldW = this.lastVisibleColumn.options.width;
+        var oldW = parseInt(this.lastVisibleColumn.options.width);
         this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
         $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
         $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -144,7 +151,7 @@ const contentWidthChange = function(newContentWidth){
             for(var i = 0; i < l; i++){
                 var overWidthColumn = this.overWidthVisibleColumnArr[i];
                 var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
-                var w = overWidthColumn.options.width;
+                var w = parseInt(overWidthColumn.options.width);
                 var realW = overWidthColumn.options.realWidth;
                 $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
                 $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
@@ -152,7 +159,7 @@ const contentWidthChange = function(newContentWidth){
                 overWidthColumn.options.width = overWidthColumn.options.realWidth;
             }
             if(newContentWidth < this.contentMinWidth){
-                var oldW = this.lastVisibleColumn.options.width;
+                var oldW = parseInt(this.lastVisibleColumn.options.width);
                 this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
                 $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
                 $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
