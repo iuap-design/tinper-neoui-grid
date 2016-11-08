@@ -300,7 +300,7 @@ content区域css begin
   margin: 0 1em 0 1em;
   line-height: 3.5em;
   font-size: 12px;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   text-overflow: ellipsis;
   height: 100%;
