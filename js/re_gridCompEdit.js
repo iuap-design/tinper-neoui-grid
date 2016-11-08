@@ -474,7 +474,9 @@ const edit_initEventFun = function(){
 	});
 
 	u.on(document,'scroll',function(){
-		oThis.editClose();
+		if(oThis.options.editType == 'default'){
+			oThis.editClose();
+		}
 	})
 };
 const setGridEditType = function(newEditType){
