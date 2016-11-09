@@ -5448,7 +5448,21 @@
 				return;
 			}
 		}
+
+		colIndex = _getNextEditColIndex(this, colIndex);
 		this.editRowFun($tr, colIndex);
+	};
+
+	var _getNextEditColIndex = function _getNextEditColIndex(gridObj, nowIndex) {
+		// 如果下一列为隐藏/不可修改/复选框则跳到下一个
+		var colIndex = -1;
+		var column = gridObj.gridCompColumnArr[nowIndex];
+		if (!column.options.visible || !column.options.editable) {
+			colIndex = _getNextEditColIndex(gridObj, nowIndex + 1);
+		} else {
+			colIndex = nowIndex;
+		}
+		return colIndex;
 	};
 	var editValueChange = function editValueChange(field, value) {
 		// 设置row的值为新值
