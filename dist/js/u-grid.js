@@ -2399,6 +2399,7 @@
 	    this.resetScrollLeft();
 	    this.hideEditMenu();
 	    this.resetLeftHeight();
+	    this.isCheckedHeaderRow();
 	    if (typeof this.options.afterCreate == 'function') {
 	        this.options.afterCreate.call(this);
 	    }
@@ -2959,13 +2960,12 @@
 	'use strict';
 
 	exports.__esModule = true;
-
 	/*
 	    重新结算是否选中header第一行
 	 */
 
 	var isCheckedHeaderRow = function isCheckedHeaderRow() {
-	    if (this.selectRows.length == this.dataSourceObj.rows.length) {
+	    if (this.selectRows.length !== 0 && this.selectRows.length == this.dataSourceObj.rows.length) {
 	        //修改全选标记为false
 	        $('#' + this.options.id + '_header_multi_input').addClass('is-checked');
 	    } else {

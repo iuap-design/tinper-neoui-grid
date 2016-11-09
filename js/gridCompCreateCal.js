@@ -50,6 +50,7 @@ const afterGridDivsCreate = function(){
     this.resetScrollLeft();
     this.hideEditMenu();
     this.resetLeftHeight();
+    this.isCheckedHeaderRow();
     if(typeof this.options.afterCreate == 'function'){
         this.options.afterCreate.call(this);
     }
