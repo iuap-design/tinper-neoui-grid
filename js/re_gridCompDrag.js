@@ -65,16 +65,38 @@ const dragFun = function(e) {
 			nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
 		if (nowTh && column != this.lastVisibleColumn) {
 			this.dragEndX = e.clientX;
-			var changeWidth = this.dragEndX - this.dragStartX,
-				newWidth = nowTh.attrWidth + changeWidth,
-				cWidth = this.contentWidth + changeWidth;
+			var changeWidth = parseInt(this.dragEndX) - parseInt(this.dragStartX),
+				newWidth = parseInt(nowTh.attrWidth) + parseInt(changeWidth),
+				cWidth = parseInt(this.contentWidth) + parseInt(changeWidth);
 			if (newWidth > this.minColumnWidth) {
-				this.dragW = this.contentWidthChange(cWidth);
+				if(this.options.noScroll){
+					// 不显示滚动条的情况下，当前列的该变量对后面一列产生影响
+					var nextVisibleThIndex = this.getNextVisibleInidexOfColumn(column);
+					if(nextVisibleThIndex > -1){
+						var nextColumn = this.getColumnByVisibleIndex(nextVisibleThIndex);
+						if(!this.dragNextClomunWidth || this.dragNextClomunWidth < 0)
+							this.dragNextClomunWidth = nextColumn.options.width;
+					}
+					var nextNewWidth = parseInt(this.dragNextClomunWidth) - parseInt(changeWidth);
+					if(!(nextNewWidth > this.minColumnWidth)){
+						$('#' + this.options.id + '_top').css('display', 'block');
+						return;
+					}
+				}
+				if(!this.options.noScroll){
+					this.dragW = this.contentWidthChange(cWidth);
+				}
 				$('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 				$('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
 				column.options.width = newWidth;
 				column.options.realWidth = newWidth;
+				if(this.options.noScroll){
+					$('#' + this.options.id + '_header_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+					$('#' + this.options.id + '_content_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+					nextColumn.options.width = nextNewWidth;
+					nextColumn.options.realWidth = nextNewWidth;
+				}
 			}
 		}
 		$('#' + this.options.id + '_top').css('display', 'block');
@@ -88,6 +110,7 @@ const dragEnd = function(e) {
 		this.resetThVariable();
 		this.saveGridCompColumnArrToLocal();
 	}
+	this.dragNextClomunWidth = -1;
 	this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
 	if(this.dragW)
 		this.contentWidth = this.dragW;

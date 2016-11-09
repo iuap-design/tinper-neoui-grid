@@ -10,9 +10,9 @@ const widthChangeFun = function() {
             this.wholeWidth = w;
 
             // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
-            if (w > this.options.formMaxWidth && 
-                ((this.showType == 'form' || this.showType == '') || 
-                    !$('#' + this.options.id + '_content_div tbody')[0]) || 
+            if (w > this.options.formMaxWidth &&
+                ((this.showType == 'form' || this.showType == '') ||
+                    !$('#' + this.options.id + '_content_div tbody')[0]) ||
                     this.options.overWidthHiddenColumn ||
                     this.options.noScroll) { //lyk--需要完善隐藏之后再显示同事添加数据操作
                 oThis.widthChangeGridFun();
@@ -47,6 +47,7 @@ const widthChangeFun = function() {
             $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 
             this.preWholeWidth = w;
+            this.resetLeftHeight();
         }
 
     }
@@ -89,20 +90,27 @@ const noScrollWidthReset = function(){
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width;
-                var newWidth = nowWidth/ this.preWholeWidth * this.wholeWidth;
+                var newWidth = parseInt(nowWidth/ this.preWholeWidth * this.wholeWidth);
                 this.setColumnWidth(column,newWidth)
             }
-            
+
         }else{
             //先按100%来处理
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
-                var nowWidth = column.options.width;
-                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
-                this.setColumnWidth(column,newWidth)
+                var nowWidth = column.options.width + '';
+                if(nowWidth.indexOf('%') > 0){
+                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+                }else{
+                    var newWidth = nowWidth;
+                }
+                if(newWidth < this.minColumnWidth){
+                    newWidth = this.minColumnWidth;
+                }
+                this.setColumnWidth(column,newWidth);
             }
         }
-        
+
         this.hasNoScrollRest = true;
     }
 }
@@ -129,7 +137,7 @@ const heightChangeFun = function() {
  */
 const contentWidthChange = function(newContentWidth){
     if(newContentWidth < this.contentMinWidth){
-        var oldW = this.lastVisibleColumn.options.width;
+        var oldW = parseInt(this.lastVisibleColumn.options.width);
         this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
         $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
         $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -143,7 +151,7 @@ const contentWidthChange = function(newContentWidth){
             for(var i = 0; i < l; i++){
                 var overWidthColumn = this.overWidthVisibleColumnArr[i];
                 var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
-                var w = overWidthColumn.options.width;
+                var w = parseInt(overWidthColumn.options.width);
                 var realW = overWidthColumn.options.realWidth;
                 $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
                 $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
@@ -151,7 +159,7 @@ const contentWidthChange = function(newContentWidth){
                 overWidthColumn.options.width = overWidthColumn.options.realWidth;
             }
             if(newContentWidth < this.contentMinWidth){
-                var oldW = this.lastVisibleColumn.options.width;
+                var oldW = parseInt(this.lastVisibleColumn.options.width);
                 this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
                 $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
                 $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -170,8 +178,11 @@ const contentWidthChange = function(newContentWidth){
         $('#' + this.options.id + '_content_left_bottom').css('display','none');
         $('#' + this.options.id + '_content_left_sum_bottom').css('bottom',0);
     }
-    $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
-    $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+    if(!this.options.noScroll){
+        $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+        $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+    }
+
     return newContentWidth;
 };
 export{

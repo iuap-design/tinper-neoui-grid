@@ -63,7 +63,7 @@ const resetThVariable = function() {
         var gridCompColumn = oThis.gridCompColumnArr[i];
         var w = 0;
         if(gridCompColumn.options.visible){
-            w = gridCompColumn.options.width;
+            w = parseInt(gridCompColumn.options.width);
         }
         this.attrLeftTotalWidth = oThis.contentWidth;
         oThis.contentWidth += w;

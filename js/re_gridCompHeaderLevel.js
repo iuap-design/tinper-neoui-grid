@@ -5,7 +5,7 @@ const re_resetThVariableHeaderLevel = function(){
 		var parentHeaderStr = oThis.getString(gridCompColumn.options.parentHeader,'');
 		var w = 0;
 		if(gridCompColumn.options.visible){
-			w = gridCompColumn.options.width;
+			w = parseInt(gridCompColumn.options.width);
 		}
 		// 处理多表头
 		if(oldParentHeaderStr != '' && parentHeaderStr != oldParentHeaderStr){ // 上一个父项结束

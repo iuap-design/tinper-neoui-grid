@@ -6,7 +6,7 @@ const init = function(options, gridComp){
     var gridOptions = gridComp.options;
     this.gridGetBoolean = gridComp.getBoolean;
     this.defaults = {
-            width:200, // 默认宽度为200
+            width:'200', // 默认宽度为200
             sortable: true, // 是否可以排序
             canDrag: true, // 是否可以拖动
             fixed: false, // 是否固定列
@@ -55,7 +55,6 @@ const init = function(options, gridComp){
 
     }
 
-    // 转成数字
     this.options.width = this.options.width;
     this.firstColumn = false;
 };

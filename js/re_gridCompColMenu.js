@@ -109,13 +109,15 @@ const colMenu_initEventFun = function(){
 
 	$(document).on('click',function(){
 		if(oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false){
-			$('#' + oThis.options.id + '_column_menu').css('display','none');
+			if(oThis.ele.offsetWidth > 0)
+				$('#' + oThis.options.id + '_column_menu').css('display','none');
 		}
 		oThis.ele.createColumnMenuFlag = false;
 	});
 	$(document).on('scroll',function(){
 		if(oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false){
-			$('#' + oThis.options.id + '_column_menu').css('display','none');
+			if(oThis.ele.offsetWidth > 0)
+				$('#' + oThis.options.id + '_column_menu').css('display','none');
 		}
 		oThis.ele.createColumnMenuFlag = false;
 	});
@@ -127,17 +129,22 @@ const colMenu_initGridEventFun = function(){
 
 	/*header 按钮处理开始*/
 	// column按钮
+	$('#' + this.options.id + '_column_menu_ul').off('mousemove');
 	$('#' + this.options.id + '_column_menu_ul').on('mousemove', function(e) {
 		oThis.columnMenuMove = true;
 	});
+	$('#' + this.options.id + '_column_menu_ul').off('mouseout');
 	$('#' + this.options.id + '_column_menu_ul').on('mouseout', function(e) {
 		oThis.columnMenuMove = false;
 	});
 
 	// 清除设置按钮
+	$('#' + this.options.id + '_clearSet').off('click');
 	$('#' + this.options.id + '_clearSet').on('click', function(e) {
 		oThis.clearLocalData();
 		oThis.initGridCompColumn();
+		oThis.hasNoScrollRest = false;
+		oThis.noScrollWidthReset();
 		// 清除排序
 		oThis.dataSourceObj.sortRows();
 		oThis.repaintGridDivs();
@@ -146,6 +153,7 @@ const colMenu_initGridEventFun = function(){
 		}
 	});
 	// 显示/隐藏列 对应所有列的点击处理
+	$('#' + this.options.id + '_column_menu_columns_ul li input').off('click')
 	$('#' + this.options.id + '_column_menu_columns_ul li input').on('click', function(e) {
 		//待完善 优化与li的click的代码整合
 		var index = $(this).closest('li').attr('index');
@@ -193,6 +201,7 @@ const colMenu_initGridEventFun = function(){
 		oThis.saveGridCompColumnArrToLocal();
 		e.stopPropagation();
 	});
+	$('#' + this.options.id + '_column_menu_columns_ul li').off('click');
 	$('#' + this.options.id + '_column_menu_columns_ul li').on('click', function(e) {
 		var index = $(this).attr('index');
 		var gridCompColumn = oThis.gridCompColumnArr[index];

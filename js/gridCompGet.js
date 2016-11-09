@@ -59,8 +59,11 @@ const getNextVisibleInidexOfColumn = function(column){
     var index = -1,flag = false,j = 0;
     for(var i=0;i < this.gridCompColumnArr.length;i++){
         if(this.gridCompColumnArr[i] == column){
+            if(!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')){
+
+                j++;
+            }
             flag = true;
-            continue;
         }
         if(flag == true && !($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')){
             index = j;
@@ -140,6 +143,20 @@ const getChildRowIndex = function(row){
     return result;
 }
 
+const getColumnByVisibleIndex = function(index){
+    var nowIndex = -1;
+    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+        var column = this.gridCompColumnArr[i];
+        if(!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')){
+            nowIndex++;
+        }
+        if(nowIndex == index){
+            return column;
+        }
+    }
+    return null;
+}
+
 export{
     getColumnAttr,
     getColumnByField,
@@ -153,5 +170,6 @@ export{
     getAllRows,
     getRowByIndex,
     getRowIndexByValue,
-    getChildRowIndex
+    getChildRowIndex,
+    getColumnByVisibleIndex
 }

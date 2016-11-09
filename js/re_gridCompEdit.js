@@ -267,15 +267,22 @@ const editRow = function($tr,colIndex){
  */
 const re_editClose = function(){
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
+	if(this.editComp && this.editComp.hide){
+		this.editComp.hide();
+	}
+	if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+		this.editComp.comp.hide();
+	}
+	$('#' + this.options.id + '_placeholder_div').remove();
 	if(!row)
 		return;
-		if(this.options.editType != 'form'){
-			//this.repaintRow(this.eidtRowIndex);
-			var obj = {};
-			obj.begin = this.eidtRowIndex;
-			obj.length = 1;
-			this.renderTypeFun(obj);
-		}
+	if(this.options.editType != 'form'){
+		//this.repaintRow(this.eidtRowIndex);
+		var obj = {};
+		obj.begin = this.eidtRowIndex;
+		obj.length = 1;
+		this.renderTypeFun(obj);
+	}
 
 	$('#' +this.options.id + '_content_edit_menu').css('display','none');
 	this.repairSumRow();
@@ -303,14 +310,16 @@ const editCell = function(obj){
 	var	colIndex = obj.colIndex;
 	var oThis = this;
 	if(obj.colIndex == 0){
-			try{
-				this.iconSpan = $(td).find('.uf')[0].outerHTML;
-			}catch(e){
+		try{
+			this.iconSpan = $(td).find('.uf')[0].outerHTML;
+		}catch(e){
 
-			}
-		} else {
-			this.iconSpan = null;
 		}
+	} else {
+		this.iconSpan = null;
+	}
+
+
 
 	var obj = {};
 	obj.td = td;
@@ -331,8 +340,16 @@ const editCell = function(obj){
 	}else if(typeof editType == 'function'){
 		var obj = {};
 		var $Div = $('.u-grid-content-td-div',$(td));
+		$Div.removeClass('u-grid-content-td-div-over');
 		obj.gridObj = this;
 		obj.element = $Div[0];
+		if(this.options.editType == 'default'){
+			// 对于高度被撑开的情况需要放一个 div来把整体撑开
+			var nowHeight = obj.element.offsetHeight;
+			var editDivHtml = '<div id="' + this.options.id + '_placeholder_div" class="u-grid-edit-placeholder-div" style="height:' +  nowHeight + 'px;"></div>';
+			$Div[0].innerHTML = editDivHtml;
+			obj.element = $('#' + this.options.id + '_placeholder_div')[0];
+		}
 		obj.value = value;
 		obj.field = field;
 		obj.rowObj = rowObj;
@@ -354,7 +371,7 @@ const editCell = function(obj){
 	            u.stopEvent(e);
 	        }
 		}
-		
+
 	});
 	if (this.options.editType == 'default')
 		$('input:first',$(td)).focus()
@@ -457,7 +474,9 @@ const edit_initEventFun = function(){
 	});
 
 	u.on(document,'scroll',function(){
-		oThis.editClose();
+		if(oThis.options.editType == 'default'){
+			oThis.editClose();
+		}
 	})
 };
 const setGridEditType = function(newEditType){

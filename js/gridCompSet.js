@@ -44,7 +44,7 @@ const setColumnVisibleByIndex = function(index,visible){
                     $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex) + ')').before(htmlStr);
                 }
             }
-            var newContentW = this.contentWidth + column.options.width;
+            var newContentW = this.contentWidth + parseInt(column.options.width);
         }
         // 隐藏处理
         if(column.options.visible == true && !visible){
@@ -54,7 +54,7 @@ const setColumnVisibleByIndex = function(index,visible){
             $('#' + this.options.id + '_content col:eq(' + visibleIndex + ')').remove();
             $('td:eq(' + index + ')',$('#' + this.options.id + '_content tbody tr')).css('display', "none");
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
-            var newContentW = this.contentWidth - column.options.width;
+            var newContentW = this.contentWidth - parseInt(column.options.width);
         }
         column.options.visible = visible;
         this.columnsVisibleFun();
@@ -78,7 +78,7 @@ const setCoulmnWidthByField = function(field, newWidth){
  */
 const setColumnWidth = function(column, newWidth){
     if(column != this.lastVisibleColumn){
-        if (newWidth > this.minColumnWidth) {
+        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
             var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
             oldWidth = column.options.width,
             changeWidth  = newWidth - oldWidth,

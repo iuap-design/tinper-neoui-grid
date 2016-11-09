@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.4
+ * tinper-neoui-grid v3.1.6
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -691,7 +691,6 @@
 							$('#' + this.options.id + '_edit_tr').remove(null, true);
 							$('#' + this.options.id + '_edit_tr1').remove(null, true);
 						}
-						return;
 					} else if (plus.length > 0) {
 						// 展开
 						plus.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
@@ -703,7 +702,6 @@
 								$('#' + oThis.options.id + '_content_multiSelect >div:nth-child(' + (parseInt(this) + 1) + ')').css('display', '');
 							});
 						}
-						return;
 					}
 					this.resetLeftHeight();
 				}
@@ -1097,7 +1095,7 @@
 	    var gridOptions = gridComp.options;
 	    this.gridGetBoolean = gridComp.getBoolean;
 	    this.defaults = {
-	        width: 200, // 默认宽度为200
+	        width: '200', // 默认宽度为200
 	        sortable: true, // 是否可以排序
 	        canDrag: true, // 是否可以拖动
 	        fixed: false, // 是否固定列
@@ -1135,7 +1133,6 @@
 	        if (typeof this.options.editType == 'string') this.options.editType = eval(this.options.editType);
 	    } catch (e) {}
 
-	    // 转成数字
 	    this.options.width = this.options.width;
 	    this.firstColumn = false;
 	};
@@ -1315,6 +1312,7 @@
 	gridComp.prototype.getRowByIndex = _gridCompGet.getRowByIndex;
 	gridComp.prototype.getRowIndexByValue = _gridCompGet.getRowIndexByValue;
 	gridComp.prototype.getChildRowIndex = _gridCompGet.getChildRowIndex;
+	gridComp.prototype.getColumnByVisibleIndex = _gridCompGet.getColumnByVisibleIndex;
 
 	gridComp.prototype.init = _gridCompInit.init;
 	gridComp.prototype.getBooleanOptions = _gridCompInit.getBooleanOptions;
@@ -2011,7 +2009,7 @@
 	    }
 
 	    var htmlStr = '<div id="' + this.options.id + '_content_' + idStr + 'div" class="u-grid-content-' + cssStr + 'div" ' + styleStr + '>';
-	    htmlStr += '<div style="height:30px;position:absolute;top:-30px;width:100%;"></div><table role="grid" id="' + this.options.id + '_content_' + idStr + 'table" ' + tableStyleStr + '>';
+	    htmlStr += '<div style="height:30px;position:absolute;top:-30px;width:100%;z-index:-1;"></div><table role="grid" id="' + this.options.id + '_content_' + idStr + 'table" ' + tableStyleStr + '>';
 	    htmlStr += this.createColgroup(createFlag);
 	    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_content_' + idStr + 'thead" style="display:none">';
 	    htmlStr += this.createThead(createFlag);
@@ -2547,8 +2545,11 @@
 	        j = 0;
 	    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	        if (this.gridCompColumnArr[i] == column) {
+	            if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+
+	                j++;
+	            }
 	            flag = true;
-	            continue;
 	        }
 	        if (flag == true && !($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
 	            index = j;
@@ -2628,6 +2629,20 @@
 	    return result;
 	};
 
+	var getColumnByVisibleIndex = function getColumnByVisibleIndex(index) {
+	    var nowIndex = -1;
+	    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+	        var column = this.gridCompColumnArr[i];
+	        if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+	            nowIndex++;
+	        }
+	        if (nowIndex == index) {
+	            return column;
+	        }
+	    }
+	    return null;
+	};
+
 	exports.getColumnAttr = getColumnAttr;
 	exports.getColumnByField = getColumnByField;
 	exports.getIndexOfColumn = getIndexOfColumn;
@@ -2641,6 +2656,7 @@
 	exports.getRowByIndex = getRowByIndex;
 	exports.getRowIndexByValue = getRowIndexByValue;
 	exports.getChildRowIndex = getChildRowIndex;
+	exports.getColumnByVisibleIndex = getColumnByVisibleIndex;
 
 /***/ },
 /* 13 */
@@ -2808,9 +2824,6 @@
 	        url = url.substring(0, index);
 	    }
 	    this.localStorageId = this.options.id + url;
-
-	    // select与focus保持一致
-	    this.options.contentFocus = this.options.contentSelect;
 	};
 	var initOptionsTree = function initOptionsTree() {};
 	/*
@@ -3952,7 +3965,7 @@
 	                    $('#' + this.options.id + '_content col:eq(' + nextVisibleIndex + ')').before(htmlStr);
 	                }
 	            }
-	            var newContentW = this.contentWidth + column.options.width;
+	            var newContentW = this.contentWidth + parseInt(column.options.width);
 	        }
 	        // 隐藏处理
 	        if (column.options.visible == true && !visible) {
@@ -3962,7 +3975,7 @@
 	            $('#' + this.options.id + '_content col:eq(' + visibleIndex + ')').remove();
 	            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "none");
 	            // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
-	            var newContentW = this.contentWidth - column.options.width;
+	            var newContentW = this.contentWidth - parseInt(column.options.width);
 	        }
 	        column.options.visible = visible;
 	        this.columnsVisibleFun();
@@ -3986,7 +3999,7 @@
 	 */
 	var setColumnWidth = function setColumnWidth(column, newWidth) {
 	    if (column != this.lastVisibleColumn) {
-	        if (newWidth > this.minColumnWidth) {
+	        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
 	            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
 	                oldWidth = column.options.width,
 	                changeWidth = newWidth - oldWidth,
@@ -4103,6 +4116,7 @@
 	            $('#' + oThis.options.id + '_edit_form').css('width', oThis.contentMinWidth + 'px');
 
 	            this.preWholeWidth = w;
+	            this.resetLeftHeight();
 	        }
 	    }
 	};
@@ -4144,15 +4158,22 @@
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width;
-	                var newWidth = nowWidth / this.preWholeWidth * this.wholeWidth;
+	                var newWidth = parseInt(nowWidth / this.preWholeWidth * this.wholeWidth);
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        } else {
 	            //先按100%来处理
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
-	                var nowWidth = column.options.width;
-	                var newWidth = nowWidth.replace('%', '') * this.wholeWidth / 100;
+	                var nowWidth = column.options.width + '';
+	                if (nowWidth.indexOf('%') > 0) {
+	                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+	                } else {
+	                    var newWidth = nowWidth;
+	                }
+	                if (newWidth < this.minColumnWidth) {
+	                    newWidth = this.minColumnWidth;
+	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        }
@@ -4182,7 +4203,7 @@
 	 */
 	var contentWidthChange = function contentWidthChange(newContentWidth) {
 	    if (newContentWidth < this.contentMinWidth) {
-	        var oldW = this.lastVisibleColumn.options.width;
+	        var oldW = parseInt(this.lastVisibleColumn.options.width);
 	        this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
 	        $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
 	        $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -4196,7 +4217,7 @@
 	            for (var i = 0; i < l; i++) {
 	                var overWidthColumn = this.overWidthVisibleColumnArr[i];
 	                var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
-	                var w = overWidthColumn.options.width;
+	                var w = parseInt(overWidthColumn.options.width);
 	                var realW = overWidthColumn.options.realWidth;
 	                $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
 	                $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
@@ -4204,7 +4225,7 @@
 	                overWidthColumn.options.width = overWidthColumn.options.realWidth;
 	            }
 	            if (newContentWidth < this.contentMinWidth) {
-	                var oldW = this.lastVisibleColumn.options.width;
+	                var oldW = parseInt(this.lastVisibleColumn.options.width);
 	                this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
 	                $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
 	                $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
@@ -4223,8 +4244,11 @@
 	        $('#' + this.options.id + '_content_left_bottom').css('display', 'none');
 	        $('#' + this.options.id + '_content_left_sum_bottom').css('bottom', 0);
 	    }
-	    $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
-	    $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+	    if (!this.options.noScroll) {
+	        $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+	        $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
+	    }
+
 	    return newContentWidth;
 	};
 	exports.widthChangeFun = widthChangeFun;
@@ -4408,7 +4432,7 @@
 	        var gridCompColumn = oThis.gridCompColumnArr[i];
 	        var w = 0;
 	        if (gridCompColumn.options.visible) {
-	            w = gridCompColumn.options.width;
+	            w = parseInt(gridCompColumn.options.width);
 	        }
 	        this.attrLeftTotalWidth = oThis.contentWidth;
 	        oThis.contentWidth += w;
@@ -4762,13 +4786,13 @@
 
 		$(document).on('click', function () {
 			if (oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false) {
-				$('#' + oThis.options.id + '_column_menu').css('display', 'none');
+				if (oThis.ele.offsetWidth > 0) $('#' + oThis.options.id + '_column_menu').css('display', 'none');
 			}
 			oThis.ele.createColumnMenuFlag = false;
 		});
 		$(document).on('scroll', function () {
 			if (oThis.columnMenuMove == false && oThis.ele.createColumnMenuFlag == false) {
-				$('#' + oThis.options.id + '_column_menu').css('display', 'none');
+				if (oThis.ele.offsetWidth > 0) $('#' + oThis.options.id + '_column_menu').css('display', 'none');
 			}
 			oThis.ele.createColumnMenuFlag = false;
 		});
@@ -4780,17 +4804,22 @@
 
 		/*header 按钮处理开始*/
 		// column按钮
+		$('#' + this.options.id + '_column_menu_ul').off('mousemove');
 		$('#' + this.options.id + '_column_menu_ul').on('mousemove', function (e) {
 			oThis.columnMenuMove = true;
 		});
+		$('#' + this.options.id + '_column_menu_ul').off('mouseout');
 		$('#' + this.options.id + '_column_menu_ul').on('mouseout', function (e) {
 			oThis.columnMenuMove = false;
 		});
 
 		// 清除设置按钮
+		$('#' + this.options.id + '_clearSet').off('click');
 		$('#' + this.options.id + '_clearSet').on('click', function (e) {
 			oThis.clearLocalData();
 			oThis.initGridCompColumn();
+			oThis.hasNoScrollRest = false;
+			oThis.noScrollWidthReset();
 			// 清除排序
 			oThis.dataSourceObj.sortRows();
 			oThis.repaintGridDivs();
@@ -4799,6 +4828,7 @@
 			}
 		});
 		// 显示/隐藏列 对应所有列的点击处理
+		$('#' + this.options.id + '_column_menu_columns_ul li input').off('click');
 		$('#' + this.options.id + '_column_menu_columns_ul li input').on('click', function (e) {
 			//待完善 优化与li的click的代码整合
 			var index = $(this).closest('li').attr('index');
@@ -4844,6 +4874,7 @@
 			oThis.saveGridCompColumnArrToLocal();
 			e.stopPropagation();
 		});
+		$('#' + this.options.id + '_column_menu_columns_ul li').off('click');
 		$('#' + this.options.id + '_column_menu_columns_ul li').on('click', function (e) {
 			var index = $(this).attr('index');
 			var gridCompColumn = oThis.gridCompColumnArr[index];
@@ -4948,16 +4979,37 @@
 			    nowVisibleThIndex = this.getVisibleIndexOfColumn(column);
 			if (nowTh && column != this.lastVisibleColumn) {
 				this.dragEndX = e.clientX;
-				var changeWidth = this.dragEndX - this.dragStartX,
-				    newWidth = nowTh.attrWidth + changeWidth,
-				    cWidth = this.contentWidth + changeWidth;
+				var changeWidth = parseInt(this.dragEndX) - parseInt(this.dragStartX),
+				    newWidth = parseInt(nowTh.attrWidth) + parseInt(changeWidth),
+				    cWidth = parseInt(this.contentWidth) + parseInt(changeWidth);
 				if (newWidth > this.minColumnWidth) {
-					this.dragW = this.contentWidthChange(cWidth);
+					if (this.options.noScroll) {
+						// 不显示滚动条的情况下，当前列的该变量对后面一列产生影响
+						var nextVisibleThIndex = this.getNextVisibleInidexOfColumn(column);
+						if (nextVisibleThIndex > -1) {
+							var nextColumn = this.getColumnByVisibleIndex(nextVisibleThIndex);
+							if (!this.dragNextClomunWidth || this.dragNextClomunWidth < 0) this.dragNextClomunWidth = nextColumn.options.width;
+						}
+						var nextNewWidth = parseInt(this.dragNextClomunWidth) - parseInt(changeWidth);
+						if (!(nextNewWidth > this.minColumnWidth)) {
+							$('#' + this.options.id + '_top').css('display', 'block');
+							return;
+						}
+					}
+					if (!this.options.noScroll) {
+						this.dragW = this.contentWidthChange(cWidth);
+					}
 					$('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 					$('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
 					column.options.width = newWidth;
 					column.options.realWidth = newWidth;
+					if (this.options.noScroll) {
+						$('#' + this.options.id + '_header_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+						$('#' + this.options.id + '_content_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
+						nextColumn.options.width = nextNewWidth;
+						nextColumn.options.realWidth = nextNewWidth;
+					}
 				}
 			}
 			$('#' + this.options.id + '_top').css('display', 'block');
@@ -4971,6 +5023,7 @@
 			this.resetThVariable();
 			this.saveGridCompColumnArrToLocal();
 		}
+		this.dragNextClomunWidth = -1;
 		this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
 		if (this.dragW) this.contentWidth = this.dragW;
 		$('#' + this.options.id + '_resize_handle')[0].nowTh = null;
@@ -5275,6 +5328,13 @@
 	 */
 	var re_editClose = function re_editClose() {
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
+		if (this.editComp && this.editComp.hide) {
+			this.editComp.hide();
+		}
+		if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+			this.editComp.comp.hide();
+		}
+		$('#' + this.options.id + '_placeholder_div').remove();
 		if (!row) return;
 		if (this.options.editType != 'form') {
 			//this.repaintRow(this.eidtRowIndex);
@@ -5336,8 +5396,16 @@
 		} else if (typeof editType == 'function') {
 			var obj = {};
 			var $Div = $('.u-grid-content-td-div', $(td));
+			$Div.removeClass('u-grid-content-td-div-over');
 			obj.gridObj = this;
 			obj.element = $Div[0];
+			if (this.options.editType == 'default') {
+				// 对于高度被撑开的情况需要放一个 div来把整体撑开
+				var nowHeight = obj.element.offsetHeight;
+				var editDivHtml = '<div id="' + this.options.id + '_placeholder_div" class="u-grid-edit-placeholder-div" style="height:' + nowHeight + 'px;"></div>';
+				$Div[0].innerHTML = editDivHtml;
+				obj.element = $('#' + this.options.id + '_placeholder_div')[0];
+			}
 			obj.value = value;
 			obj.field = field;
 			obj.rowObj = rowObj;
@@ -5456,7 +5524,9 @@
 		});
 
 		u.on(document, 'scroll', function () {
-			oThis.editClose();
+			if (oThis.options.editType == 'default') {
+				oThis.editClose();
+			}
 		});
 	};
 	var setGridEditType = function setGridEditType(newEditType) {
@@ -5704,7 +5774,7 @@
 			var parentHeaderStr = oThis.getString(gridCompColumn.options.parentHeader, '');
 			var w = 0;
 			if (gridCompColumn.options.visible) {
-				w = gridCompColumn.options.width;
+				w = parseInt(gridCompColumn.options.width);
 			}
 			// 处理多表头
 			if (oldParentHeaderStr != '' && parentHeaderStr != oldParentHeaderStr) {
@@ -5913,7 +5983,7 @@
 					var column = this.gridCompHiddenLevelColumnArr[i];
 					if (column.options.visible) {
 						column.options.visible = false;
-						columnWholeWidth = columnWholeWidth - column.options.width;
+						columnWholeWidth = parseInt(columnWholeWidth) - parseInt(column.options.width);
 					}
 					if (!(columnWholeWidth > wholeWidth)) {
 						break;
@@ -5924,7 +5994,7 @@
 				for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
 					var column = this.gridCompHiddenLevelColumnArr[i];
 					if (!column.options.visible) {
-						columnWholeWidth = columnWholeWidth + column.options.width;
+						columnWholeWidth = parseInt(columnWholeWidth) + parseInt(column.options.width);
 						if (columnWholeWidth > wholeWidth) {
 							break;
 						}
@@ -5955,10 +6025,10 @@
 	};
 	var re_createContentSumRow = function re_createContentSumRow(bottonStr) {
 		var htmlStr = '';
-		if (this.options.showSumRow) {
-			htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;' + bottonStr + '">';
-			htmlStr += '</div>';
-		}
+		// if(this.options.showSumRow){
+		// 	htmlStr += '<div class="u-grid-content-left-sum-bottom" id="' + this.options.id + '_content_left_sum_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;'+bottonStr+'">';
+		// 	htmlStr += '</div>';
+		// }
 		return htmlStr;
 	};
 	/*
@@ -6263,9 +6333,15 @@
 		}
 		var oThis = this;
 		if (this.swapColumnFlag) {
-			var nowTh = this.swapColumnEle,
-			    $nowTh = $(nowTh),
-			    nowGridCompColumn = nowTh.gridCompColumn;
+			var nowTh = this.swapColumnEle;
+			if (!nowTh) {
+				return;
+			}
+			var $nowTh = $(nowTh);
+			if (!nowTh.gridCompColumn) {
+				return;
+			}
+			var nowGridCompColumn = nowTh.gridCompColumn;
 			//创建拖动区域
 			if ($('#' + this.options.id + '_clue').length == 0) {
 				var $d = $('<div class="u-grid u-grid-header-drag-clue" id="' + this.options.id + '_clue" />').css({
