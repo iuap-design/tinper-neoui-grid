@@ -1060,9 +1060,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1359,6 +1359,7 @@
 	gridComp.prototype.setRowFocus = _gridCompOperateRow.setRowFocus;
 	gridComp.prototype.setRowUnFocus = _gridCompOperateRow.setRowUnFocus;
 	gridComp.prototype.resetNumCol = _gridCompOperateRow.resetNumCol;
+	gridComp.prototype.isCheckedHeaderRow = _gridCompOperateRow.isCheckedHeaderRow;
 
 	gridComp.prototype.renderTypeFun = _gridCompRenderType.renderTypeFun;
 	gridComp.prototype.renderTypeByColumn = _gridCompRenderType.renderTypeByColumn;
@@ -2947,6 +2948,18 @@
 	exports.__esModule = true;
 
 	/*
+	    重新结算是否选中header第一行
+	 */
+
+	var isCheckedHeaderRow = function isCheckedHeaderRow() {
+	    if (this.selectRows.length == this.dataSourceObj.rows.length) {
+	        //修改全选标记为false
+	        $('#' + this.options.id + '_header_multi_input').addClass('is-checked');
+	    } else {
+	        $('#' + this.options.id + '_header_multi_input').removeClass('is-checked');
+	    }
+	};
+	/*
 	 * 添加一行
 	 */
 	var addOneRow = function addOneRow(row, index) {
@@ -3177,6 +3190,7 @@
 	        oThis.dataSourceObj.options.values.splice(index + i, 0, this);
 	    });
 	    this.updateLastRowFlag();
+	    this.isCheckedHeaderRow();
 	};
 	var createContentOneRowFixed = function createContentOneRowFixed(rowObj) {
 	    return '';
@@ -3237,10 +3251,12 @@
 	        var obj = {};
 	        obj.gridObj = this;
 	        obj.index = index;
-	        if (!this.options.onRowDelete(index)) {
+	        obj.row = row;
+	        if (!this.options.onRowDelete(obj)) {
 	            return;
 	        }
 	    }
+	    this.isCheckedHeaderRow();
 	};
 	var repairSumRow = function repairSumRow() {};
 	var deleteOneRowTree = function deleteOneRowTree() {};
@@ -3260,6 +3276,7 @@
 	    $.each(indexss, function (i) {
 	        oThis.deleteOneRow(this);
 	    });
+	    this.isCheckedHeaderRow();
 	};
 	/*
 	 * 修改某一行
@@ -3395,10 +3412,11 @@
 	    this.selectRowsObj.push(this.dataSourceObj.rows[rowIndex]);
 	    this.selectRowsIndex.push(rowIndex);
 	    this.dataSourceObj.rows[rowIndex].checked = true;
-	    if (this.selectRows.length == this.dataSourceObj.rows.length) {
-	        //修改全选标记为false
-	        $('#' + this.options.id + '_header_multi_input').addClass('is-checked');
-	    }
+	    // if(this.selectRows.length == this.dataSourceObj.rows.length){
+	    //     //修改全选标记为false
+	    //     $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+	    // }
+	    this.isCheckedHeaderRow();
 	    if (typeof this.options.onRowSelected == 'function') {
 	        var obj = {};
 	        obj.gridObj = this;
@@ -3465,6 +3483,7 @@
 	        obj.rowIndex = rowIndex;
 	        this.options.onRowUnSelected(obj);
 	    }
+	    oThis.isCheckedHeaderRow();
 	    return true;
 	};
 	/*
@@ -3637,6 +3656,7 @@
 	        this.innerHTML = i + 1 + "";
 	    });
 	};
+	exports.isCheckedHeaderRow = isCheckedHeaderRow;
 	exports.addOneRow = addOneRow;
 	exports.addOneRowTree = addOneRowTree;
 	exports.addOneRowTreeHasChildF = addOneRowTreeHasChildF;
@@ -5324,6 +5344,7 @@
 			editType.call(this, obj);
 		}
 		// input输入blur时显示下一个编辑控件
+		$('input', $(td)).off('keydown');
 		$('input', $(td)).on('keydown', function (e) {
 			if (oThis.options.editType == 'form') {} else {
 				var keyCode = e.keyCode;

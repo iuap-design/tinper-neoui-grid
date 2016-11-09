@@ -1,5 +1,17 @@
 
 /*
+    重新结算是否选中header第一行
+ */
+
+const isCheckedHeaderRow = function() {
+    if(this.selectRows.length == this.dataSourceObj.rows.length){
+        //修改全选标记为false
+        $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+    } else {
+        $('#' + this.options.id + '_header_multi_input').removeClass('is-checked')
+    }
+}
+/*
  * 添加一行
  */
 const addOneRow = function(row,index){
@@ -221,6 +233,7 @@ const addRows = function(rows,index){
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin',htmlStrmultiSelect);
             }
+           
         }
         if (this.options.showNumCol) {
             if(endFlag){
@@ -250,6 +263,7 @@ const addRows = function(rows,index){
         oThis.dataSourceObj.options.values.splice(index + i,0,this);
     });
     this.updateLastRowFlag();
+    this.isCheckedHeaderRow();
 };
 const createContentOneRowFixed = function(rowObj){
     return '';
@@ -315,6 +329,7 @@ const deleteOneRow = function(index){
             return;
         }
     }
+    this.isCheckedHeaderRow();
 };
 const repairSumRow = function(){
 };
@@ -335,6 +350,7 @@ const deleteRows = function(indexs){
     $.each(indexss, function(i) {
         oThis.deleteOneRow(this);
     });
+    this.isCheckedHeaderRow();
 };
 /*
  * 修改某一行
@@ -485,10 +501,11 @@ const setRowSelect = function(rowIndex, doms){
     this.selectRowsObj.push(this.dataSourceObj.rows[rowIndex]);
     this.selectRowsIndex.push(rowIndex);
     this.dataSourceObj.rows[rowIndex].checked = true;
-    if(this.selectRows.length == this.dataSourceObj.rows.length){
-        //修改全选标记为false
-        $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
-    }
+    // if(this.selectRows.length == this.dataSourceObj.rows.length){
+    //     //修改全选标记为false
+    //     $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+    // }
+    this.isCheckedHeaderRow();
     if(typeof this.options.onRowSelected == 'function'){
         var obj = {};
         obj.gridObj = this;
@@ -557,6 +574,7 @@ const setRowUnselect = function(rowIndex){
         obj.rowIndex = rowIndex;
         this.options.onRowUnSelected(obj);
     }
+    oThis.isCheckedHeaderRow();
     return true;
 };
 /*
@@ -734,6 +752,7 @@ const resetNumCol = function(){
     });
 };
 export{
+    isCheckedHeaderRow,
     addOneRow,
     addOneRowTree,
     addOneRowTreeHasChildF,

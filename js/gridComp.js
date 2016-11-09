@@ -87,6 +87,7 @@ import {
 } from './gridCompInit';
 
 import {
+    isCheckedHeaderRow,
 	addOneRow,
     addOneRowTree,
     addOneRowTreeHasChildF,
@@ -324,6 +325,7 @@ gridComp.prototype.setAllRowUnSelect = setAllRowUnSelect;
 gridComp.prototype.setRowFocus = setRowFocus;
 gridComp.prototype.setRowUnFocus = setRowUnFocus;
 gridComp.prototype.resetNumCol = resetNumCol;
+gridComp.prototype.isCheckedHeaderRow = isCheckedHeaderRow;
 
 
 gridComp.prototype.renderTypeFun = renderTypeFun;
