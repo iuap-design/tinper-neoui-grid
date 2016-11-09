@@ -3896,6 +3896,8 @@
 	    var newSpan = $(span).clone()[0];
 	    var overFlag = false;
 	    obj.span.parentNode.appendChild(newSpan);
+	    var oldDisplay = span.style.display;
+	    span.style.display = 'none';
 	    newSpan.style.height = '';
 	    newSpan.style.maxHeight = '999999px';
 	    var newHeight = newSpan.offsetHeight;
@@ -3903,6 +3905,7 @@
 	        overFlag = true;
 	    }
 	    obj.span.parentNode.removeChild(newSpan);
+	    span.style.display = oldDisplay;
 	    return overFlag;
 	};
 
