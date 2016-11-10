@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.6
+ * tinper-neoui-grid v3.1.7
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1058,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	  _classCallCheck(this, column);
+	    _classCallCheck(this, column);
 
-	  this.init(options, gridComp);
+	    this.init(options, gridComp);
 	};
 
 	;
@@ -4084,7 +4084,8 @@
 	    if ($('#' + this.options.id)[0]) {
 	        // 获取整体区域宽度
 	        var w = $('#' + this.options.id).width(); //[0].offsetWidth;
-	        if (this.wholeWidth != w && this.$ele.data('gridComp') == this) {
+	        // w!=0的判断是为了处理页签中的grid在切换的过程中会重绘
+	        if (this.wholeWidth != w && this.$ele.data('gridComp') == this && w != 0) {
 	            this.wholeWidth = w;
 
 	            // 树展开/合上的时候会导致页面出现滚动条导致宽度改变，没有&&之后会重新刷新页面导致无法收起
