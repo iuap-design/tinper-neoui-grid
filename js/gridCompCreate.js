@@ -350,9 +350,10 @@ const createContentTable = function(createFlag){
         if(this.contentMinWidth > 0){
             styleStr += 'width:' + this.contentMinWidth + 'px;';
         }
-        if(this.options.noScroll){
-            styleStr += 'overflow-x:hidden;'
-        }
+        // 因为添加overflow-x之后会导致纵向也显示不全，后续出现问题通过修改宽度来实现，不再通过overflow来实现
+        // if(this.options.noScroll){
+        //     styleStr += 'overflow-x:hidden;'  
+        // }
         styleStr += '"';
         tableStyleStr = '';
         if(this.contentMinWidth > 0){
