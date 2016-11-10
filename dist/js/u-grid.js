@@ -5374,10 +5374,11 @@
 		var oThis = this;
 		if (obj.colIndex == 0) {
 			try {
+				this.iconSpan = '';
 				this.iconSpan = $(td).find('.uf')[0].outerHTML;
 			} catch (e) {}
 		} else {
-			this.iconSpan = null;
+			this.iconSpan = '';
 		}
 
 		var obj = {};
