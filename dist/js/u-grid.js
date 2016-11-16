@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.8
+ * tinper-neoui-grid v3.1.9
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
