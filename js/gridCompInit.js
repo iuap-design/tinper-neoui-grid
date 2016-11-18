@@ -87,6 +87,7 @@ const initDefault = function(){
         needLocalStorage:false, // 是否使用前端缓存
         noScroll:false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
         contentSelect: true, // 点击内容区是否执行选中逻辑
+        showEditIcon: false,// 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
     }
 };
@@ -233,6 +234,10 @@ const initGridCompColumnVar = function(){
 };
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
+    // 如果可编辑增加修改图标
+    if(this.options.showEditIcon && column.options.editable){
+        column.options.title += '<i class="uf uf-fontselectioneditor"></i>';
+    }
     var widthStr = column.options.width + '';
     if(widthStr.indexOf("%") > 0){
         this.options.noScroll = 'true';

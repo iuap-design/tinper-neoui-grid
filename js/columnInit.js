@@ -33,7 +33,8 @@ const init = function(options, gridComp){
     var gridDefault = {
         sortable: gridOptions.sortable,
         canDrag: gridOptions.canDrag,
-        width: gridOptions.columnWidth
+        width: gridOptions.columnWidth,
+        editable: gridOptions.editable
     };
     if(options.dataType == 'Date'){
         this.defaults.format = 'YYYY-MM-DD';

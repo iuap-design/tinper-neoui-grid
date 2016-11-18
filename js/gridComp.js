@@ -669,9 +669,14 @@ gridCompProto.initGridEventFun = function(){
     oldInitGridEventFun_swap.apply(this,arguments);
     swap_initGridEventFun.apply(this,arguments);
 };
+
 gridCompProto.swapColumnStart = swapColumnStart;
 gridCompProto.swapColumnFun = swapColumnFun;
 gridCompProto.swapColumnEnd = swapColumnEnd;
+
+/*
+ * rowDrag
+ */
 
 
 
