@@ -5093,26 +5093,26 @@
 		var colIndex = $td.index();
 		if (this.options.editable && (this.eidtRowIndex != index || this.options.editType == 'default' && this.editColIndex != colIndex)) {
 			this.editClose();
-			if (typeof this.options.onBeforeEditFun == 'function') {
-				var obj = {};
-				obj.gridObj = this;
-				obj.rowObj = this.dataSourceObj.rows[index];
-				obj.rowIndex = index;
-				obj.colIndex = colIndex;
-				obj.$tr = $tr;
-				obj.e = e;
-				if (!this.options.onBeforeEditFun(obj)) {
-					if (this.eidtRowIndex != -1) {
-						this.editClose();
-					}
-					return;
-				}
-			}
 			this.editRowFun($tr, colIndex);
 		}
 	};
 
 	var editRowFun = function editRowFun($tr, colIndex) {
+		var index = this.getTrIndex($tr);
+		if (typeof this.options.onBeforeEditFun == 'function') {
+			var obj = {};
+			obj.gridObj = this;
+			obj.rowObj = this.dataSourceObj.rows[index];
+			obj.rowIndex = index;
+			obj.colIndex = colIndex;
+			obj.$tr = $tr;
+			if (!this.options.onBeforeEditFun(obj)) {
+				if (this.eidtRowIndex != -1) {
+					this.editClose();
+				}
+				return;
+			}
+		}
 		if (this.eidtRowIndex != -1) {
 			this.editClose();
 		}
@@ -5120,6 +5120,7 @@
 		this.eidtRowIndex = index;
 		this.editColIndex = colIndex;
 		this.editRow($tr, colIndex);
+		return true;
 	};
 	var editRowIndexFun = function editRowIndexFun(i) {
 		if (this.eidtRowIndex != -1) {
@@ -5466,16 +5467,29 @@
 			}
 		}
 
-		colIndex = _getNextEditColIndex(this, colIndex);
+		colIndex = _getNextEditColIndex(this, colIndex, $tr);
 		this.editRowFun($tr, colIndex);
 	};
 
-	var _getNextEditColIndex = function _getNextEditColIndex(gridObj, nowIndex) {
+	var _getNextEditColIndex = function _getNextEditColIndex(gridObj, nowIndex, $tr) {
 		// 如果下一列为隐藏/不可修改/复选框则跳到下一个
 		var colIndex = -1;
 		var column = gridObj.gridCompColumnArr[nowIndex];
-		if (!column.options.visible || !column.options.editable) {
-			colIndex = _getNextEditColIndex(gridObj, nowIndex + 1);
+		var beforeFlag = true;
+		var index = gridObj.getTrIndex($tr);
+		if (typeof gridObj.options.onBeforeEditFun == 'function') {
+			var obj = {};
+			obj.gridObj = gridObj;
+			obj.rowObj = gridObj.dataSourceObj.rows[index];
+			obj.rowIndex = index;
+			obj.colIndex = nowIndex;
+			obj.$tr = $tr;
+			if (!gridObj.options.onBeforeEditFun(obj)) {
+				beforeFlag = false;
+			}
+		}
+		if (!column.options.visible || !column.options.editable || !beforeFlag) {
+			colIndex = _getNextEditColIndex(gridObj, nowIndex + 1, $tr);
 		} else {
 			colIndex = nowIndex;
 		}
