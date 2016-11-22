@@ -1,7 +1,10 @@
 import {gridBrowser} from './gridBrowser';
 
- import {dataSource}  from './dataSource';
- import {column as gridCompColumn}  from './column';
+import {dataSource}  from './dataSource';
+import {column as gridCompColumn}  from './column';
+
+import {editHeadTitleIcon} from "./re_gridCompEdit";
+
  /*
  * 处理参数
  */
@@ -235,9 +238,7 @@ const initGridCompColumnVar = function(){
 const initGridCompColumnFun = function(columnOptions){
     var column = new gridCompColumn(columnOptions, this);
     // 如果可编辑增加修改图标
-    if(this.options.showEditIcon && column.options.editable){
-        column.options.title += '<i class="uf uf-fontselectioneditor"></i>';
-    }
+    this.editHeadTitleIcon(column);
     var widthStr = column.options.width + '';
     if(widthStr.indexOf("%") > 0){
         this.options.noScroll = 'true';

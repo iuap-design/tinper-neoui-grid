@@ -157,6 +157,10 @@ header区域css begin
   height: 3.14285714em;
   line-height: 3.14285714em;
 }
+
+.u-grid-hide-title-icon .uf-fontselectioneditor {
+  display: none
+}
 .u-gird-parent {
   position: absolute;
   top: 0px;
@@ -176,6 +180,8 @@ header区域css begin
 .u-grid-header-link:visited {
   //color: #a8a8a8;
 }
+
+
 .u-grid-header-columnmenu {
   position: absolute;
   padding: 0 .4em 0 .6em;

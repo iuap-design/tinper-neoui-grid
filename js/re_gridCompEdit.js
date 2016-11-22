@@ -16,6 +16,7 @@ const re_clickFunEdit = function(e,index){
 	}
 };
 
+
 const editRowFun = function($tr, colIndex){
 	var index = this.getTrIndex($tr);
 	if(typeof this.options.onBeforeEditFun == 'function'){
@@ -478,8 +479,39 @@ const setEditType = function(field,editType){
  */
 const setEditable = function(editable){
 	this.options.editable = editable;
+	this.setColumnEdit();
 	this.editClose();
 };
+
+const setColumnEdit = function () {
+	var i;
+	for ( i = 0; i < this.gridCompColumnArr.length; i++) {
+
+		this.editFieldIcon(this.gridCompColumnArr[i]);
+	}
+
+	for ( i = 0; i < this.gridCompColumnFixedArr.length; i++) {
+
+		this.editFieldIcon(this.gridCompColumnFixedArr[i]);
+	}
+}
+
+const editFieldIcon = function (column) {
+	var fieldDom = $('.u-grid-header-link[field='+column.options.field+']');
+	var fieldEditIconDom = fieldDom.find('.uf-fontselectioneditor');
+	if(this.options.showEditIcon && this.options.editable && column.options.editable){
+
+		if(!fieldEditIconDom){
+			fieldDom.append('<i class="uf uf-fontselectioneditor"></i>');
+		}
+		fieldDom.removeClass('u-grid-hide-title-icon');
+
+	}else {
+		fieldDom.addClass('u-grid-hide-title-icon');
+	}
+		
+}
+
 const edit_initEventFun = function(){
 	var oThis = this;
 	$(document).on('click',function(e){
@@ -518,6 +550,15 @@ const setGridEditTypeAndEditRow = function(newEditType,rowIndex,colIndex){
 	var $tr = $('tr:eq(' + rowIndex + ')',$contentBody)
 	this.editRowFun($tr,colIndex)
 }
+
+// 如果可编辑增加修改图标
+const editHeadTitleIcon = function(column){
+
+    if(this.options.showEditIcon &&　this.options.editable && column.options.editable){
+        column.options.title += '<i class="uf uf-fontselectioneditor"></i>';
+    }
+}
+
 export{
     re_hideEditMenu,
     re_clickFunEdit,
@@ -532,7 +573,10 @@ export{
     re_updateValueAtEdit,
     setEditType,
     setEditable,
+    setColumnEdit,
+    editFieldIcon,
     edit_initEventFun,
     setGridEditType,
-    setGridEditTypeAndEditRow
+    setGridEditTypeAndEditRow,
+    editHeadTitleIcon
 }

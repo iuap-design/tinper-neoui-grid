@@ -454,9 +454,12 @@ var oldInitGridEventFun_grag= gridCompProto.initGridEventFun;
      re_updateValueAtEdit,
      setEditType,
      setEditable,
+     setColumnEdit,
+     editFieldIcon,
      edit_initEventFun,
      setGridEditType,
-     setGridEditTypeAndEditRow
+     setGridEditTypeAndEditRow,
+     editHeadTitleIcon
  } from './re_gridCompEdit';
 
 gridCompProto.hideEditMenu = re_hideEditMenu;
@@ -476,6 +479,8 @@ gridCompProto.updateEditRowIndex = re_updateEditRowIndex;
 gridCompProto.updateValueAtEdit = re_updateValueAtEdit;
 gridCompProto.setEditType = setEditType;
 gridCompProto.setEditable = setEditable;
+gridCompProto.setColumnEdit = setColumnEdit;
+gridCompProto.editFieldIcon = editFieldIcon;
 gridCompProto.initEventFun = function(){
     // 执行原有方法
    oldInitEventFun_edit.apply(this,arguments);
@@ -483,6 +488,7 @@ gridCompProto.initEventFun = function(){
 };
 gridCompProto.setGridEditType = setGridEditType;
 gridCompProto.setGridEditTypeAndEditRow = setGridEditTypeAndEditRow;
+gridCompProto.editHeadTitleIcon = editHeadTitleIcon;
 
 
 /*
