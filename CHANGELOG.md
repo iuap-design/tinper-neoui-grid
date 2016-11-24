@@ -1,3 +1,15 @@
+<a name="3.1.13"></a>
+## [3.1.13](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.12...v3.1.13) (2016-11-24)
+
+
+### Bug Fixes
+* tab键考虑onBeforeEditFun处理 ([fbbf509](https://github.com/iuap-design/tinper-neoui-grid/commit/fbbf509))
+
+* 云彩—-可编辑时显示图标 ([a95c9b3](https://github.com/iuap-design/tinper-neoui-grid/commit/a95c9b3))
+
+
+
+
 <a name="3.1.12"></a>
 ## [3.1.12](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.9...v3.1.12) (2016-11-17)
 

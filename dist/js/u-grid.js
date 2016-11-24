@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.12
+ * tinper-neoui-grid v3.1.13
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1058,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	  _classCallCheck(this, column);
+	    _classCallCheck(this, column);
 
-	  this.init(options, gridComp);
+	    this.init(options, gridComp);
 	};
 
 	;
@@ -6715,11 +6715,11 @@
 	            }
 	        }
 
-	        tempdata = this.dataSourceObj[this.rowDragStartIndex];
+	        tempdata = this.dataSourceObj.rows[this.rowDragStartIndex];
 
-	        this.dataSourceObj[this.rowDragStartIndex] = this.dataSourceObj[this.rowDragEndIndex];
+	        this.dataSourceObj.rows[this.rowDragStartIndex] = this.dataSourceObj.rows[this.rowDragEndIndex];
 
-	        this.dataSourceObj[this.rowDragEndIndex] = tempdata;
+	        this.dataSourceObj.rows[this.rowDragEndIndex] = tempdata;
 	    }
 	    // 删除之前行，插入新行
 
