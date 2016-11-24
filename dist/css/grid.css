@@ -159,7 +159,7 @@ header区域css begin
 }
 
 .u-grid-hide-title-icon .uf-fontselectioneditor {
-  display: none;
+  display: none
 }
 .u-gird-parent {
   position: absolute;
@@ -440,6 +440,16 @@ content区域css begin
   height: 1.25em;
   color: #007ae3;
   font-size: 14px !important;
+}
+
+
+/*行拖拽*/
+td.u-grid-drag-icon:before {
+  content: "\e6d1";
+  font-family: "uf" !important;
+  font-size: 12px;
+  position: absolute;
+  z-index: 100;
 }
 /*
 content区域css end

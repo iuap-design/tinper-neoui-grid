@@ -685,6 +685,32 @@ gridCompProto.swapColumnEnd = swapColumnEnd;
  */
 
 
+// var oldInitEventFun_rowDrag= gridCompProto.initEventFun;
+var oldInitGridEventFun_rowDrag= gridCompProto.initGridEventFun;
+import{
+    rowDrag_initGridEventFun,
+    rowDragStart,
+    rowDragFun,
+    rowDragEnd
+}from './re_gridCompRowDrag';
+
+// gridCompProto.initEventFun = function(){
+//     // 执行原有方法
+//    oldInitEventFun_rowDrag.apply(this,arguments);
+//    rowDrag_initEventFun.apply(this,arguments);
+// };
+
+
+gridCompProto.initGridEventFun = function(){
+    // 执行原有方法
+    oldInitGridEventFun_rowDrag.apply(this,arguments);
+    rowDrag_initGridEventFun.apply(this,arguments);
+};
+
+gridCompProto.rowDragStart = rowDragStart;
+gridCompProto.rowDragFun = rowDragFun;
+gridCompProto.rowDragEnd = rowDragEnd;
+
 
 /*
  * tree
