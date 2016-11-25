@@ -1058,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1616,13 +1616,6 @@
 	var oldInitGridEventFun_rowDrag = gridCompProto.initGridEventFun;
 
 
-	// gridCompProto.initEventFun = function(){
-	//     // 执行原有方法
-	//    oldInitEventFun_rowDrag.apply(this,arguments);
-	//    rowDrag_initEventFun.apply(this,arguments);
-	// };
-
-
 	gridCompProto.initGridEventFun = function () {
 	  // 执行原有方法
 	  oldInitGridEventFun_rowDrag.apply(this, arguments);
@@ -1632,6 +1625,7 @@
 	gridCompProto.rowDragStart = _re_gridCompRowDrag.rowDragStart;
 	gridCompProto.rowDragFun = _re_gridCompRowDrag.rowDragFun;
 	gridCompProto.rowDragEnd = _re_gridCompRowDrag.rowDragEnd;
+	gridCompProto.setRowDrag = _re_gridCompRowDrag.setRowDrag;
 
 	/*
 	 * tree
@@ -6588,7 +6582,7 @@
 	'use strict';
 
 	exports.__esModule = true;
-	exports.rowDragEnd = exports.rowDragFun = exports.rowDragStart = exports.rowDrag_initGridEventFun = undefined;
+	exports.setRowDrag = exports.rowDragEnd = exports.rowDragFun = exports.rowDragStart = exports.rowDrag_initGridEventFun = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
 
@@ -6604,7 +6598,6 @@
 	            var eleTr = $(e.target).closest("tr")[0];
 	            if (oThis.options.canRowDrag) {
 	                oThis.rowDragStart(e, eleTr);
-	                oThis.rowDragFlag = true;
 	            }
 	            e.preventDefault();
 	        }
@@ -6614,7 +6607,8 @@
 	    $('#' + this.options.id + '_content_tbody').on('mousemove', function (e) {
 	        oThis.mouseMoveX = e.clientX;
 	        oThis.mouseMoveY = e.clientY;
-	        if (oThis.rowDragFlag && (oThis.mouseMoveX != oThis.rowDragStartX || oThis.mouseMoveY != oThis.rowDragStartY) && oThis.options.canRowDrag) {
+	        if (oThis.rowDragEle && (oThis.mouseMoveX != oThis.rowDragStartX || oThis.mouseMoveY != oThis.rowDragStartY) && oThis.options.canRowDrag) {
+	            oThis.rowDragFlag = true;
 	            // 鼠标按下之后移动了
 	            oThis.rowDragFun(e);
 	        }
@@ -6700,36 +6694,48 @@
 	        return;
 	    }
 	    if (this.rowDragFlag && this.rowDragEndIndex != this.rowDragStartIndex) {
-	        console.log('end 结束');
+	        //保存下临时数据
+	        tempdata = this.dataSourceObj.rows[this.rowDragStartIndex];
 
 	        $('#' + this.options.id + '_content_tbody').find('tr td').removeClass('u-grid-drag-icon');
 
 	        if (this.dragdirection < 0) {
 
+	            //dom元素操作
 	            $('#' + this.options.id + '_content_tbody').find('tr').eq(this.rowDragEndIndex).before(this.rowDragEle);
+
+	            // 删除起始位置
+	            this.dataSourceObj.rows.splice(this.rowDragStartIndex, 1);
+
+	            this.dataSourceObj.rows.splice(this.rowDragEndIndex, 0, tempdata);
 	        } else {
-	            if (this.rowDragEndIndex + 1 >= this.dataSourceObj.rows.length) {
+
+	            // 数据操作
+	            this.dataSourceObj.rows.splice(this.rowDragStartIndex, 1);
+	            // dom元素操作
+	            if (this.rowDragEndIndex >= this.dataSourceObj.rows.length) {
 	                $('#' + this.options.id + '_content_tbody').append(this.rowDragEle);
+	                this.dataSourceObj.rows.splice(this.rowDragEndIndex + 1, 0, tempdata);
 	            } else {
 	                $('#' + this.options.id + '_content_tbody').find('tr').eq(this.rowDragEndIndex + 1).before(this.rowDragEle);
+	                this.dataSourceObj.rows.splice(this.rowDragEndIndex, 0, tempdata);
 	            }
 	        }
-
-	        tempdata = this.dataSourceObj.rows[this.rowDragStartIndex];
-
-	        this.dataSourceObj.rows[this.rowDragStartIndex] = this.dataSourceObj.rows[this.rowDragEndIndex];
-
-	        this.dataSourceObj.rows[this.rowDragEndIndex] = tempdata;
 	    }
 	    // 删除之前行，插入新行
 
 	    this.rowDragFlag = false;
+	    this.rowDragEle = undefined;
 	};
 
+	var setRowDrag = function setRowDrag(isDrag) {
+	    this.options.canRowDrag = isDrag;
+	};
 	exports.rowDrag_initGridEventFun = rowDrag_initGridEventFun;
 	exports.rowDragStart = rowDragStart;
 	exports.rowDragFun = rowDragFun;
 	exports.rowDragEnd = rowDragEnd;
+	exports.setRowDrag = setRowDrag;
 
 /***/ }
 /******/ ]);

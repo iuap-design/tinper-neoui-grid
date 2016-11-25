@@ -691,14 +691,11 @@ import{
     rowDrag_initGridEventFun,
     rowDragStart,
     rowDragFun,
-    rowDragEnd
+    rowDragEnd,
+    setRowDrag
+
 }from './re_gridCompRowDrag';
 
-// gridCompProto.initEventFun = function(){
-//     // 执行原有方法
-//    oldInitEventFun_rowDrag.apply(this,arguments);
-//    rowDrag_initEventFun.apply(this,arguments);
-// };
 
 
 gridCompProto.initGridEventFun = function(){
@@ -710,6 +707,7 @@ gridCompProto.initGridEventFun = function(){
 gridCompProto.rowDragStart = rowDragStart;
 gridCompProto.rowDragFun = rowDragFun;
 gridCompProto.rowDragEnd = rowDragEnd;
+gridCompProto.setRowDrag = setRowDrag;
 
 
 /*

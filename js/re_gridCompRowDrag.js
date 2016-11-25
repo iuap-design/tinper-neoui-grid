@@ -17,7 +17,7 @@ const rowDrag_initGridEventFun = function() {
             var eleTr = $(e.target).closest("tr")[0];
             if (oThis.options.canRowDrag) {
                 oThis.rowDragStart(e, eleTr);
-                oThis.rowDragFlag = true;
+                
             }
             e.preventDefault();
         }
@@ -27,9 +27,10 @@ const rowDrag_initGridEventFun = function() {
     $('#' + this.options.id + '_content_tbody').on('mousemove', function(e) {
         oThis.mouseMoveX = e.clientX;
         oThis.mouseMoveY = e.clientY;
-        if (oThis.rowDragFlag && (oThis.mouseMoveX != oThis.rowDragStartX || oThis.mouseMoveY != oThis.rowDragStartY)  && oThis.options.canRowDrag) {
+        if (oThis.rowDragEle &&(oThis.mouseMoveX != oThis.rowDragStartX || oThis.mouseMoveY != oThis.rowDragStartY)  && oThis.options.canRowDrag) {
+            oThis.rowDragFlag = true;
             // 鼠标按下之后移动了
-             oThis.rowDragFun(e);
+            oThis.rowDragFun(e);
         }
        
         e.stopPropagation();
@@ -121,39 +122,52 @@ const rowDragEnd = function(e) {
         return;
     }
     if (this.rowDragFlag && this.rowDragEndIndex!=this.rowDragStartIndex) {
-    	console.log('end 结束');
-
-    	$('#' + this.options.id + '_content_tbody').find('tr td').removeClass('u-grid-drag-icon');
+        //保存下临时数据
+        tempdata = this.dataSourceObj.rows[this.rowDragStartIndex];
+    	
+        $('#' + this.options.id + '_content_tbody').find('tr td').removeClass('u-grid-drag-icon');
 	       	
         if (this.dragdirection <0 ){
 
+            //dom元素操作
         	$('#' + this.options.id + '_content_tbody').find('tr').eq(this.rowDragEndIndex).before(this.rowDragEle);
-        
+            
+            // 删除起始位置
+            this.dataSourceObj.rows.splice(this.rowDragStartIndex,1);
+            
+            this.dataSourceObj.rows.splice(this.rowDragEndIndex,0,tempdata);
         }else {
-        	if (this.rowDragEndIndex +1 >= this.dataSourceObj.rows.length) {
+
+            // 数据操作
+            this.dataSourceObj.rows.splice(this.rowDragStartIndex,1);
+            // dom元素操作
+        	if (this.rowDragEndIndex >= this.dataSourceObj.rows.length) {
 	       		$('#' + this.options.id + '_content_tbody').append(this.rowDragEle);
+                this.dataSourceObj.rows.splice(this.rowDragEndIndex+1,0,tempdata);
 	       	}else {
 	       		$('#' + this.options.id + '_content_tbody').find('tr').eq(this.rowDragEndIndex+1).before(this.rowDragEle);
-	       	}
+	       	    this.dataSourceObj.rows.splice(this.rowDragEndIndex,0,tempdata);
+            }
+
+            
         }
-   	
-    	tempdata = this.dataSourceObj.rows[this.rowDragStartIndex];
-
-        this.dataSourceObj.rows[this.rowDragStartIndex] = this.dataSourceObj.rows[this.rowDragEndIndex];
-
-        this.dataSourceObj.rows[this.rowDragEndIndex] = tempdata;
 		
     }
     // 删除之前行，插入新行
     
     this.rowDragFlag = false;
+    this.rowDragEle = undefined;
 };
 
+const setRowDrag = function(isDrag) {
+    this.options.canRowDrag = isDrag;
+}
 export{
     rowDrag_initGridEventFun,
     rowDragStart,
     rowDragFun,
-    rowDragEnd
+    rowDragEnd,
+    setRowDrag
 }
 
 
