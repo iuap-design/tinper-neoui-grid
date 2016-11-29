@@ -1,3 +1,13 @@
+<a name="3.1.14"></a>
+## [3.1.14](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.13...v3.1.14) (2016-11-29)
+
+
+### Bug Fixes
+* 点击也可拖拽bug ([47f7165](https://github.com/iuap-design/tinper-neoui-grid/commit/47f7165))
+
+
+
+
 <a name="3.1.13"></a>
 ## [3.1.13](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.12...v3.1.13) (2016-11-24)
 
