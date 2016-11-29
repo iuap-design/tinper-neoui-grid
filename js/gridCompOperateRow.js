@@ -384,6 +384,18 @@ const updateValueAt = function(rowIndex, field, value, force) {
         if (typeof value == 'undefined')
             value = '';
         if (oldValue != value || force) {
+            if (typeof this.options.onBeforeValueChange == 'function') {
+                var obj = {};
+                obj.gridObj = this;
+                //因为树表更新时候可能改变rowIndex的顺序
+                obj.rowIndex = treeRowIndex;
+                obj.field = field;
+                obj.oldValue = oldValue;
+                obj.newValue = value;
+                var flag = this.options.onBeforeValueChange(obj);
+                if(!flag)
+                    return;
+            }
             $(this.dataSourceObj.rows[rowIndex].value).attr(field, value);
             $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value);
             if (this.showType == 'grid') {
