@@ -512,6 +512,14 @@ const setRowSelect = function(rowIndex, doms) {
     //     $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
     // }
     this.isCheckedHeaderRow();
+    if(typeof this.defaultOnRowSelected == 'function'){
+        var obj = {};
+        obj.gridObj = this;
+        obj.rowObj = this.dataSourceObj.rows[rowIndex];
+        obj.rowIndex = rowIndex;
+        this.defaultOnRowSelected(obj);
+    }
+
     if (typeof this.options.onRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
