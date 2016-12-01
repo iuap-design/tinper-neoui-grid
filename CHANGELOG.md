@@ -1,3 +1,15 @@
+<a name="3.1.15"></a>
+## [3.1.15](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.14...v3.1.15) (2016-12-01)
+
+
+### Bug Fixes
+* form形式下编辑样式问题以及合计情况下左侧边线显示问题 ([7f3339c](https://github.com/iuap-design/tinper-neoui-grid/commit/7f3339c))
+
+* grid增加onBeforeValueChange处理 ([be4fee3](https://github.com/iuap-design/tinper-neoui-grid/commit/be4fee3))
+
+
+
+
 <a name="3.1.14"></a>
 ## [3.1.14](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.13...v3.1.14) (2016-11-29)
 
