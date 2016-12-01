@@ -96,8 +96,10 @@ const editRow = function($tr,colIndex){
 
 			var tr = table.insertRow(this.eidtRowIndex + 2);
 			tr.id = this.options.id + '_edit_tr';
+			$(tr).addClass('grid_edit_form_tr');
 			var cell = tr.insertCell();
 			cell.id = this.options.id + '_edit_td';
+			$(cell).addClass('grid_edit_form_td');
 			cell.style.borderBottom = '0px';
 			cell.style.background = '#fff';
 			var cWidth = parseInt(this.contentMinWidth) + parseInt(this.fixedWidth);
@@ -140,8 +142,10 @@ const editRow = function($tr,colIndex){
 
 			var tr = table.insertRow(this.eidtRowIndex + 2);
 			tr.id = this.options.id + '_edit_tr';
+			$(tr).addClass('grid_edit_form_tr');
 			var cell = tr.insertCell();
 			cell.id = this.options.id + '_edit_td';
+			$(cell).addClass('grid_edit_form_td');
 			cell.style.borderBottom = '0px';
 			var cWidth = parseInt(this.contentMinWidth) + parseInt(this.fixedWidth);
 			var htmlStr = '<div id="' + this.options.id + '_edit_form" class="u-grid-edit-form" style="width:' + cWidth + 'px;float:left;">';

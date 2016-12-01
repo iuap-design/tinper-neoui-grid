@@ -281,12 +281,20 @@ content区域css begin
   overflow: hidden;
 }
 
+.u-grid .grid_edit_form_td{
+    overflow: visible;
+}
+
 .u-grid tbody tr:last-child td{
   border-bottom-width: 0px;
 }
 
 .u-grid-content-left>div:last-child{
   border-bottom-width: 0px;
+}
+
+.u-grid-content-left.u-grid-content-left-sum>div:last-child{
+  border-bottom-width: 1px;
 }
 
 .u-grid-content tr{

@@ -1058,9 +1058,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -1918,15 +1918,19 @@
 	    var oThis = this,
 	        htmlStr = "",
 	        left = 0,
-	        hStr;
+	        hStr,
+	        sumRowClass = '';
 	    // 高度可伸缩，暂时去掉内部的高度设置
 	    // if(this.countContentHeight && parseInt(this.contentHeight) > 0){
 	    // 	hStr = 'max-height:' + this.contentHeight + 'px;overflow:hidden;';
 	    // }else{
 	    // 	hStr = '';
 	    // }
+	    if (this.options.showSumRow) {
+	        sumRowClass = 'u-grid-content-left-sum';
+	    }
 	    if (this.options.multiSelect) {
-	        htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
+	        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
 	        // 遍历生成所有行
 	        if (this.dataSourceObj.rows) {
 	            $.each(this.dataSourceObj.rows, function (i) {
@@ -1937,7 +1941,7 @@
 	        left += this.multiSelectWidth;
 	    }
 	    if (this.options.showNumCol) {
-	        htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
+	        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
 	        // 遍历生成所有行
 	        if (this.dataSourceObj.rows) {
 	            $.each(this.dataSourceObj.rows, function (i, row) {
@@ -3086,8 +3090,10 @@
 
 				var tr = table.insertRow(this.eidtRowIndex + 2);
 				tr.id = this.options.id + '_edit_tr';
+				$(tr).addClass('grid_edit_form_tr');
 				var cell = tr.insertCell();
 				cell.id = this.options.id + '_edit_td';
+				$(cell).addClass('grid_edit_form_td');
 				cell.style.borderBottom = '0px';
 				cell.style.background = '#fff';
 				var cWidth = parseInt(this.contentMinWidth) + parseInt(this.fixedWidth);
@@ -3129,8 +3135,10 @@
 
 				var tr = table.insertRow(this.eidtRowIndex + 2);
 				tr.id = this.options.id + '_edit_tr';
+				$(tr).addClass('grid_edit_form_tr');
 				var cell = tr.insertCell();
 				cell.id = this.options.id + '_edit_td';
+				$(cell).addClass('grid_edit_form_td');
 				cell.style.borderBottom = '0px';
 				var cWidth = parseInt(this.contentMinWidth) + parseInt(this.fixedWidth);
 				var htmlStr = '<div id="' + this.options.id + '_edit_form" class="u-grid-edit-form" style="width:' + cWidth + 'px;float:left;">';
@@ -3917,6 +3925,17 @@
 	            treeRowIndex = rowIndex;
 	        if (typeof value == 'undefined') value = '';
 	        if (oldValue != value || force) {
+	            if (typeof this.options.onBeforeValueChange == 'function') {
+	                var obj = {};
+	                obj.gridObj = this;
+	                //因为树表更新时候可能改变rowIndex的顺序
+	                obj.rowIndex = treeRowIndex;
+	                obj.field = field;
+	                obj.oldValue = oldValue;
+	                obj.newValue = value;
+	                var flag = this.options.onBeforeValueChange(obj);
+	                if (!flag) return;
+	            }
 	            $(this.dataSourceObj.rows[rowIndex].value).attr(field, value);
 	            $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value);
 	            if (this.showType == 'grid') {

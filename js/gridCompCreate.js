@@ -248,15 +248,18 @@ const createContentSumRow = function(){
  * 创建内容区左侧区域
  */
 const createContentLeft = function() {
-    var oThis = this,htmlStr = "",left = 0,hStr;
+    var oThis = this,htmlStr = "",left = 0,hStr,sumRowClass = '';
     // 高度可伸缩，暂时去掉内部的高度设置
     // if(this.countContentHeight && parseInt(this.contentHeight) > 0){
     // 	hStr = 'max-height:' + this.contentHeight + 'px;overflow:hidden;';
     // }else{
     // 	hStr = '';
     // }
+    if(this.options.showSumRow){
+        sumRowClass = 'u-grid-content-left-sum';
+    }
     if(this.options.multiSelect){
-        htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
+        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
             $.each(this.dataSourceObj.rows, function(i) {
@@ -267,7 +270,7 @@ const createContentLeft = function() {
         left += this.multiSelectWidth;
     }
     if (this.options.showNumCol) {
-        htmlStr += '<div class="u-grid-content-left" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
+        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
             $.each(this.dataSourceObj.rows, function(i, row) {
