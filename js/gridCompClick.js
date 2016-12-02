@@ -70,6 +70,7 @@ const clickFun = function(e){
 			if(oThis.options.rowClickBan){
 				return;
 			}
+			this.clickFunEdit(e,index);
 			var rowChildIndex = oThis.getChildRowIndex(row);
 			if(oThis.options.contentFocus || !oThis.options.multiSelect){
 				if(oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus){
@@ -89,7 +90,7 @@ const clickFun = function(e){
 					}
 				}
 			}
-			this.clickFunEdit(e,index);
+			
 		}
 	}
 };

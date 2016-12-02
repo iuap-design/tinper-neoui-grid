@@ -273,13 +273,27 @@ const editRow = function($tr,colIndex){
  */
 const re_editClose = function(){
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
+	var inputDom = null;
+	try{
+		var inputDom = this.editComp.element.parentNode.querySelector('input');
+	}catch(e){
+	}
+	
+	if(inputDom){
+		inputDom.blur();
+	}
 	if(this.editComp && this.editComp.hide){
 		this.editComp.hide();
 	}
 	if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
 		this.editComp.comp.hide();
 	}
-	$('#' + this.options.id + '_placeholder_div').remove();
+	try{
+		$('#' + this.options.id + '_placeholder_div').remove();
+	}catch(e){
+
+	}
+	
 	if(!row)
 		return;
 	if(this.options.editType != 'form'){
