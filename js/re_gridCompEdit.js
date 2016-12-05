@@ -558,6 +558,12 @@ const edit_initEventFun = function(){
 			oThis.editClose();
 		}
 	})
+	// 为所有div添加监听，滚动时执行editClose
+	$('div').on('scroll',function(){
+		if(oThis.options.editType == 'default'){
+			oThis.editClose();
+		}
+	})
 };
 const setGridEditType = function(newEditType){
 	this.options.editType = newEditType;
