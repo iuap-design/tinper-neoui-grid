@@ -603,11 +603,12 @@ const repairContent = function(){
  */
 const objCompare = function(rootObj, objAry) {
     var aryLen = objAry.length;
-    var rootStr = JSON.stringify(rootObj);
+    // var rootStr = JSON.stringify(rootObj);
     var matchNum = 0;
     for(var i=0; i<aryLen; i++){
-        var compareStr = JSON.stringify(objAry[i]);
-        matchNum += (rootStr == compareStr) ? 1 : 0;
+        // var compareStr = JSON.stringify(objAry[i]);
+        var compareObj = objAry[i];
+        matchNum += (rootObj == compareObj) ? 1 : 0;
     }
     return (matchNum>0) ? true : false; 
 };
