@@ -97,18 +97,31 @@ const noScrollWidthReset = function(){
 
         }else{
             //先按100%来处理
+            var hasP = false;
+            var nowWholeWidth = 0;
             for(var i = 0; i < this.gridCompColumnArr.length; i++){
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width + '';
+                
                 if(nowWidth.indexOf('%') > 0){
                     var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+                    hasP = true;
                 }else{
                     var newWidth = nowWidth;
+                    if(column.options.visible){
+                        nowWholeWidth += parseInt(nowWidth);
+                    }
                 }
+                
                 if(newWidth < this.minColumnWidth){
                     newWidth = this.minColumnWidth;
                 }
                 this.setColumnWidth(column,newWidth);
+            }
+            if(!hasP && nowWholeWidth > this.wholeWidth){
+                var nowW = this.lastVisibleColumn.options.width;
+                var w = nowW - (nowWholeWidth - this.wholeWidth);
+                this.lastVisibleColumn.options.width = w;
             }
         }
 
