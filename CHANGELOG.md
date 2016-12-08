@@ -1,3 +1,17 @@
+<a name="3.1.16"></a>
+## [3.1.16](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.15...v3.1.16) (2016-12-08)
+
+
+### Bug Fixes
+* 优化grid编辑下连续点击出错的问题 ([d8b35b6](https://github.com/iuap-design/tinper-neoui-grid/commit/d8b35b6))
+
+* 优化不显示滚动条情况下动态改变宽度导致最后一列显示宽度超长的问题 ([3c3a452](https://github.com/iuap-design/tinper-neoui-grid/commit/3c3a452))
+
+* 兼容子表的情况，避免json转字符串的情况出现死循环 ([361d04c](https://github.com/iuap-design/tinper-neoui-grid/commit/361d04c))
+
+
+
+
 <a name="3.1.15"></a>
 ## [3.1.15](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.14...v3.1.15) (2016-12-01)
 

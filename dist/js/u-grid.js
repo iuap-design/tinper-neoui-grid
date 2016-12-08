@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.15
+ * tinper-neoui-grid v3.1.16
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -2289,11 +2289,12 @@
 	 */
 	var objCompare = function objCompare(rootObj, objAry) {
 	    var aryLen = objAry.length;
-	    var rootStr = JSON.stringify(rootObj);
+	    // var rootStr = JSON.stringify(rootObj);
 	    var matchNum = 0;
 	    for (var i = 0; i < aryLen; i++) {
-	        var compareStr = JSON.stringify(objAry[i]);
-	        matchNum += rootStr == compareStr ? 1 : 0;
+	        // var compareStr = JSON.stringify(objAry[i]);
+	        var compareObj = objAry[i];
+	        matchNum += rootObj == compareObj ? 1 : 0;
 	    }
 	    return matchNum > 0 ? true : false;
 	};
@@ -3265,13 +3266,24 @@
 	 */
 	var re_editClose = function re_editClose() {
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
+		var inputDom = null;
+		try {
+			var inputDom = this.editComp.element.parentNode.querySelector('input');
+		} catch (e) {}
+
+		if (inputDom) {
+			inputDom.blur();
+		}
 		if (this.editComp && this.editComp.hide) {
 			this.editComp.hide();
 		}
 		if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
 			this.editComp.comp.hide();
 		}
-		$('#' + this.options.id + '_placeholder_div').remove();
+		try {
+			$('#' + this.options.id + '_placeholder_div').remove();
+		} catch (e) {}
+
 		if (!row) return;
 		if (this.options.editType != 'form') {
 			//this.repaintRow(this.eidtRowIndex);
@@ -3518,6 +3530,12 @@
 		});
 
 		u.on(document, 'scroll', function () {
+			if (oThis.options.editType == 'default') {
+				oThis.editClose();
+			}
+		});
+		// 为所有div添加监听，滚动时执行editClose
+		$('div').on('scroll', function () {
 			if (oThis.options.editType == 'default') {
 				oThis.editClose();
 			}
@@ -4794,18 +4812,31 @@
 	            }
 	        } else {
 	            //先按100%来处理
+	            var hasP = false;
+	            var nowWholeWidth = 0;
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width + '';
+
 	                if (nowWidth.indexOf('%') > 0) {
 	                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
+	                    hasP = true;
 	                } else {
 	                    var newWidth = nowWidth;
+	                    if (column.options.visible) {
+	                        nowWholeWidth += parseInt(nowWidth);
+	                    }
 	                }
+
 	                if (newWidth < this.minColumnWidth) {
 	                    newWidth = this.minColumnWidth;
 	                }
 	                this.setColumnWidth(column, newWidth);
+	            }
+	            if (!hasP && nowWholeWidth > this.wholeWidth) {
+	                var nowW = this.lastVisibleColumn.options.width;
+	                var w = nowW - (nowWholeWidth - this.wholeWidth);
+	                this.lastVisibleColumn.options.width = w;
 	            }
 	        }
 
@@ -4966,6 +4997,7 @@
 				if (oThis.options.rowClickBan) {
 					return;
 				}
+				this.clickFunEdit(e, index);
 				var rowChildIndex = oThis.getChildRowIndex(row);
 				if (oThis.options.contentFocus || !oThis.options.multiSelect) {
 					if (oThis.dataSourceObj.rows[index].focus && oThis.options.cancelFocus) {
@@ -4985,7 +5017,6 @@
 						}
 					}
 				}
-				this.clickFunEdit(e, index);
 			}
 		}
 	};
