@@ -85,47 +85,50 @@ const widthChangeGridFun = function() {
  * 不显示滚动条的情况下需要重置每列的宽度
  */
 const noScrollWidthReset = function(){
-    if(this.options.noScroll){
-        if(this.hasNoScrollRest){
-            //先按100%来处理
-            for(var i = 0; i < this.gridCompColumnArr.length; i++){
+    if (this.options.noScroll) {
+        if (this.hasNoScrollRest) {
+            var nowW = 0;
+            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width;
-                var newWidth = parseInt(nowWidth/ this.preWholeWidth * this.wholeWidth);
-                this.setColumnWidth(column,newWidth)
+                var pre = this.preWholeWidth - this.leftW;
+                var whole = this.wholeWidth - this.leftW;
+                var newWidth = parseInt(nowWidth / pre * whole);
+                if(column.options.visible){
+                    nowW += newWidth;
+                }
+                this.setColumnWidth(column, newWidth);
             }
 
-        }else{
+        } else {
             //先按100%来处理
-            var hasP = false;
-            var nowWholeWidth = 0;
-            for(var i = 0; i < this.gridCompColumnArr.length; i++){
+            var nowW = 0;
+            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
                 var column = this.gridCompColumnArr[i];
                 var nowWidth = column.options.width + '';
-                
-                if(nowWidth.indexOf('%') > 0){
-                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
-                    hasP = true;
-                }else{
+                var whole = this.wholeWidth - this.leftW;
+
+                if (nowWidth.indexOf('%') > 0) {
+                    var newWidth = parseInt(nowWidth.replace('%', '') * whole / 100);
+                } else {
                     var newWidth = nowWidth;
-                    if(column.options.visible){
-                        nowWholeWidth += parseInt(nowWidth);
-                    }
                 }
-                
-                if(newWidth < this.minColumnWidth){
+                if (newWidth < this.minColumnWidth) {
                     newWidth = this.minColumnWidth;
                 }
-                this.setColumnWidth(column,newWidth);
-            }
-            if(!hasP && nowWholeWidth > this.wholeWidth){
-                var nowW = this.lastVisibleColumn.options.width;
-                var w = nowW - (nowWholeWidth - this.wholeWidth);
-                this.lastVisibleColumn.options.width = w;
+                if(column.options.visible){
+                    nowW += newWidth;
+                }
+                this.setColumnWidth(column, newWidth);
             }
         }
-
         this.hasNoScrollRest = true;
+    }
+    if(nowW > whole){
+        var lastVisibleColumn = this.lastVisibleColumn;
+        var lastWidth = lastVisibleColumn.options.width;
+        var newLastWidth = lastWidth -(nowW - whole)
+        this.setColumnWidth(lastVisibleColumn, newLastWidth);
     }
 }
 const widthChangeGridFunFixed = function(halfWholeWidth){

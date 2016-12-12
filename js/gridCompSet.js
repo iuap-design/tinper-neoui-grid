@@ -25,7 +25,7 @@ const setColumnVisibleByIndex = function(index,visible){
             $('td:eq(' + index + ')',$('#' + this.options.id + '_content tbody tr')).css('display', "");
             // 当前列之后的显示列的index
             var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
-            if(nextVisibleIndex == -1){
+            if(nextVisibleIndex < 1){
                 // 添加在最后面
                 try{
                     $('#' + this.options.id + '_header col:last')[0].insertAdjacentHTML('afterEnd',htmlStr);
@@ -37,11 +37,11 @@ const setColumnVisibleByIndex = function(index,visible){
             }else{
                 // 添加在下一个显示列之前
                 try{
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
+                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex -1) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
+                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex -1) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
                 }catch(e){
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex) + ')').before(htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex) + ')').before(htmlStr);
+                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex -1) + ')').before(htmlStr);
+                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex -1) + ')').before(htmlStr);
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
@@ -77,7 +77,7 @@ const setCoulmnWidthByField = function(field, newWidth){
  * 根据column对象设置宽度
  */
 const setColumnWidth = function(column, newWidth){
-    if(column != this.lastVisibleColumn){
+    // if(column != this.lastVisibleColumn){
         if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
             var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
             oldWidth = column.options.width,
@@ -93,7 +93,7 @@ const setColumnWidth = function(column, newWidth){
             this.resetThVariable();
             this.saveGridCompColumnArrToLocal();
         }
-    }
+    // }
 };
 /*
  * 设置数据源
