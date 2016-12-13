@@ -12,8 +12,9 @@ const rowDrag_initGridEventFun = function() {
     // 判断是否操作在内容行上
     // 根据某个字段判断是否可拖拽，如果可编辑调用rowDragStart
   	$('#' + this.options.id + '_content_tbody').on('mousedown', function (e) {
-
-        if ($(e.target).closest("tr").length > 0) {
+        var $tarTr = $(e.target).closest("tr");
+        var isEditTr = $(e.target).closest("tr").hasClass('grid_edit_form_tr');
+        if ($tarTr.length > 0 && !isEditTr) {
             var eleTr = $(e.target).closest("tr")[0];
             if (oThis.options.canRowDrag) {
                 oThis.rowDragStart(e, eleTr);
