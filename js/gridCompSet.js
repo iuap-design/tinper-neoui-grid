@@ -93,6 +93,7 @@ const setColumnWidth = function(column, newWidth){
             this.resetThVariable();
             this.saveGridCompColumnArrToLocal();
         }
+        this.columnsVisibleFun();
     // }
 };
 /*

@@ -130,6 +130,7 @@ const noScrollWidthReset = function(){
         var newLastWidth = lastWidth -(nowW - whole)
         this.setColumnWidth(lastVisibleColumn, newLastWidth);
     }
+    
 }
 const widthChangeGridFunFixed = function(halfWholeWidth){
 };
