@@ -49,6 +49,25 @@ const addOneRow = function(row, index) {
         });
     }
 
+    // 需要重新排序重置变量
+    var l = 0;
+    if (this.options.showTree) {
+        if (this.dataSourceObj.options.values) {
+            l = this.dataSourceObj.options.values.length;
+        } else {
+            this.dataSourceObj.options.values = new Array();
+        }
+        this.dataSourceObj.options.values.splice(index, 0, row);
+        this.addOneRowTreeHasChildF(rowObj);
+    } else {
+        if (this.dataSourceObj.options.values) {
+
+        } else {
+            this.dataSourceObj.options.values = new Array();
+        }
+        this.dataSourceObj.options.values.splice(index, 0, row);
+    }
+
     if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
 
@@ -120,24 +139,7 @@ const addOneRow = function(row, index) {
         obj.length = 1;
         this.renderTypeFun(obj);
     }
-    // 需要重新排序重置变量
-    var l = 0;
-    if (this.options.showTree) {
-        if (this.dataSourceObj.options.values) {
-            l = this.dataSourceObj.options.values.length;
-        } else {
-            this.dataSourceObj.options.values = new Array();
-        }
-        this.dataSourceObj.options.values.splice(index, 0, row);
-        this.addOneRowTreeHasChildF(rowObj);
-    } else {
-        if (this.dataSourceObj.options.values) {
-
-        } else {
-            this.dataSourceObj.options.values = new Array();
-        }
-        this.dataSourceObj.options.values.splice(index, 0, row);
-    }
+    
 };
 const addOneRowTree = function(row, index) {
     return index;
@@ -184,6 +186,14 @@ const addRows = function(rows, index) {
         oThis.dataSourceObj.rows.splice(index + i, 0, rowObj);
         oThis.updateEditRowIndex('+', index + i)
     });
+
+    if (this.dataSourceObj.options.values) {} else {
+        this.dataSourceObj.options.values = new Array();
+    }
+    $.each(rows, function(i) {
+        oThis.dataSourceObj.options.values.splice(index + i, 0, this);
+    });
+
     // 如果是在中间插入需要将后续的valueIndex + 1；
     if (this.dataSourceObj.rows.length > (index + rows.length)) {
         $.each(this.dataSourceObj.rows, function(i) {
@@ -263,12 +273,7 @@ const addRows = function(rows, index) {
         obj.length = rows.length;
         this.renderTypeFun(obj);
     }
-    if (this.dataSourceObj.options.values) {} else {
-        this.dataSourceObj.options.values = new Array();
-    }
-    $.each(rows, function(i) {
-        oThis.dataSourceObj.options.values.splice(index + i, 0, this);
-    });
+    
     this.updateLastRowFlag();
     this.isCheckedHeaderRow();
 };
@@ -291,6 +296,18 @@ const deleteOneRow = function(index) {
     }
     this.dataSourceObj.rows.splice(index, 1);
     this.updateEditRowIndex('-', index);
+    if (this.dataSourceObj.options.values) {
+        var i = this.dataSourceObj.options.values.indexOf(rowValue);
+        this.dataSourceObj.options.values.splice(i, 1);
+    }
+    // 如果是在中间插入需要将后续的valueIndex - 1；
+    if (this.dataSourceObj.rows.length > (index + 1)) {
+        $.each(this.dataSourceObj.rows, function(i) {
+            if (i >= index) {
+                this.valueIndex = this.valueIndex - 1;
+            }
+        });
+    }
     if (this.selectRows) {
         $.each(this.selectRows, function(i) {
             if (this == rowValue) {
@@ -321,10 +338,7 @@ const deleteOneRow = function(index) {
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
     }
-    if (this.dataSourceObj.options.values) {
-        var i = this.dataSourceObj.options.values.indexOf(rowValue);
-        this.dataSourceObj.options.values.splice(i, 1);
-    }
+    
     this.deleteOneRowTree();
     if (typeof this.options.onRowDelete == 'function') {
         var obj = {};
