@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.16
+ * tinper-neoui-grid v3.1.17
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -2024,9 +2024,9 @@
 	            styleStr += 'width:' + this.contentMinWidth + 'px;';
 	        }
 	        // 因为添加overflow-x之后会导致纵向也显示不全，后续出现问题通过修改宽度来实现，不再通过overflow来实现
-	        // if(this.options.noScroll){
-	        //     styleStr += 'overflow-x:hidden;'  
-	        // }
+	        if (this.options.noScroll) {
+	            styleStr += 'overflow-x:hidden;';
+	        }
 	        styleStr += '"';
 	        tableStyleStr = '';
 	        if (this.contentMinWidth > 0) {
@@ -3450,6 +3450,10 @@
 	};
 	var re_updateValueAtEdit = function re_updateValueAtEdit(rowIndex, field, value, force) {
 		if (this.eidtRowIndex == rowIndex) {
+			if (this.options.editType == 'form') {} else {
+				this.eidtRowIndex = -1; //下拉选中之后eidtRowIndex依然为原来的值，后续需要判断修改列
+			}
+
 			if ($('#' + this.options.id + "_edit_field_" + field).length > 0) {
 				if ($('#' + this.options.id + "_edit_field_" + field)[0].type == 'checkbox') {
 					if (value == 'Y' || value == 'true' || value === true) {
@@ -3636,6 +3640,23 @@
 	        });
 	    }
 
+	    // 需要重新排序重置变量
+	    var l = 0;
+	    if (this.options.showTree) {
+	        if (this.dataSourceObj.options.values) {
+	            l = this.dataSourceObj.options.values.length;
+	        } else {
+	            this.dataSourceObj.options.values = new Array();
+	        }
+	        this.dataSourceObj.options.values.splice(index, 0, row);
+	        this.addOneRowTreeHasChildF(rowObj);
+	    } else {
+	        if (this.dataSourceObj.options.values) {} else {
+	            this.dataSourceObj.options.values = new Array();
+	        }
+	        this.dataSourceObj.options.values.splice(index, 0, row);
+	    }
+
 	    if (this.showType == 'grid') {
 	        //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
 	        this.editClose();
@@ -3694,22 +3715,6 @@
 	        obj.length = 1;
 	        this.renderTypeFun(obj);
 	    }
-	    // 需要重新排序重置变量
-	    var l = 0;
-	    if (this.options.showTree) {
-	        if (this.dataSourceObj.options.values) {
-	            l = this.dataSourceObj.options.values.length;
-	        } else {
-	            this.dataSourceObj.options.values = new Array();
-	        }
-	        this.dataSourceObj.options.values.splice(index, 0, row);
-	        this.addOneRowTreeHasChildF(rowObj);
-	    } else {
-	        if (this.dataSourceObj.options.values) {} else {
-	            this.dataSourceObj.options.values = new Array();
-	        }
-	        this.dataSourceObj.options.values.splice(index, 0, row);
-	    }
 	};
 	var addOneRowTree = function addOneRowTree(row, index) {
 	    return index;
@@ -3755,6 +3760,14 @@
 	        oThis.dataSourceObj.rows.splice(index + i, 0, rowObj);
 	        oThis.updateEditRowIndex('+', index + i);
 	    });
+
+	    if (this.dataSourceObj.options.values) {} else {
+	        this.dataSourceObj.options.values = new Array();
+	    }
+	    $.each(rows, function (i) {
+	        oThis.dataSourceObj.options.values.splice(index + i, 0, this);
+	    });
+
 	    // 如果是在中间插入需要将后续的valueIndex + 1；
 	    if (this.dataSourceObj.rows.length > index + rows.length) {
 	        $.each(this.dataSourceObj.rows, function (i) {
@@ -3822,12 +3835,7 @@
 	        obj.length = rows.length;
 	        this.renderTypeFun(obj);
 	    }
-	    if (this.dataSourceObj.options.values) {} else {
-	        this.dataSourceObj.options.values = new Array();
-	    }
-	    $.each(rows, function (i) {
-	        oThis.dataSourceObj.options.values.splice(index + i, 0, this);
-	    });
+
 	    this.updateLastRowFlag();
 	    this.isCheckedHeaderRow();
 	};
@@ -3850,6 +3858,18 @@
 	    }
 	    this.dataSourceObj.rows.splice(index, 1);
 	    this.updateEditRowIndex('-', index);
+	    if (this.dataSourceObj.options.values) {
+	        var i = this.dataSourceObj.options.values.indexOf(rowValue);
+	        this.dataSourceObj.options.values.splice(i, 1);
+	    }
+	    // 如果是在中间插入需要将后续的valueIndex - 1；
+	    if (this.dataSourceObj.rows.length > index + 1) {
+	        $.each(this.dataSourceObj.rows, function (i) {
+	            if (i >= index) {
+	                this.valueIndex = this.valueIndex - 1;
+	            }
+	        });
+	    }
 	    if (this.selectRows) {
 	        $.each(this.selectRows, function (i) {
 	            if (this == rowValue) {
@@ -3881,10 +3901,7 @@
 	        this.noRowsShowFun();
 	        this.updateNumColLastRowFlag();
 	    }
-	    if (this.dataSourceObj.options.values) {
-	        var i = this.dataSourceObj.options.values.indexOf(rowValue);
-	        this.dataSourceObj.options.values.splice(i, 1);
-	    }
+
 	    this.deleteOneRowTree();
 	    if (typeof this.options.onRowDelete == 'function') {
 	        var obj = {};
@@ -4594,7 +4611,7 @@
 	            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
 	            // 当前列之后的显示列的index
 	            var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
-	            if (nextVisibleIndex == -1) {
+	            if (nextVisibleIndex < 1) {
 	                // 添加在最后面
 	                try {
 	                    $('#' + this.options.id + '_header col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
@@ -4606,11 +4623,11 @@
 	            } else {
 	                // 添加在下一个显示列之前
 	                try {
-	                    $('#' + this.options.id + '_header col:eq(' + nextVisibleIndex + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
-	                    $('#' + this.options.id + '_content col:eq(' + nextVisibleIndex + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+	                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+	                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
 	                } catch (e) {
-	                    $('#' + this.options.id + '_header col:eq(' + nextVisibleIndex + ')').before(htmlStr);
-	                    $('#' + this.options.id + '_content col:eq(' + nextVisibleIndex + ')').before(htmlStr);
+	                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
+	                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
 	                }
 	            }
 	            var newContentW = this.contentWidth + parseInt(column.options.width);
@@ -4646,23 +4663,24 @@
 	 * 根据column对象设置宽度
 	 */
 	var setColumnWidth = function setColumnWidth(column, newWidth) {
-	    if (column != this.lastVisibleColumn) {
-	        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
-	            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
-	                oldWidth = column.options.width,
-	                changeWidth = newWidth - oldWidth,
-	                cWidth = this.contentWidth + changeWidth;
-	            this.contentWidth = this.contentWidthChange(cWidth);
-	            $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-	            $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+	    // if(column != this.lastVisibleColumn){
+	    if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
+	        var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
+	            oldWidth = column.options.width,
+	            changeWidth = newWidth - oldWidth,
+	            cWidth = this.contentWidth + changeWidth;
+	        this.contentWidth = this.contentWidthChange(cWidth);
+	        $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+	        $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
-	            column.options.width = newWidth;
-	            column.options.realWidth = newWidth;
+	        column.options.width = newWidth;
+	        column.options.realWidth = newWidth;
 
-	            this.resetThVariable();
-	            this.saveGridCompColumnArrToLocal();
-	        }
+	        this.resetThVariable();
+	        this.saveGridCompColumnArrToLocal();
 	    }
+	    this.columnsVisibleFun();
+	    // }
 	};
 	/*
 	 * 设置数据源
@@ -4803,44 +4821,47 @@
 	var noScrollWidthReset = function noScrollWidthReset() {
 	    if (this.options.noScroll) {
 	        if (this.hasNoScrollRest) {
-	            //先按100%来处理
+	            var nowW = 0;
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width;
-	                var newWidth = parseInt(nowWidth / this.preWholeWidth * this.wholeWidth);
+	                var pre = this.preWholeWidth - this.leftW;
+	                var whole = this.wholeWidth - this.leftW;
+	                var newWidth = parseInt(nowWidth / pre * whole);
+	                if (column.options.visible) {
+	                    nowW += newWidth;
+	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
 	        } else {
 	            //先按100%来处理
-	            var hasP = false;
-	            var nowWholeWidth = 0;
+	            var nowW = 0;
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
 	                var nowWidth = column.options.width + '';
+	                var whole = this.wholeWidth - this.leftW;
 
 	                if (nowWidth.indexOf('%') > 0) {
-	                    var newWidth = parseInt(nowWidth.replace('%', '') * this.wholeWidth / 100);
-	                    hasP = true;
+	                    var newWidth = parseInt(nowWidth.replace('%', '') * whole / 100);
 	                } else {
 	                    var newWidth = nowWidth;
-	                    if (column.options.visible) {
-	                        nowWholeWidth += parseInt(nowWidth);
-	                    }
 	                }
-
 	                if (newWidth < this.minColumnWidth) {
 	                    newWidth = this.minColumnWidth;
 	                }
+	                if (column.options.visible) {
+	                    nowW += newWidth;
+	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
-	            if (!hasP && nowWholeWidth > this.wholeWidth) {
-	                var nowW = this.lastVisibleColumn.options.width;
-	                var w = nowW - (nowWholeWidth - this.wholeWidth);
-	                this.lastVisibleColumn.options.width = w;
-	            }
 	        }
-
 	        this.hasNoScrollRest = true;
+	    }
+	    if (nowW > whole) {
+	        var lastVisibleColumn = this.lastVisibleColumn;
+	        var lastWidth = lastVisibleColumn.options.width;
+	        var newLastWidth = lastWidth - (nowW - whole);
+	        this.setColumnWidth(lastVisibleColumn, newLastWidth);
 	    }
 	};
 	var widthChangeGridFunFixed = function widthChangeGridFunFixed(halfWholeWidth) {};
@@ -6651,8 +6672,9 @@
 	    // 判断是否操作在内容行上
 	    // 根据某个字段判断是否可拖拽，如果可编辑调用rowDragStart
 	    $('#' + this.options.id + '_content_tbody').on('mousedown', function (e) {
-
-	        if ($(e.target).closest("tr").length > 0) {
+	        var $tarTr = $(e.target).closest("tr");
+	        var isEditTr = $(e.target).closest("tr").hasClass('grid_edit_form_tr');
+	        if ($tarTr.length > 0 && !isEditTr) {
 	            var eleTr = $(e.target).closest("tr")[0];
 	            if (oThis.options.canRowDrag) {
 	                oThis.rowDragStart(e, eleTr);
