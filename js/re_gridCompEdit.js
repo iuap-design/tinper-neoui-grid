@@ -477,7 +477,8 @@ const re_updateValueAtEdit = function(rowIndex,field,value,force){
 		if(this.options.editType == 'form'){
 
 		}else{
-			this.eidtRowIndex = -1; //下拉选中之后eidtRowIndex依然为原来的值，后续需要判断修改列
+			if(this.gridCompColumnArr[this.editColIndex].options.field == field)
+				this.eidtRowIndex = -1; //下拉选中之后eidtRowIndex依然为原来的值，后续需要判断修改列
 		}
 		
 		if($('#' +  this.options.id + "_edit_field_" + field).length > 0){
