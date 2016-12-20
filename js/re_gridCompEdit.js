@@ -272,6 +272,8 @@ const editRow = function($tr,colIndex){
  * 行编辑关闭
  */
 const re_editClose = function(){
+	if(this.eidtRowIndex < 0)
+		return;
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
 	var inputDom = null;
 	try{
