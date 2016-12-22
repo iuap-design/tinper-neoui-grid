@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.17
+ * tinper-neoui-grid v3.1.18
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -2779,8 +2779,8 @@
 	        multiSelect: false, // 是否显示复选框
 	        columnMenu: true, // 是否存在列头操作按钮
 	        canDrag: true, // 是否可以拖动
-	        formMaxWidth: 300, // 整体宽度小于某一值之后以form展示
-	        // formMaxWidth:0,
+	        // formMaxWidth: 300, // 整体宽度小于某一值之后以form展示
+	        formMaxWidth: 0,
 	        maxHeaderLevel: 1, // header的最高层级，用于计算header区域的高度
 	        overWidthHiddenColumn: false, // 宽度不足时是否自动隐藏column
 	        sortable: true, // 是否可以排序
@@ -3265,6 +3265,7 @@
 	 * 行编辑关闭
 	 */
 	var re_editClose = function re_editClose() {
+		if (this.eidtRowIndex < 0) return;
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
 		var inputDom = null;
 		try {
@@ -3451,7 +3452,7 @@
 	var re_updateValueAtEdit = function re_updateValueAtEdit(rowIndex, field, value, force) {
 		if (this.eidtRowIndex == rowIndex) {
 			if (this.options.editType == 'form') {} else {
-				this.eidtRowIndex = -1; //下拉选中之后eidtRowIndex依然为原来的值，后续需要判断修改列
+				if (this.gridCompColumnArr[this.editColIndex].options.field == field) this.eidtRowIndex = -1; //下拉选中之后eidtRowIndex依然为原来的值，后续需要判断修改列
 			}
 
 			if ($('#' + this.options.id + "_edit_field_" + field).length > 0) {
