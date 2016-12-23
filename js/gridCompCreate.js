@@ -57,6 +57,7 @@ const createGridDivs = function() {
 	htmlStr += '</div>';
 	if($('#' + this.options.id)[0])
 		$('#' + this.options.id).html(htmlStr);
+    $('#' +this.options.id + '_column_menu').remove();
 	$(document.body).append(this.createColumnMenu());
 	this.initGridEventFun();
 	this.headerFirstClassFun();
