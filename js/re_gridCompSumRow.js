@@ -111,6 +111,16 @@ const createSumRowForIE = function(table,createFlag){
  * 重画合计行
  */
 const re_repairSumRow = function(){
+	var self = this;
+    if(this.re_repairSumRowSetTimeout)
+        clearTimeout(this.re_repairSumRowSetTimeout)
+    this.re_repairSumRowSetTimeout = setTimeout(function(){
+        re_repairSumRowFun.call(self);
+    },100)
+	
+};
+
+const re_repairSumRowFun = function(){
 	if(this.options.showSumRow){
 		$('#' + this.options.id + '_content_div tbody .u-grid-content-sum-row').remove();
 		$('#' + this.options.id + '_content_fixed_div tbody .u-grid-content-sum-row').remove();
@@ -130,7 +140,7 @@ const re_repairSumRow = function(){
 		}
 		this.renderSumRow();
 	}
-};
+}
 
 const renderSumRow = function(){
 	var oThis = this;

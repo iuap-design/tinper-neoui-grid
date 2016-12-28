@@ -168,11 +168,12 @@ const colMenu_initGridEventFun = function(){
 
 			if(document.documentMode == 8){
 				var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
-				var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
+				var oldTop = $('#' + oThis.options.id + '_column_menu')[0].style.top;
+				var oldLeft = $('#' + oThis.options.id + '_column_menu')[0].style.left;
 				oThis.gridCompColumnArr[index].options.visible = false;
 				oThis.repaintGridDivs();
 				$('#' + oThis.options.id + '_column_menu').css('display','block');
-				$('#' + oThis.options.id + '_column_menu').css('right','0px');
+				$('#' + oThis.options.id + '_column_menu').css('left',oldLeft);
 				$('#' + oThis.options.id + '_column_menu').css('top',oldTop);
 				$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
 
@@ -184,12 +185,13 @@ const colMenu_initGridEventFun = function(){
 			$(this)[0].checked = true;
 
 			if(document.documentMode == 8){
-				var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
-				var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
+				var oldScrollTop = $('#' + oThis.options.id + '_column_menu')[0].scrollTop;
+				var oldTop = $('#' + oThis.options.id + '_column_menu')[0].style.top;
+				var oldLeft = $('#' + oThis.options.id + '_column_menu')[0].style.left;
 				oThis.gridCompColumnArr[index].options.visible = true;
 				oThis.repaintGridDivs();
 				$('#' + oThis.options.id + '_column_menu').css('display','block');
-				$('#' + oThis.options.id + '_column_menu').css('right','0px');
+				$('#' + oThis.options.id + '_column_menu').css('left',oldLeft);
 				$('#' + oThis.options.id + '_column_menu').css('top',oldTop);
 				$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
 			}else{

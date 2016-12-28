@@ -68,6 +68,15 @@ const countRowHeight = function(){
  * 根据内容区的高度调整左侧区域的高度
  */
 const resetLeftHeight = function(){
+    var self = this;
+    if(this.resetLeftHeightSetTimeout)
+        clearTimeout(this.resetLeftHeightSetTimeout)
+    this.resetLeftHeightSetTimeout = setTimeout(function(){
+        resetLeftHeightFun.call(self);
+    },100)
+}
+
+const resetLeftHeightFun = function(){
     if(this.options.showNumCol || this.options.multiSelect){
         var $trs = $('#' + this.options.id + '_content_tbody tr');
         var $leftNums = $('#' + this.options.id + '_content_numCol div');
