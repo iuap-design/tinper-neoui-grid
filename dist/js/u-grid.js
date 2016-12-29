@@ -1,5 +1,5 @@
 /** 
- * tinper-neoui-grid v3.1.18
+ * tinper-neoui-grid v3.1.19
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -1717,6 +1717,7 @@
 	    htmlStr += this.createContent();
 	    htmlStr += '</div>';
 	    if ($('#' + this.options.id)[0]) $('#' + this.options.id).html(htmlStr);
+	    $('#' + this.options.id + '_column_menu').remove();
 	    $(document.body).append(this.createColumnMenu());
 	    this.initGridEventFun();
 	    this.headerFirstClassFun();
@@ -2448,6 +2449,14 @@
 	 * 根据内容区的高度调整左侧区域的高度
 	 */
 	var resetLeftHeight = function resetLeftHeight() {
+	    var self = this;
+	    if (this.resetLeftHeightSetTimeout) clearTimeout(this.resetLeftHeightSetTimeout);
+	    this.resetLeftHeightSetTimeout = setTimeout(function () {
+	        resetLeftHeightFun.call(self);
+	    }, 100);
+	};
+
+	var resetLeftHeightFun = function resetLeftHeightFun() {
 	    if (this.options.showNumCol || this.options.multiSelect) {
 	        var $trs = $('#' + this.options.id + '_content_tbody tr');
 	        var $leftNums = $('#' + this.options.id + '_content_numCol div');
@@ -5527,11 +5536,12 @@
 
 				if (document.documentMode == 8) {
 					var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
-					var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
+					var oldTop = $('#' + oThis.options.id + '_column_menu')[0].style.top;
+					var oldLeft = $('#' + oThis.options.id + '_column_menu')[0].style.left;
 					oThis.gridCompColumnArr[index].options.visible = false;
 					oThis.repaintGridDivs();
 					$('#' + oThis.options.id + '_column_menu').css('display', 'block');
-					$('#' + oThis.options.id + '_column_menu').css('right', '0px');
+					$('#' + oThis.options.id + '_column_menu').css('left', oldLeft);
 					$('#' + oThis.options.id + '_column_menu').css('top', oldTop);
 					$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
 				} else {
@@ -5542,12 +5552,13 @@
 				$(this)[0].checked = true;
 
 				if (document.documentMode == 8) {
-					var oldScrollTop = $('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop;
-					var oldTop = $('#' + oThis.options.id + '_column_menu_columns')[0].style.top;
+					var oldScrollTop = $('#' + oThis.options.id + '_column_menu')[0].scrollTop;
+					var oldTop = $('#' + oThis.options.id + '_column_menu')[0].style.top;
+					var oldLeft = $('#' + oThis.options.id + '_column_menu')[0].style.left;
 					oThis.gridCompColumnArr[index].options.visible = true;
 					oThis.repaintGridDivs();
 					$('#' + oThis.options.id + '_column_menu').css('display', 'block');
-					$('#' + oThis.options.id + '_column_menu').css('right', '0px');
+					$('#' + oThis.options.id + '_column_menu').css('left', oldLeft);
 					$('#' + oThis.options.id + '_column_menu').css('top', oldTop);
 					$('#' + oThis.options.id + '_column_menu_columns')[0].scrollTop = oldScrollTop;
 				} else {
@@ -6318,6 +6329,14 @@
 	 * 重画合计行
 	 */
 	var re_repairSumRow = function re_repairSumRow() {
+		var self = this;
+		if (this.re_repairSumRowSetTimeout) clearTimeout(this.re_repairSumRowSetTimeout);
+		this.re_repairSumRowSetTimeout = setTimeout(function () {
+			re_repairSumRowFun.call(self);
+		}, 100);
+	};
+
+	var re_repairSumRowFun = function re_repairSumRowFun() {
 		if (this.options.showSumRow) {
 			$('#' + this.options.id + '_content_div tbody .u-grid-content-sum-row').remove();
 			$('#' + this.options.id + '_content_fixed_div tbody .u-grid-content-sum-row').remove();
