@@ -205,27 +205,8 @@ const colMenu_initGridEventFun = function(){
 	});
 	$('#' + this.options.id + '_column_menu_columns_ul li').off('click');
 	$('#' + this.options.id + '_column_menu_columns_ul li').on('click', function(e) {
-		var index = $(this).attr('index');
-		var gridCompColumn = oThis.gridCompColumnArr[index];
-		if(!gridCompColumn.options.canVisible){
-			return false;
-		}
-		//获取选中列数量，不能小于1
-		if(gridCompColumn.options.visible){
-			$('input',$(this))[0].checked = false;
-			var ll = $('input:checked',$('#' + oThis.options.id + '_column_menu_columns_ul')).length;
-			if(ll == 0){
-				$('input',$(this))[0].checked = true;
-				return;
-			}
-			oThis.setColumnVisibleByIndex(index,false);
-			oThis.gridCompColumnArr[index].options.visible = false;
-		}else{
-			$('input',$(this))[0].checked = true;
-			oThis.setColumnVisibleByIndex(index,true);
-			oThis.gridCompColumnArr[index].options.visible = true;
-		}
-		oThis.saveGridCompColumnArrToLocal();
+		var inputDom  = $(this).find('input');
+		inputDom.click();
 	});
 	/*header 按钮处理结束*/
 };
