@@ -55,9 +55,9 @@
 
 	var _dataSource = __webpack_require__(1);
 
-	var _column = __webpack_require__(6);
+	var _column = __webpack_require__(7);
 
-	var _gridComp = __webpack_require__(8);
+	var _gridComp = __webpack_require__(9);
 
 	var old = $.fn.grid;
 	// 方法扩展
@@ -92,7 +92,7 @@
 
 	var _re_gridCompSort = __webpack_require__(3);
 
-	var _re_gridCompTree = __webpack_require__(5);
+	var _re_gridCompTree = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -269,9 +269,9 @@
 					var p = parseInt($el.text());
 					var f = $el.closest('th').attr('field');
 					var st;
-					if ($el.parent().hasClass("uf-caretarrowup")) {
+					if ($el.parent().hasClass("uf-arrow-up")) {
 						st = 'asc';
-					} else if ($el.parent().hasClass("uf-caretdown")) {
+					} else if ($el.parent().hasClass("uf-arrow-down")) {
 						st = 'desc';
 					}
 					prioArray[p - 1] = { field: f, sortType: st };
@@ -279,11 +279,11 @@
 				// 页面调整
 				/*修改ue将caret调整为caret*/
 				var $caret;
-				if (($caret = $ele.find('.uf-caretarrowup')).length > 0) {
+				if (($caret = $ele.find('.uf-arrow-up')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text());
 					prioArray[p - 1].sortType = 'desc';
-					$caret.removeClass('uf-caretarrowup').addClass('uf-caretdown');
-				} else if (($caret = $ele.find('.uf-caretdown')).length > 0) {
+					$caret.removeClass('uf-arrow-up').addClass('uf-arrow-down');
+				} else if (($caret = $ele.find('.uf-arrow-down')).length > 0) {
 					var p = parseInt($caret.find('.u-grid-header-sort-priority').text());
 					for (var i = p; i < prioArray.length; i++) {
 						var $flag = $('[field=' + prioArray[i].field + ']').find('.u-grid-header-sort-priority');
@@ -293,25 +293,25 @@
 					$caret.remove();
 				} else {
 					prioArray.push({ field: field, sortType: 'asc' });
-					// $ele.first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
-					$ele.first().first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ></span>');
+					// $ele.first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
+					$ele.first().first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>');
 				}
 				// 执行排序逻辑
 				this.dataSourceObj.sortRowsByPrio(prioArray);
 			} else {
-				if ($(".uf-caretarrowup").parent().parent().parent()[0] == ele) {
+				if ($(".uf-arrow-up").parent().parent().parent()[0] == ele) {
 					//原来为升序，本次为降序
-					$(".uf-caretarrowup").remove();
-					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-caretdown u-grid-header-sort-span" ></span>');
+					$(".uf-arrow-up").remove();
+					//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-down u-grid-header-sort-span" ></span>');
 					if (typeof this.options.onSortFun == 'function') {
 						this.options.onSortFun(field, 'asc');
 					} else {
 						this.dataSourceObj.sortRows(field, "asc");
 					}
-				} else if ($(".uf-caretdown").parent().parent().parent()[0] == ele) {
+				} else if ($(".uf-arrow-down").parent().parent().parent()[0] == ele) {
 					//原来为降序，本次为不排序
-					$(".uf-caretdown").remove();
+					$(".uf-arrow-down").remove();
 					if (typeof this.options.onSortFun == 'function') {
 						this.options.onSortFun();
 					} else {
@@ -319,10 +319,10 @@
 					}
 				} else {
 					//本次为升序
-					$(".uf-caretarrowup").remove();
-					$(".uf-caretdown").remove();
-					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
-					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-caretarrowup u-grid-header-sort-span"></span>');
+					$(".uf-arrow-up").remove();
+					$(".uf-arrow-down").remove();
+					// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
+					$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-up u-grid-header-sort-span"></span>');
 					if (typeof this.options.onSortFun == 'function') {
 						this.options.onSortFun(field, "desc");
 					} else {
@@ -517,11 +517,15 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
+	exports.initContentDivEventFun = exports.initGridEventFun = exports.initEventFun = undefined;
+
+	var _gridBrowser = __webpack_require__(5);
+
 	/*
 	 * 创建完成之后顶层div添加监听
 	 */
@@ -583,7 +587,11 @@
 	        $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
-	        oThis.editClose();
+	        if ((_gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD) && oThis.scrollTop == 0 && oThis.scrollLeft == 0) {
+	            //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
+	        } else {
+	            oThis.editClose();
+	        }
 	    });
 	    // 数据行相关事件
 	    $('#' + this.options.id + '_content_tbody').on('click', function (e) {
@@ -641,6 +649,62 @@
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	var gridBrowser = {},
+	    userAgent = navigator.userAgent,
+	    ua = userAgent.toLowerCase(),
+	    s;
+	if (s = ua.match(/msie ([\d.]+)/)) {
+	    gridBrowser.isIE = true;
+	}
+	if (gridBrowser.isIE) {
+	    var mode = document.documentMode;
+	    if (mode == null) {} else {
+	        if (mode == 8) {
+	            gridBrowser.isIE8 = true;
+	        } else if (mode == 9) {
+	            gridBrowser.isIE9 = true;
+	        } else if (mode == 10) {
+	            gridBrowser.isIE10 = true;
+	        }
+	    }
+	}
+
+	if (ua.indexOf('Android') > -1 || ua.indexOf('android') > -1 || ua.indexOf('Adr') > -1 || ua.indexOf('adr') > -1) {
+	    gridBrowser.isAndroid = true;
+	}
+
+	if (gridBrowser.isAndroid) {
+	    if (window.screen.width >= 768 && window.screen.width < 1024) {
+	        gridBrowser.isAndroidPAD = true;
+	    }
+	    if (window.screen.width <= 768) {
+	        gridBrowser.isAndroidPhone = true;
+	    }
+	}
+
+	if (ua.match(/iphone/i)) {
+	    gridBrowser.isIOS = true;
+	    gridBrowser.isIphone = true;
+	}
+
+	if (ua.match(/ipad/i)) {
+	    gridBrowser.isIOS = true;
+	    gridBrowser.isIPAD = true;
+	}
+
+	if (gridBrowser.isIphone || gridBrowser.isAndroidPhone) {
+	    gridBrowser.isMobile = true;
+	}
+
+	exports.gridBrowser = gridBrowser;
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1043,7 +1107,7 @@
 	exports.pushChildRows = pushChildRows;
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1051,9 +1115,9 @@
 	exports.__esModule = true;
 	exports.column = undefined;
 
-	var _columnInit = __webpack_require__(7);
+	var _columnInit = __webpack_require__(8);
 
-	var _re_gridCompTree = __webpack_require__(5);
+	var _re_gridCompTree = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1081,7 +1145,7 @@
 	exports.column = column;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1156,7 +1220,7 @@
 	exports.getBooleanOptions = getBooleanOptions;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1164,7 +1228,7 @@
 	exports.__esModule = true;
 	exports.gridComp = undefined;
 
-	var _gridCompCreate = __webpack_require__(9);
+	var _gridCompCreate = __webpack_require__(10);
 
 	var _gridCompCreateCal = __webpack_require__(11);
 
@@ -1214,7 +1278,7 @@
 
 	var _re_gridCompRowDrag = __webpack_require__(32);
 
-	var _re_gridCompTree = __webpack_require__(5);
+	var _re_gridCompTree = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1648,7 +1712,7 @@
 	exports.gridComp = gridComp;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1656,7 +1720,7 @@
 	exports.__esModule = true;
 	exports.repairContent = exports.createContentOneRowTdForIE = exports.createContentOneRowTd = exports.repaintRow = exports.createContentOneRowForIE = exports.createContentOneRow = exports.createContentRowsSumRow = exports.createContentRows = exports.createNoRowsDiv = exports.createContentTableFixed = exports.createContentTable = exports.createContentLeftNumColRow = exports.createContentLeftMultiSelectRow = exports.createContentLeft = exports.createContentSumRow = exports.createContent = exports.createThead = exports.createColgroup = exports.createHeaderDrag = exports.createHeaderTableFixed = exports.createHeaderTable = exports.createHeader = exports.createColumnMenu = exports.repaintGridDivs = exports.createGridDivs = exports.repaintDivs = exports.createDivs = undefined;
 
-	var _gridBrowser = __webpack_require__(10);
+	var _gridBrowser = __webpack_require__(5);
 
 	/*
 	 * 创建顶层div以及_top div层
@@ -1753,7 +1817,7 @@
 	    if (!this.options.showHeader) headerShowStr = 'style="display:none;"';
 	    var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + '>';
 	    if (this.options.columnMenu) {
-	        htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
+	        htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light"></div>';
 	    }
 	    if (this.options.multiSelect || this.options.showNumCol) {
 	        htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">';
@@ -1865,7 +1929,7 @@
 	        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + '</div>';
 	        /*if(oThis.options.columnMenu && createFlag != 'fixed'){
 	            // 创建右侧按钮图标
-	            htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption " field="' + this.options.field + '" style="display:none;"></div>';
+	            htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light " field="' + this.options.field + '" style="display:none;"></div>';
 	        }*/
 	        htmlStr += '</div></th>';
 	    });
@@ -2329,55 +2393,6 @@
 	exports.repairContent = repairContent;
 
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	var gridBrowser = {},
-	    userAgent = navigator.userAgent,
-	    ua = userAgent.toLowerCase(),
-	    s;
-	if (s = ua.match(/msie ([\d.]+)/)) {
-	    gridBrowser.isIE = true;
-	}
-	if (gridBrowser.isIE) {
-	    var mode = document.documentMode;
-	    if (mode == null) {} else {
-	        if (mode == 8) {
-	            gridBrowser.isIE8 = true;
-	        } else if (mode == 9) {
-	            gridBrowser.isIE9 = true;
-	        }
-	    }
-	}
-
-	if (ua.indexOf('Android') > -1 || ua.indexOf('android') > -1 || ua.indexOf('Adr') > -1 || ua.indexOf('adr') > -1) {
-	    gridBrowser.isAndroid = true;
-	}
-
-	if (gridBrowser.isAndroid) {
-	    if (window.screen.width >= 768 && window.screen.width < 1024) {
-	        gridBrowser.isAndroidPAD = true;
-	    }
-	    if (window.screen.width <= 768) {
-	        gridBrowser.isAndroidPhone = true;
-	    }
-	}
-
-	if (ua.match(/iphone/i)) {
-	    gridBrowser.isIOS = true;
-	    gridBrowser.isIphone = true;
-	}
-
-	if (gridBrowser.isIphone || gridBrowser.isAndroidPhone) {
-	    gridBrowser.isMobile = true;
-	}
-
-	exports.gridBrowser = gridBrowser;
-
-/***/ },
 /* 11 */
 /***/ function(module, exports) {
 
@@ -2708,11 +2723,11 @@
 	exports.__esModule = true;
 	exports.initDataSource = exports.setRequired = exports.initGridCompFixedColumn = exports.initGridHiddenLevelColumn = exports.initGridCompColumnLoacl = exports.initGridCompColumnHeaderLevelFun = exports.initGridCompColumnColumnMenuFun = exports.initGridCompColumnFun = exports.initGridCompColumnVar = exports.initGridCompColumn = exports.initWidthVariable = exports.initDataSourceVariable = exports.initVariable = exports.initOptionsTree = exports.initOptions = exports.destroySelf = exports.initGrid = exports.initDefault = exports.getBooleanOptions = exports.init = undefined;
 
-	var _gridBrowser = __webpack_require__(10);
+	var _gridBrowser = __webpack_require__(5);
 
 	var _dataSource = __webpack_require__(1);
 
-	var _column = __webpack_require__(6);
+	var _column = __webpack_require__(7);
 
 	var _re_gridCompEdit = __webpack_require__(14);
 
@@ -5223,7 +5238,7 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var _gridBrowser = __webpack_require__(10);
+	var _gridBrowser = __webpack_require__(5);
 
 	/*
 	 * 对宽度和高度进行处理
@@ -5571,27 +5586,8 @@
 		});
 		$('#' + this.options.id + '_column_menu_columns_ul li').off('click');
 		$('#' + this.options.id + '_column_menu_columns_ul li').on('click', function (e) {
-			var index = $(this).attr('index');
-			var gridCompColumn = oThis.gridCompColumnArr[index];
-			if (!gridCompColumn.options.canVisible) {
-				return false;
-			}
-			//获取选中列数量，不能小于1
-			if (gridCompColumn.options.visible) {
-				$('input', $(this))[0].checked = false;
-				var ll = $('input:checked', $('#' + oThis.options.id + '_column_menu_columns_ul')).length;
-				if (ll == 0) {
-					$('input', $(this))[0].checked = true;
-					return;
-				}
-				oThis.setColumnVisibleByIndex(index, false);
-				oThis.gridCompColumnArr[index].options.visible = false;
-			} else {
-				$('input', $(this))[0].checked = true;
-				oThis.setColumnVisibleByIndex(index, true);
-				oThis.gridCompColumnArr[index].options.visible = true;
-			}
-			oThis.saveGridCompColumnArrToLocal();
+			var inputDom = $(this).find('input');
+			inputDom.click();
 		});
 		/*header 按钮处理结束*/
 	};

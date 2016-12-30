@@ -13,7 +13,7 @@ if (gridBrowser.isIE) {
             gridBrowser.isIE9 = true;
         }else if(mode == 10) {
             gridBrowser.isIE10 = true;
-        }
+        } 
     }
 }
 
@@ -36,9 +36,13 @@ if(ua.match(/iphone/i)) {
     gridBrowser.isIphone = true;
 }
 
+if(ua.match(/ipad/i)) {
+    gridBrowser.isIOS = true;
+    gridBrowser.isIPAD = true;
+}
 
 if(gridBrowser.isIphone || gridBrowser.isAndroidPhone){
     gridBrowser.isMobile = true;
 }
-
+        
 export{gridBrowser}
