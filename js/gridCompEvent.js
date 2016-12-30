@@ -66,7 +66,7 @@ const initContentDivEventFun = function(){
         }else{
             oThis.editClose();
         }
-        
+
     });
     // 数据行相关事件
     $('#' + this.options.id + '_content_tbody').on('click',function(e){

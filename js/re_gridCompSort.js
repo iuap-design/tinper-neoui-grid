@@ -52,9 +52,9 @@ const canSortable = function(e, ele) {
 				var p = parseInt($el.text())
 				var f = $el.closest('th').attr('field')
 				var st
-				if($el.parent().hasClass("uf-caretarrowup")) {
+				if($el.parent().hasClass("uf-arrow-up")) {
 					st = 'asc'
-				} else if($el.parent().hasClass("uf-caretdown")){
+				} else if($el.parent().hasClass("uf-arrow-down")){
 					st = 'desc'
 				}
 				prioArray[p-1] = {field:f, sortType:st}
@@ -62,11 +62,11 @@ const canSortable = function(e, ele) {
 			// 页面调整
 			/*修改ue将caret调整为caret*/
 			var $caret
-			if(($caret = $ele.find('.uf-caretarrowup')).length > 0) {
+			if(($caret = $ele.find('.uf-arrow-up')).length > 0) {
 				var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 				prioArray[p-1].sortType = 'desc'
-				$caret.removeClass('uf-caretarrowup').addClass('uf-caretdown')
-			} else if(($caret = $ele.find('.uf-caretdown')).length > 0) {
+				$caret.removeClass('uf-arrow-up').addClass('uf-arrow-down')
+			} else if(($caret = $ele.find('.uf-arrow-down')).length > 0) {
 				var p = parseInt($caret.find('.u-grid-header-sort-priority').text())
 				for(var i=p;i<prioArray.length;i++) {
 					var $flag = $('[field='+prioArray[i].field+']').find('.u-grid-header-sort-priority')
@@ -76,24 +76,24 @@ const canSortable = function(e, ele) {
 				$caret.remove()
 			} else {
 				prioArray.push({field:field, sortType:'asc'})
-				// $ele.first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
-				$ele.first().first().append('<span class="uf uf-caretarrowup u-grid-header-sort-span" ></span>')
+				// $ele.first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
+				$ele.first().first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>')
 			}
 			// 执行排序逻辑
 			this.dataSourceObj.sortRowsByPrio(prioArray)
 
 		} else {
-			if ($(".uf-caretarrowup").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
-				$(".uf-caretarrowup").remove();
-				//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
-				$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretdown u-grid-header-sort-span" ></span>');
+			if ($(".uf-arrow-up").parent().parent().parent()[0] == ele) { //原来为升序，本次为降序
+				$(".uf-arrow-up").remove();
+				//$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
+				$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span" ></span>');
 				if(typeof this.options.onSortFun == 'function'){
 					this.options.onSortFun(field,'asc')
 				}else{
 					this.dataSourceObj.sortRows(field, "asc");
 				}
-			} else if ($(".uf-caretdown").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
-				$(".uf-caretdown").remove();
+			} else if ($(".uf-arrow-down").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
+				$(".uf-arrow-down").remove();
 				if(typeof this.options.onSortFun == 'function'){
 					this.options.onSortFun();
 				}else{
@@ -101,10 +101,10 @@ const canSortable = function(e, ele) {
 				}
 
 			} else { //本次为升序
-				$(".uf-caretarrowup").remove();
-				$(".uf-caretdown").remove();
-				// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
-				$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-caretarrowup u-grid-header-sort-span"></span>');
+				$(".uf-arrow-up").remove();
+				$(".uf-arrow-down").remove();
+				// $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
+				$(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span"></span>');
 				if(typeof this.options.onSortFun == 'function'){
 					this.options.onSortFun(field, "desc");
 				}else{

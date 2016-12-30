@@ -93,7 +93,7 @@ const createHeader = function() {
         headerShowStr = 'style="display:none;"';
     var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + '>';
     if (this.options.columnMenu){
-        htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption"></div>';
+        htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light"></div>';
     }
     if (this.options.multiSelect || this.options.showNumCol) {
         htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">';
@@ -200,7 +200,7 @@ const createThead = function(createFlag) {
         htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + '</div>';
         /*if(oThis.options.columnMenu && createFlag != 'fixed'){
             // 创建右侧按钮图标
-            htmlStr += '<div class="u-grid-header-columnmenu uf uf-reorderoption " field="' + this.options.field + '" style="display:none;"></div>';
+            htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light " field="' + this.options.field + '" style="display:none;"></div>';
         }*/
         htmlStr += '</div></th>';
     });
