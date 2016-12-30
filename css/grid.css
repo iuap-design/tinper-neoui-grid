@@ -277,8 +277,8 @@ content区域css begin
   line-height: 2.6875em;*/
   height: 43px;
   line-height: 43px;
-  height: 2.68em \9;
-  line-height: 2.68em \9;
+  /*height: 2.68em \9;
+  line-height: 2.68em \9;*/
   font-size: 16px !important;
   overflow: hidden;
 }

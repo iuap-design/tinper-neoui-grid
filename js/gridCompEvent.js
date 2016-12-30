@@ -1,3 +1,4 @@
+import {gridBrowser} from './gridBrowser';
 /*
  * 创建完成之后顶层div添加监听
  */
@@ -60,7 +61,12 @@ const initContentDivEventFun = function(){
         $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
         $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
         $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
-        oThis.editClose();
+        if(gridBrowser.isIE10 && oThis.scrollTop ==0 && oThis.scrollLeft ==0){
+            //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
+        }else{
+            oThis.editClose();
+        }
+        
     });
     // 数据行相关事件
     $('#' + this.options.id + '_content_tbody').on('click',function(e){

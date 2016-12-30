@@ -11,7 +11,9 @@ if (gridBrowser.isIE) {
         }
         else if (mode == 9) {
             gridBrowser.isIE9 = true;
-        }
+        }else if(mode == 10) {
+            gridBrowser.isIE10 = true;
+        } 
     }
 }
 
