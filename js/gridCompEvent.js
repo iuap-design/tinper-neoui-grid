@@ -61,7 +61,7 @@ const initContentDivEventFun = function(){
         $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
         $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
         $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
-        if((gridBrowser.isIE10 || gridBrowser.isIPAD) && oThis.scrollTop ==0 && oThis.scrollLeft ==0){
+        if(gridBrowser.isIE10 || gridBrowser.isIPAD){
             //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
         }else{
             oThis.editClose();

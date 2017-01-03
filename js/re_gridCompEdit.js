@@ -1,6 +1,7 @@
 import {
 	initEventFun
 } from './gridCompEvent';
+import {gridBrowser} from './gridBrowser';
 
 const re_hideEditMenu = function(){
 	$('#' +this.options.id + '_content_edit_menu').css('display','none');
@@ -564,13 +565,22 @@ const edit_initEventFun = function(){
 
 	u.on(document,'scroll',function(){
 		if(oThis.options.editType == 'default'){
-			oThis.editClose();
+			if(gridBrowser.isIE10 || gridBrowser.isIPAD){
+
+			}else{
+				oThis.editClose();
+			}
+			
 		}
 	})
 	// 为所有div添加监听，滚动时执行editClose
 	$('div').on('scroll',function(){
 		if(oThis.options.editType == 'default'){
-			oThis.editClose();
+			if(gridBrowser.isIE10 || gridBrowser.isIPAD){
+				
+			}else{
+				oThis.editClose();
+			}
 		}
 	})
 };
