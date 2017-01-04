@@ -100,6 +100,8 @@ const setColumnWidth = function(column, newWidth){
  * 设置数据源
  */
 const setDataSource = function(dataSource) {
+    if(!(this.$ele.data('gridComp') == this))
+        return;
     this.initDataSourceVariable();
     this.options.dataSource = dataSource;
     this.initDataSource();
