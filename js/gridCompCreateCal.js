@@ -42,6 +42,8 @@ const editorRowChangeFun = function(){
  * 2、取行高
  */
 const afterGridDivsCreate = function(){
+    if(this.showType != 'grid')
+        return;
     this.columnsVisibleFun();
     this.resetThVariable();
     this.countRowHeight();
