@@ -150,6 +150,7 @@ const editClose = function() {};
  * 添加多行
  */
 const addRows = function(rows, index) {
+    if (!(this.$ele.data('gridComp') == this)) return;
     if (this.options.showTree) {
         // 树表待优化
         var l = rows.length;

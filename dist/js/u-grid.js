@@ -587,7 +587,7 @@
 	        $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
 	        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
-	        if ((_gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD) && oThis.scrollTop == 0 && oThis.scrollLeft == 0) {
+	        if (_gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD) {
 	            //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
 	        } else {
 	            oThis.editClose();
@@ -1122,9 +1122,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -2438,6 +2438,7 @@
 	 * 2、取行高
 	 */
 	var afterGridDivsCreate = function afterGridDivsCreate() {
+	    if (this.showType != 'grid') return;
 	    this.columnsVisibleFun();
 	    this.resetThVariable();
 	    this.countRowHeight();
@@ -3024,6 +3025,8 @@
 
 	var _gridCompEvent = __webpack_require__(4);
 
+	var _gridBrowser = __webpack_require__(5);
+
 	var re_hideEditMenu = function re_hideEditMenu() {
 		$('#' + this.options.id + '_content_edit_menu').css('display', 'none');
 	};
@@ -3560,13 +3563,17 @@
 
 		u.on(document, 'scroll', function () {
 			if (oThis.options.editType == 'default') {
-				oThis.editClose();
+				if (_gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD) {} else {
+					oThis.editClose();
+				}
 			}
 		});
 		// 为所有div添加监听，滚动时执行editClose
 		$('div').on('scroll', function () {
 			if (oThis.options.editType == 'default') {
-				oThis.editClose();
+				if (_gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD) {} else {
+					oThis.editClose();
+				}
 			}
 		});
 	};
@@ -4711,6 +4718,7 @@
 	 * 设置数据源
 	 */
 	var setDataSource = function setDataSource(dataSource) {
+	    if (!(this.$ele.data('gridComp') == this)) return;
 	    this.initDataSourceVariable();
 	    this.options.dataSource = dataSource;
 	    this.initDataSource();
