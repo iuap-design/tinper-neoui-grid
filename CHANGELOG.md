@@ -1,3 +1,15 @@
+<a name="3.1.21"></a>
+## [3.1.21](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.19...v3.1.21) (2017-01-06)
+
+
+### Bug Fixes
+* addrows在单页面中多次触发 ([144ab18](https://github.com/iuap-design/tinper-neoui-grid/commit/144ab18))
+
+* 优化columnMenu区域文字的点击处理逻辑 ([06bbe55](https://github.com/iuap-design/tinper-neoui-grid/commit/06bbe55))
+
+
+
+
 <a name="3.1.19"></a>
 ## [3.1.19](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.18...v3.1.19) (2016-12-28)
 
