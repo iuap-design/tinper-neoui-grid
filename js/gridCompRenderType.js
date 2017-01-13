@@ -170,7 +170,14 @@ const renderTypeByColumn = function(gridCompColumn,i,begin,length, isFixedColumn
                         span: span,
                         column: gridCompColumn
                     };
-                    var overFlag = oThis.getRenderOverFlag(obj);
+                    var colum_maxlength = gridCompColumn.options.maxLength,
+                        overFlag = false;
+                    if(colum_maxlength&&colum_maxlength>0){
+                        //控制表格列显示...
+                        overFlag = span.innerHTML.length>colum_maxlength?true:false;
+                    }else{
+                        overFlag = oThis.getRenderOverFlag(obj);
+                    }
                     if (overFlag) {
                         $(span).addClass('u-grid-content-td-div-over');
                     }
