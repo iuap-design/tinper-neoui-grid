@@ -273,23 +273,26 @@ const editRow = function($tr,colIndex){
  * 行编辑关闭
  */
 const re_editClose = function(){
+	var dohideFlag=true;//标记是否执行过hide、blur事件
 	if(this.eidtRowIndex < 0)
 		return;
 	var row = this.dataSourceObj.rows[this.eidtRowIndex];
 	var inputDom = null;
+	
+	if(dohideFlag && this.editComp && this.editComp.hide){
+		this.editComp.hide();
+	}
+	if (dohideFlag && this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+		this.editComp.comp.hide();
+	}
+
 	try{
 		var inputDom = this.editComp.element.parentNode.querySelector('input');
 	}catch(e){
 	}
 	
-	if(inputDom){
+	if(dohideFlag && inputDom){
 		inputDom.blur();
-	}
-	if(this.editComp && this.editComp.hide){
-		this.editComp.hide();
-	}
-	if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
-		this.editComp.comp.hide();
 	}
 	try{
 		$('#' + this.options.id + '_placeholder_div').remove();

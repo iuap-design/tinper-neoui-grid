@@ -1122,9 +1122,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -3292,21 +3292,24 @@
 	 * 行编辑关闭
 	 */
 	var re_editClose = function re_editClose() {
+		var dohideFlag = true; //标记是否执行过hide、blur事件
 		if (this.eidtRowIndex < 0) return;
 		var row = this.dataSourceObj.rows[this.eidtRowIndex];
 		var inputDom = null;
+
+		if (dohideFlag && this.editComp && this.editComp.hide) {
+			this.editComp.hide();
+		}
+		if (dohideFlag && this.editComp && this.editComp.comp && this.editComp.comp.hide) {
+			this.editComp.comp.hide();
+		}
+
 		try {
 			var inputDom = this.editComp.element.parentNode.querySelector('input');
 		} catch (e) {}
 
-		if (inputDom) {
+		if (dohideFlag && inputDom) {
 			inputDom.blur();
-		}
-		if (this.editComp && this.editComp.hide) {
-			this.editComp.hide();
-		}
-		if (this.editComp && this.editComp.comp && this.editComp.comp.hide) {
-			this.editComp.comp.hide();
 		}
 		try {
 			$('#' + this.options.id + '_placeholder_div').remove();
@@ -4573,7 +4576,14 @@
 	                        span: span,
 	                        column: gridCompColumn
 	                    };
-	                    var overFlag = oThis.getRenderOverFlag(obj);
+	                    var colum_maxlength = gridCompColumn.options.maxLength,
+	                        overFlag = false;
+	                    if (colum_maxlength && colum_maxlength > 0) {
+	                        //控制表格列显示...
+	                        overFlag = span.innerHTML.length > colum_maxlength ? true : false;
+	                    } else {
+	                        overFlag = oThis.getRenderOverFlag(obj);
+	                    }
 	                    if (overFlag) {
 	                        $(span).addClass('u-grid-content-td-div-over');
 	                    }
