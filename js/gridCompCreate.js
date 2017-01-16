@@ -517,9 +517,9 @@ const createContentOneRowTd = function(row,createFlag){
             treeStyle = 'style="position:relative;';
             if(row.hasChild){
                 if(oThis.options.autoExpand){
-                    spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
+                    spanStr = '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>';
                 }else{
-                    spanStr = '<span class=" uf uf-addsquarebutton2 u-grid-content-tree-span"></span>';
+                    spanStr = '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>';
                 }
             }else{
                 l += 16;

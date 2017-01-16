@@ -19,12 +19,12 @@ const re_clickFunTree = function(e){
 		var row = oThis.dataSourceObj.rows[index];
 		if(row){
 			var rowChildIndex = oThis.getChildRowIndex(row);
-			if($target.hasClass('uf-minusbutton') || $target.hasClass('uf-addsquarebutton2') ){
-				var minus = $td.find('.uf-minusbutton');
-				var plus = $td.find('.uf-addsquarebutton2');
+			if($target.hasClass('uf-reduce-s-o') || $target.hasClass('uf-add-s-o') ){
+				var minus = $td.find('.uf-reduce-s-o');
+				var plus = $td.find('.uf-add-s-o');
 				if(minus.length >0){
 					// 合上 需要将所有的都合上
-					minus.removeClass('uf-minusbutton').addClass('uf-addsquarebutton2');
+					minus.removeClass('uf-reduce-s-o').addClass('uf-add-s-o');
 					if(rowChildIndex.length > 0){
 						var allChildRowIndex = oThis.getAllChildRowIndex(row);
 						$.each(allChildRowIndex, function() {
@@ -32,7 +32,7 @@ const re_clickFunTree = function(e){
 							$tr1.css('display','none');
 							// 左侧复选区隐藏
 							$('#' + oThis.options.id + '_content_multiSelect >div:nth-child('+(parseInt(this) +1)+ ')').css('display','none');
-							$('.uf-minusbutton',$tr1).removeClass('uf-minusbutton').addClass('uf-addsquarebutton2');
+							$('.uf-reduce-s-o',$tr1).removeClass('uf-reduce-s-o').addClass('uf-add-s-o');
 						});
 					}
 					if(this.options.editType == 'form'){
@@ -43,7 +43,7 @@ const re_clickFunTree = function(e){
 					}
 				}else if(plus.length > 0){
 					// 展开
-					plus.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
+					plus.removeClass('uf-add-s-o').addClass('uf-reduce-s-o');
 					if(rowChildIndex.length > 0){
 						$.each(rowChildIndex, function() {
 							var $tr1 = $('tr[role="row"]:eq(' + parseInt(this) +')',$tr.parent());
@@ -106,7 +106,7 @@ const re_addOneRowTree = function(row,index,rowObj){
 			var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(oThis.addRowParentIndex);
 			if(parentChildLength > 0){
 				// 如果存在父项并且父项存在子项则需要判断父项是否展开
-				var openDiv = $('.uf-addsquarebutton2',$pTr);
+				var openDiv = $('.uf-add-s-o',$pTr);
 				if(!(openDiv.length > 0)){
 					displayFlag = 'block';
 				}
@@ -117,12 +117,12 @@ const re_addOneRowTree = function(row,index,rowObj){
 				}
 
 				var d = $("div:eq(0)",$pTr);
-				var openDiv = $('.uf-addsquarebutton2',$pTr);
-				var closeDiv = $('.uf-minusbutton',$pTr);
+				var openDiv = $('.uf-add-s-o',$pTr);
+				var closeDiv = $('.uf-reduce-s-o',$pTr);
 				if(this.options.autoExpand){
-					var spanHtml = '<span class="uf u-grid-content-tree-span uf-minusbutton"></span>';
+					var spanHtml = '<span class="uf u-grid-content-tree-span uf-reduce-s-o"></span>';
 				}else{
-					var spanHtml = '<span class="uf u-grid-content-tree-span uf-addsquarebutton2"></span>';
+					var spanHtml = '<span class="uf u-grid-content-tree-span uf-add-s-o"></span>';
 				}
 				if(d.length > 0 && openDiv.length == 0 && closeDiv.length == 0){
 					d[0].insertAdjacentHTML('afterBegin',spanHtml);
@@ -133,7 +133,7 @@ const re_addOneRowTree = function(row,index,rowObj){
 					}
 				}
 				if(openDiv.length > 0){
-					openDiv.removeClass('uf-addsquarebutton2').addClass('uf-minusbutton');
+					openDiv.removeClass('uf-add-s-o').addClass('uf-reduce-s-o');
 				}
 			}
 		}
@@ -267,7 +267,7 @@ const expandNodeByIndex = function(rowIndex){
 			parentIndex = whileRow.parentRowIndex;
 			whileRow = whileRow.parentRow;
 			var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(parentIndex);
-			var openDiv = $('.uf-addsquarebutton2',$pTr);
+			var openDiv = $('.uf-add-s-o',$pTr);
 			if(openDiv.length > 0){ //合着
 				needExpanedParent.push(parentIndex);
 			}else{
@@ -280,13 +280,13 @@ const expandNodeByIndex = function(rowIndex){
 		for(var i = needExpanedParent.length - 1;i > -1;i--){
 			var index = needExpanedParent[i];
 			var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(index);
-			var openDiv = $('.uf-addsquarebutton2',$pTr);
+			var openDiv = $('.uf-add-s-o',$pTr);
 			openDiv.click();
 		}
 	}
 
 	var $Tr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(rowIndex);
-	var openDiv = $('.uf-addsquarebutton2',$Tr);
+	var openDiv = $('.uf-add-s-o',$Tr);
 	var firstDiv = $('.u-grid-content-td-div',$Tr);
 	if(openDiv.length > 0)
 		openDiv.click();
