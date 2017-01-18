@@ -3,6 +3,8 @@ logs
 *.log
 npm-debug.log*
 
+.DS_Store
+
 # Runtime data
 pids
 *.pid
@@ -25,6 +27,8 @@ build/Release
 
 # Dependency directory
 node_modules
+
+snippets/temp
 
 # Optional npm cache directory
 .npm

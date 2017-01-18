@@ -17,6 +17,7 @@
   -webkit-box-sizing: border-box;
   box-shadow: none;
   -webkit-box-shadow: none;
+  overflow:hidden;
 }
 .u-grid li {
   font-size: 16px;
@@ -54,6 +55,7 @@
   outline: 0;
   table-layout: fixed;
   background: #fff;
+  margin: 0px !important;
 }
 /*
 header区域css begin
@@ -79,7 +81,7 @@ header区域css begin
 .u-grid-header-left {
   position: absolute;
   z-index: 11;
-  background-color: #ebebeb;
+  background-color: #eeeff1;
   height: 100%;
 }
 .u-grid-header-multi-select {
@@ -119,6 +121,7 @@ header区域css begin
   border-style: solid;
   border-color: #cecece;
   border-width: 0px;
+  padding:0px !important;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -145,7 +148,7 @@ header区域css begin
 .u-grid-header-link {
   display: block;
   padding-left: 0.714285714285em;
-  padding-right: 2em;
+  padding-right: 0.714285714285em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -153,6 +156,10 @@ header区域css begin
   font-size: 0.875em;
   height: 3.14285714em;
   line-height: 3.14285714em;
+}
+
+.u-grid-hide-title-icon .uf-fontselectioneditor {
+  display: none
 }
 .u-gird-parent {
   position: absolute;
@@ -173,6 +180,8 @@ header区域css begin
 .u-grid-header-link:visited {
   //color: #a8a8a8;
 }
+
+
 .u-grid-header-columnmenu {
   position: absolute;
   padding: 0 .4em 0 .6em;
@@ -232,7 +241,7 @@ header区域css begin
 .u-grid-header-sort-span {
   width: 1.3em;
   text-align: center;
-  font-size: 1.3em;
+  font-size: 12px;
   position: absolute;
   height: inherit;
   line-height: inherit;
@@ -254,50 +263,102 @@ header区域css end
 content区域css begin
 */
 .u-grid td {
-  border-style: solid;
-  border-color: #cecece;
-  border-width: 0 0 1px 0;
+  border-style: solid ;
+  border-color: #cecece ;
+  border-width: 0 0 1px 0 ;
   box-sizing: border-box;
+  padding:0px !important;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   vertical-align: middle;
   white-space: nowrap;
   text-overflow: ellipsis;
-  height: 2.7em;
-  line-height: 2.7em;
-  height: 2.68em \9;
-  line-height: 2.68em \9;
+  /*height: 2.6875em;
+  line-height: 2.6875em;*/
+  height: 43px;
+  line-height: 43px;
+  /*height: 2.68em \9;
+  line-height: 2.68em \9;*/
+  font-size: 16px !important;
+  overflow: hidden;
+}
+
+.u-grid .grid_edit_form_td{
+    overflow: visible;
+}
+
+.u-grid tbody tr:last-child td{
+  border-bottom-width: 0px;
+}
+
+.u-grid-content-left>div:last-child{
+  border-bottom-width: 0px;
+}
+
+.u-grid-content-left.u-grid-content-left-sum>div:last-child{
+  border-bottom-width: 1px;
+}
+
+.u-grid-content tr{
+    border-top:0px !important;
 }
 .u-grid-content-td-div {
-  height: 100%;
+  height: inherit;
   margin: 0 2em 0 0.833333333em;
-  font-size: 0.75em;
+  font-size: 0.75em !important;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   position: relative;
+  line-height: inherit;
 }
 .u-grid-edit-div .u-grid-content-td-div {
   margin: 0 1em 0 1em;
-  line-height: 2.125em;
+  line-height: 3.5em;
   font-size: 12px;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   text-overflow: ellipsis;
   height: 100%;
 }
+.u-grid-content-td-div-over::after{
+  content:"...";
+  font-weight:bold;
+  position:absolute;
+  bottom:15px;
+  right: -5px;
+}
 
+
+.u-grid-content-td-div > input{
+    height:100%;
+}
 .u-grid-content-td-div > .right-span{
     position: absolute;
     right: 0px;
-    line-height: 2.125em;
+    line-height: 3.5em;
     width: 2rem;
     text-align: center;
 }
+
+/*checkbox样式*/
+
+.u-grid-content-td-div .u-checkbox-outline,.u-grid-content-td-div .u-checkbox-focus-helper {
+    top: -10px;
+}
+
 .u-grid-content {
+  border-style: solid;
+  border-color: #cecece;
+  border-width: 0px;
+  border-bottom-width: 1px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   position: relative;
   zoom: 1;
   background-color: #fff ;
+  overflow: hidden;
 }
 .u-grid-content-div {
   position: relative;
@@ -314,13 +375,6 @@ content区域css begin
   height: 2.125em;
   z-index: 11;
   background-color: #FFF;
-  border-style: solid;
-  border-color: #cecece;
-  border-width: 0px;
-  border-bottom-width: 1px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
 }
 .u-grid-content-left-bottom {
   position: absolute;
@@ -348,6 +402,7 @@ content区域css begin
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
     margin: 0px !important;
+    font-size: 16px !important;
 }
 .u-grid-multi-input {
   margin: 0px !important;
@@ -387,14 +442,24 @@ content区域css begin
 }
 
 .u-grid-content-focus-row {
-  background-color: #03cc71 !important;
+  background-color: #e9f7fc !important;
   //color: #FFF !important;
 }
 .u-grid-content-tree-span {
   width: 1.25em;
   height: 1.25em;
   color: #007ae3;
-  font-size: 13px !important;
+  font-size: 14px !important;
+}
+
+
+/*行拖拽*/
+td.u-grid-drag-icon:before {
+  content: "\e6d1";
+  font-family: "uf" !important;
+  font-size: 12px;
+  position: absolute;
+  z-index: 100;
 }
 /*
 content区域css end
@@ -548,7 +613,7 @@ columnMenu区域css begin
   width: 160px;
   display: none;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   z-index: 13;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -612,17 +677,17 @@ columnMenu columns区域css begin
 */
 .u-grid-column-menu-columns {
   width: 160px;
-  display: none;
+  display: block;
   overflow-y: auto;
   overflow-x: hidden;
-  position: absolute;
+  position: relative;
   z-index: 13;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 .u-grid-column-menu-columns-ul {
-  border-width: 1px 0px 1px 0px;
+  border-width: 1px 0px 0px 0px;
   border-style: solid;
   border-color: #cecece;
   background-color: #fff;
@@ -641,6 +706,7 @@ columnMenu columns区域css begin
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  cursor: pointer;
 }
 .u-grid-column-menu-columns-div1 {
   display: block;
@@ -700,13 +766,13 @@ form展示区域css begin
 }
 .u-grid-content-td-div .eType-input > .right-span{
   position: absolute;
-  line-height: 2.125em;
+  line-height: 3.5em;
   cursor: pointer;
   right: 0px;
   width: 2rem;
   text-align: center;
 }
-    
+
 .u-grid-content-td-div .checkbox label {
   top: -2px;
 }
@@ -728,21 +794,21 @@ form展示区域css end
 }
 
 .u-grid-err-td{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 .u-grid-err-td *{
-  background-color: #1baede !important;
+  background-color: #1baede;
 }
 
 /*鼠标滑过begin*/
 
 .u-grid-move-bg{
-  background: #e9f7fc;
+  background: #f4f8fb !important;;
   color:#333;
 }
-.u-grid-move-bg a{
-  color: #0377c1 !important;
+.u-grid .u-grid-move-bg a{
+  color: #0377c1;
 }
 .u-grid-move-bg a:hover{
   text-decoration: underline;
@@ -775,8 +841,8 @@ form展示区域css end
   left: 0;
   height: 100%;
   width: 100%;
-  -webkit-mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiI…JmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmUiIC8+DQo8L3N2Zz4NCg==);
-  mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiI…JmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmUiIC8+DQo8L3N2Zz4NCg==);
+  -webkit-mask: url(../images/tick.svg?embed);
+  mask: url(../images/tick.svg?embed);
   background: transparent;
   transition-duration: 0.28s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -799,6 +865,6 @@ form展示区域css end
 .u-grid-checkbox-outline.is-checked .u-grid-checkbox-tick-outline{
   -webkit-mask: none;
   mask: none;
-  background: #1baede url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iDQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIg0KICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHZlcnNpb249IjEuMSINCiAgIHZpZXdCb3g9IjAgMCAxIDEiDQogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4NCiAgPHBhdGgNCiAgICAgZD0iTSAwLjA0MDM4MDU5LDAuNjI2Nzc2NyAwLjE0NjQ0NjYxLDAuNTIwNzEwNjggMC40MjkyODkzMiwwLjgwMzU1MzM5IDAuMzIzMjIzMywwLjkwOTYxOTQxIHogTSAwLjIxNzE1NzI5LDAuODAzNTUzMzkgMC44NTM1NTMzOSwwLjE2NzE1NzI5IDAuOTU5NjE5NDEsMC4yNzMyMjMzIDAuMzIzMjIzMywwLjkwOTYxOTQxIHoiDQogICAgIGlkPSJyZWN0Mzc4MCINCiAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZSIgLz4NCjwvc3ZnPg0K);
+  background: #1baede url(../images/tick.svg?embed);
 }
 /*复选框end*/
