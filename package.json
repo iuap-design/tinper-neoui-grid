@@ -1,6 +1,6 @@
 {
   "name": "tinper-neoui-grid",
-  "version": "3.1.24",
+  "version": "3.1.25",
   "description": "grid",
   "main": "gulpfile.js",
   "directories": {
