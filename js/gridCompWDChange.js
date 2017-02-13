@@ -5,7 +5,9 @@ const widthChangeFun = function() {
     var oThis = this;
     if($('#' + this.options.id)[0]){
         // 获取整体区域宽度
-        var w = $('#' + this.options.id).width()  //[0].offsetWidth;
+        //var w = $('#' + this.options.id).width()  //[0].offsetWidth;
+        // jquery获取方式有问题，修改为offsetWidth
+        var w = $('#' + this.options.id)[0].offsetWidth;
         // w!=0的判断是为了处理页签中的grid在切换的过程中会重绘
         if(this.wholeWidth != w && this.$ele.data('gridComp') == this && w != 0){
             this.wholeWidth = w;
@@ -86,7 +88,8 @@ const widthChangeGridFun = function() {
  */
 const noScrollWidthReset = function(){
     if (this.options.noScroll) {
-        if (this.hasNoScrollRest) {
+        //云采不支持拖动，后续再完善拖动之后的情况
+        /*if (this.hasNoScrollRest) {
             var nowW = 0;
             for (var i = 0; i < this.gridCompColumnArr.length; i++) {
                 var column = this.gridCompColumnArr[i];
@@ -100,12 +103,13 @@ const noScrollWidthReset = function(){
                 this.setColumnWidth(column, newWidth);
             }
 
-        } else {
+        } else {*/
             //先按100%来处理
             var nowW = 0;
             for (var i = 0; i < this.gridCompColumnArr.length; i++) {
                 var column = this.gridCompColumnArr[i];
-                var nowWidth = column.options.width + '';
+                // var nowWidth = column.options.width + '';
+                var nowWidth = column.options.optionsWidth + '';
                 var whole = this.wholeWidth - this.leftW;
 
                 if (nowWidth.indexOf('%') > 0) {
@@ -121,7 +125,7 @@ const noScrollWidthReset = function(){
                 }
                 this.setColumnWidth(column, newWidth);
             }
-        }
+        /*}*/
         this.hasNoScrollRest = true;
     }
     if(nowW > whole){
@@ -130,7 +134,7 @@ const noScrollWidthReset = function(){
         var newLastWidth = lastWidth -(nowW - whole)
         this.setColumnWidth(lastVisibleColumn, newLastWidth);
     }
-    
+
 }
 const widthChangeGridFunFixed = function(halfWholeWidth){
 };
