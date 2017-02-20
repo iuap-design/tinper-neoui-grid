@@ -14,8 +14,7 @@
     "es": "babel src -d lib",
     "prod": "npm run es && npm run build",
     "product": "npm run es && npm run build && npm run dev && gulp dist",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 ",
-    "utipbuild": "npm run es && npm run build && npm run dev && gulp dist"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 "
   },
   "repository": {
     "type": "git",

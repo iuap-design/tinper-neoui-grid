@@ -52,7 +52,7 @@ var globs = {
         'src/js/Swap.js',
         'src/js/Tree.js',
     ],
-    css: 'css/grid.css'
+    css: 'src/css/grid.css'
 };
 
 gulp.task('js-init', function() {
