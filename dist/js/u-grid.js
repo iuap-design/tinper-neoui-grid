@@ -85,7 +85,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.dataSource = undefined;
 
 	var _dataSourceInit = __webpack_require__(2);
@@ -131,7 +133,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 处理参数
 	 */
@@ -218,7 +222,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.re_basicSortRows = exports.sortRowsByPrio = exports.re_deleteOneRowTree = exports.canSortable = exports.sort_initGridEventFun = exports.sort_initEventFun = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
@@ -521,7 +527,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.initContentDivEventFun = exports.initGridEventFun = exports.initEventFun = undefined;
 
 	var _gridBrowser = __webpack_require__(5);
@@ -653,7 +661,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	var gridBrowser = {},
 	    userAgent = navigator.userAgent,
 	    ua = userAgent.toLowerCase(),
@@ -709,7 +719,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 
 	var re_initTree = function re_initTree(options, gridOptions) {
 		if (gridOptions.showTree) {
@@ -1112,7 +1124,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.column = undefined;
 
 	var _columnInit = __webpack_require__(8);
@@ -1150,7 +1164,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 处理参数
 	 */
@@ -1225,7 +1241,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	exports.gridComp = undefined;
 
 	var _gridCompCreate = __webpack_require__(10);
@@ -1717,7 +1735,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.repairContent = exports.createContentOneRowTdForIE = exports.createContentOneRowTd = exports.repaintRow = exports.createContentOneRowForIE = exports.createContentOneRow = exports.createContentRowsSumRow = exports.createContentRows = exports.createNoRowsDiv = exports.createContentTableFixed = exports.createContentTable = exports.createContentLeftNumColRow = exports.createContentLeftMultiSelectRow = exports.createContentLeft = exports.createContentSumRow = exports.createContent = exports.createThead = exports.createColgroup = exports.createHeaderDrag = exports.createHeaderTableFixed = exports.createHeaderTable = exports.createHeader = exports.createColumnMenu = exports.repaintGridDivs = exports.createGridDivs = exports.repaintDivs = exports.createDivs = undefined;
 
 	var _gridBrowser = __webpack_require__(5);
@@ -2398,7 +2418,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	var trHoverFun = function trHoverFun(index) {
 	    var oThis = this;
 	    $('#' + oThis.options.id + '_content_tbody').find('tr').removeClass('u-grid-move-bg');
@@ -2538,7 +2560,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 获取某列对应属性
 	 */
@@ -2721,7 +2745,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.initDataSource = exports.setRequired = exports.initGridCompFixedColumn = exports.initGridHiddenLevelColumn = exports.initGridCompColumnLoacl = exports.initGridCompColumnHeaderLevelFun = exports.initGridCompColumnColumnMenuFun = exports.initGridCompColumnFun = exports.initGridCompColumnVar = exports.initGridCompColumn = exports.initWidthVariable = exports.initDataSourceVariable = exports.initVariable = exports.initOptionsTree = exports.initOptions = exports.destroySelf = exports.initGrid = exports.initDefault = exports.getBooleanOptions = exports.init = undefined;
 
 	var _gridBrowser = __webpack_require__(5);
@@ -3020,7 +3046,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.editHeadTitleIcon = exports.setGridEditTypeAndEditRow = exports.setGridEditType = exports.edit_initEventFun = exports.editFieldIcon = exports.setColumnEdit = exports.setEditable = exports.setEditType = exports.re_updateValueAtEdit = exports.re_updateEditRowIndex = exports.editValueChange = exports.nextEditShow = exports.editCell = exports.re_editClose = exports.editRow = exports.editRowIndexFun = exports.editRowFun = exports.re_clickFunEdit = exports.re_hideEditMenu = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
@@ -3647,7 +3675,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	    重新结算是否选中header第一行
 	 */
@@ -4420,7 +4450,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 处理renderType
 	 * begin为起始行，length为行数（增加行数时使用）
@@ -4649,7 +4681,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 设置某列是否显示(传入column)
 	 */
@@ -4804,7 +4838,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 整体宽度改变处理
 	 */
@@ -4812,7 +4848,9 @@
 	    var oThis = this;
 	    if ($('#' + this.options.id)[0]) {
 	        // 获取整体区域宽度
-	        var w = $('#' + this.options.id).width(); //[0].offsetWidth;
+	        //var w = $('#' + this.options.id).width()  //[0].offsetWidth;
+	        // jquery获取方式有问题，修改为offsetWidth
+	        var w = $('#' + this.options.id)[0].offsetWidth;
 	        // w!=0的判断是为了处理页签中的grid在切换的过程中会重绘
 	        if (this.wholeWidth != w && this.$ele.data('gridComp') == this && w != 0) {
 	            this.wholeWidth = w;
@@ -4887,7 +4925,8 @@
 	 */
 	var noScrollWidthReset = function noScrollWidthReset() {
 	    if (this.options.noScroll) {
-	        if (this.hasNoScrollRest) {
+	        //云采不支持拖动，后续再完善拖动之后的情况
+	        /*if (this.hasNoScrollRest) {
 	            var nowW = 0;
 	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
 	                var column = this.gridCompColumnArr[i];
@@ -4895,33 +4934,34 @@
 	                var pre = this.preWholeWidth - this.leftW;
 	                var whole = this.wholeWidth - this.leftW;
 	                var newWidth = parseInt(nowWidth / pre * whole);
-	                if (column.options.visible) {
+	                if(column.options.visible){
 	                    nowW += newWidth;
 	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
-	        } else {
-	            //先按100%来处理
-	            var nowW = 0;
-	            for (var i = 0; i < this.gridCompColumnArr.length; i++) {
-	                var column = this.gridCompColumnArr[i];
-	                var nowWidth = column.options.width + '';
-	                var whole = this.wholeWidth - this.leftW;
+	         } else {*/
+	        //先按100%来处理
+	        var nowW = 0;
+	        for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+	            var column = this.gridCompColumnArr[i];
+	            // var nowWidth = column.options.width + '';
+	            var nowWidth = column.options.optionsWidth + '';
+	            var whole = this.wholeWidth - this.leftW;
 
-	                if (nowWidth.indexOf('%') > 0) {
-	                    var newWidth = parseInt(nowWidth.replace('%', '') * whole / 100);
-	                } else {
-	                    var newWidth = nowWidth;
-	                }
-	                if (newWidth < this.minColumnWidth) {
-	                    newWidth = this.minColumnWidth;
-	                }
-	                if (column.options.visible) {
-	                    nowW += newWidth;
-	                }
-	                this.setColumnWidth(column, newWidth);
+	            if (nowWidth.indexOf('%') > 0) {
+	                var newWidth = parseInt(nowWidth.replace('%', '') * whole / 100);
+	            } else {
+	                var newWidth = nowWidth;
 	            }
+	            if (newWidth < this.minColumnWidth) {
+	                newWidth = this.minColumnWidth;
+	            }
+	            if (column.options.visible) {
+	                nowW += newWidth;
+	            }
+	            this.setColumnWidth(column, newWidth);
 	        }
+	        /*}*/
 	        this.hasNoScrollRest = true;
 	    }
 	    if (nowW > whole) {
@@ -5015,7 +5055,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	/*
 	 * 双击/单击处理
 	 */
@@ -5122,7 +5164,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	/*
 	 * 更新最后数据行标识
 	 */
@@ -5275,7 +5319,9 @@
 
 	"use strict";
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.getDataTableRowIdByRow = exports.getTrIndex = exports.accAdd = exports.DicimalFormater = exports.cloneObj = exports.getFloat = exports.getInt = exports.getString = exports.swapEle = exports.formatWidth = undefined;
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -5436,7 +5482,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.colMenu_initGridEventFun = exports.colMenu_initEventFun = exports.re_createColumnMenu = exports.colMenu_initGridCompColumn = exports.re_initGridCompColumnColumnMenuFun = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
@@ -5646,7 +5694,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.re_resetThVariableDrag = exports.headerThDrag = exports.dragEnd = exports.dragFun = exports.dragStart = exports.drag_initGridEventFun = exports.drag_initEventFun = exports.re_createHeaderDrag = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
@@ -5795,7 +5845,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.formEditCell = exports.re_editorRowChangeFun = exports.editForm_setRequired = exports.editForm_initDefault = undefined;
 
 	var _gridCompInit = __webpack_require__(13);
@@ -5853,7 +5905,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.re_widthChangeGridFunFixed = exports.re_createContentOneRowFixed = exports.re_createContentTableFixed = exports.re_createHeaderTableFixed = exports.fixed_columnsVisibleFun = exports.re_initGridCompFixedColumn = undefined;
 
 	var _gridCompOther = __webpack_require__(20);
@@ -5924,7 +5978,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	/*
 	 * 创建form形式下div
 	 */
@@ -5998,7 +6054,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	var re_resetThVariableHeaderLevel = function re_resetThVariableHeaderLevel() {
 		var oThis = this,
 		    oldParentHeaderStr = '',
@@ -6089,7 +6147,9 @@
 
 	"use strict";
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	var re_initGridCompColumnLoacl = function re_initGridCompColumnLoacl() {
 		var oThis = this,
 		    localGridCompColumnArr = this.getGridCompColumnArrFromLocal();
@@ -6189,7 +6249,9 @@
 
 	"use strict";
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	var re_initGridHiddenLevelColumn = function re_initGridHiddenLevelColumn() {
 		if (!this.options.overWidthHiddenColumn) return;
 		var oThis = this;
@@ -6248,7 +6310,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 
 	var re_createContentRowsSumRow = function re_createContentRowsSumRow(createFlag) {
 		var htmlStr = '';
@@ -6482,7 +6546,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 	exports.swapColumnEnd = exports.swapColumnFun = exports.swapColumnStart = exports.swap_initGridEventFun = exports.swap_initEventFun = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);
@@ -6718,7 +6784,9 @@
 
 	'use strict';
 
-	exports.__esModule = true;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.setRowDrag = exports.rowDragEnd = exports.rowDragFun = exports.rowDragStart = exports.rowDrag_initGridEventFun = undefined;
 
 	var _gridCompEvent = __webpack_require__(4);

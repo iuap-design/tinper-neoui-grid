@@ -38,19 +38,19 @@ var errHandle = function ( err ) {
 
 var globs = {
     js:[
-        'js/gridComp.js',
-        'js/ColumnMenu.js',
-        'js/Drag.js',
-        'js/Edit.js',
-        'js/EditForm.js',
-        'js/Fixed.js',
-        'js/FormShow.js',
-        'js/HeaderLevel.js',
-        'js/OverWidthHidden.js',
-        'js/Sort.js',
-        'js/SumRow.js',
-        'js/Swap.js',
-        'js/Tree.js',
+        'src/js/gridComp.js',
+        'src/js/ColumnMenu.js',
+        'src/js/Drag.js',
+        'src/js/Edit.js',
+        'src/js/EditForm.js',
+        'src/js/Fixed.js',
+        'src/js/FormShow.js',
+        'src/js/HeaderLevel.js',
+        'src/js/OverWidthHidden.js',
+        'src/js/Sort.js',
+        'src/js/SumRow.js',
+        'src/js/Swap.js',
+        'src/js/Tree.js',
     ],
     css: 'css/grid.css'
 };
