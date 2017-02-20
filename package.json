@@ -1,6 +1,6 @@
 {
   "name": "tinper-neoui-grid",
-  "version": "3.1.25",
+  "version": "3.1.26",
   "description": "grid",
   "main": "gulpfile.js",
   "directories": {
@@ -14,7 +14,7 @@
     "es": "babel src -d lib",
     "prod": "npm run es && npm run build",
     "product": "npm run es && npm run build && npm run dev && gulp dist",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && node changeSort.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 ",
     "utipbuild": "npm run es && npm run build && npm run dev && gulp dist"
   },
   "repository": {
