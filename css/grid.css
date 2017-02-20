@@ -754,7 +754,7 @@ form展示区域css begin
   width: 90%;
   height: 90%;
   margin: 0px;
-  margin-left: 5%;
+  // margin-left: 5%;
   min-height: 20px;
   font-size: 12px;
   color: #333;
