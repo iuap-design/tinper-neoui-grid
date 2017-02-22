@@ -92,6 +92,7 @@ const initDefault = function(){
         contentSelect: true, // 点击内容区是否执行选中逻辑
         showEditIcon: false,// 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
+        fixedFloat: 'left',
     }
 };
 /*

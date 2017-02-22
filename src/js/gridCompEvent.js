@@ -55,7 +55,11 @@ const initContentDivEventFun = function(){
     $('#' + this.options.id + '_content_div').on('scroll', function(e) {
         oThis.scrollLeft = this.scrollLeft;
         oThis.scrollTop = this.scrollTop;
-        $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + oThis.fixedWidth + "px");
+        if(oThis.options.fixedFloat == 'right'){
+          $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + "px");
+        }else{
+          $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + oThis.fixedWidth + "px");
+        }
         $('#' + oThis.options.id + '_noRowsShow').css('left', oThis.scrollLeft + "px");
         $('#' + oThis.options.id + '_edit_form').css('left', oThis.scrollLeft + "px");
         $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
@@ -66,7 +70,7 @@ const initContentDivEventFun = function(){
         }else{
             oThis.editClose();
         }
-        
+
     });
     // 数据行相关事件
     $('#' + this.options.id + '_content_tbody').on('click',function(e){

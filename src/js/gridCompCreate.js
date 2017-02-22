@@ -129,14 +129,22 @@ const createHeaderTable = function(createFlag){
         positionStr = 'absolute;width:'+this.fixedWidth+'px;z-index:11;background:#F9F9F9;';
         idStr = 'fixed_';
     }else{
-        leftW = parseInt(this.leftW) + parseInt(this.fixedWidth);
+				if(this.options.fixedFloat == 'right'){
+					leftW = parseInt(this.leftW);
+				}else{
+					leftW = parseInt(this.leftW) + parseInt(this.fixedWidth);
+				}
         positionStr = 'relative;';
         idStr = '';
         if(this.contentMinWidth > 0){
             positionStr += 'width:'+this.contentMinWidth+'px;';
         }
     }
-    var htmlStr = '<table role="grid" id="' + this.options.id + '_header_'+idStr+'table" style="position:'+ positionStr+';left:' + leftW + 'px;">';
+		if(createFlag == 'fixed' && this.options.fixedFloat == 'right'){
+				var htmlStr = '<table role="grid" id="' + this.options.id + '_header_'+idStr+'table" style="position:'+ positionStr+';right:0px;">';
+		}else{
+				var htmlStr = '<table role="grid" id="' + this.options.id + '_header_'+idStr+'table" style="position:'+ positionStr+';left:' + leftW + 'px;">';
+		}
     htmlStr += this.createColgroup(createFlag);
     htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_header_'+idStr+'thead">';
     htmlStr += this.createThead(createFlag);
@@ -212,7 +220,7 @@ const createThead = function(createFlag) {
  * 创建内容区域
  */
 const createContent = function() {
-    var h = '',displayStr = '',bottonStr='';
+    var h = '',displayStr = '',bottonStr='',lbw = 0;
     if(this.countContentHeight){
         var wh = $('#' + this.options.id)[0].offsetHeight;
         this.wholeHeight = wh;
@@ -234,7 +242,12 @@ const createContent = function() {
         if(u.isIOS){
             displayStr += 'width:0px;';
         }
-        htmlStr += '<div class="u-grid-content-left-bottom" id="' + this.options.id + '_content_left_bottom" style="width:' + (this.leftW + this.fixedWidth) + 'px;'+displayStr+'">';
+				if(this.options.fixedFloat == 'right'){
+					lbw = this.leftW;
+				}else{
+					lbw = this.leftW + this.fixedWidth;
+				}
+        htmlStr += '<div class="u-grid-content-left-bottom" id="' + this.options.id + '_content_left_bottom" style="width:' + lbw + 'px;'+displayStr+'">';
         htmlStr += '</div>';
     }
     htmlStr += this.createContentTableFixed();
@@ -297,7 +310,7 @@ const createContentLeftMultiSelectRow = function(row,displayFlag){
 
     var rootObj = row.value;
     var objAry = this.selectRows;
-    var re = objCompare(rootObj, objAry);  
+    var re = objCompare(rootObj, objAry);
 
     if(gridBrowser.isIE8){
         //var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ></div>'
@@ -319,13 +332,13 @@ const createContentLeftNumColRow = function(index){
     var row = this.dataSourceObj.rows[index];
     var rootObj = row.value;
     var objAry = this.selectRows;
-    var re = objCompare(rootObj, objAry);  
+    var re = objCompare(rootObj, objAry);
     var htmlStr;
     if(re){
         htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-sel-row">' + (index+1) + '</div>';
     }else{
         htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index+1) + '</div>';
-   
+
     }
      return htmlStr;
 };
@@ -339,15 +352,23 @@ const createContentTable = function(createFlag){
     }else{
         hStr = "";
     }
-    
+
     if(createFlag == 'fixed'){
         leftW = parseInt(this.leftW);
         idStr = 'fixed_';
         cssStr = 'fixed-';
-        styleStr = 'style="position:absolute;width:'+this.fixedWidth+'px;left:' + leftW + 'px;' +hStr+'"';
+				if(this.options.fixedFloat == 'right'){
+					styleStr = 'style="position:absolute;width:'+this.fixedWidth+'px;right:0px;' +hStr+'"';
+				}else{
+					styleStr = 'style="position:absolute;width:'+this.fixedWidth+'px;left:' + leftW + 'px;' +hStr+'"';
+				}
         tableStyleStr = 'style="width:'+this.fixedWidth+'px;"';
     }else{
-        leftW = parseInt(this.leftW) + parseInt(this.fixedWidth,0);
+				if(this.options.fixedFloat == 'right'){
+					leftW = parseInt(this.leftW);
+				}else{
+	        leftW = parseInt(this.leftW) + parseInt(this.fixedWidth,0);
+				}
         idStr = '';
         cssStr = '';
         styleStr = 'style="position:relative;left:' + leftW + 'px;' +hStr;
@@ -356,7 +377,7 @@ const createContentTable = function(createFlag){
         }
         // 因为添加overflow-x之后会导致纵向也显示不全，后续出现问题通过修改宽度来实现，不再通过overflow来实现
         if(this.options.noScroll){
-            styleStr += 'overflow-x:hidden;'  
+            styleStr += 'overflow-x:hidden;'
         }
         styleStr += '"';
         tableStyleStr = '';
@@ -611,7 +632,7 @@ const objCompare = function(rootObj, objAry) {
         var compareObj = objAry[i];
         matchNum += (rootObj == compareObj) ? 1 : 0;
     }
-    return (matchNum>0) ? true : false; 
+    return (matchNum>0) ? true : false;
 };
 
 export{
