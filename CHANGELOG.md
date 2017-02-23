@@ -1,3 +1,8 @@
+<a name="3.1.28"></a>
+## [3.1.28](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.27...v3.1.28) (2017-02-22)
+
+
+
 <a name="3.1.27"></a>
 ## [3.1.27](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.26...v3.1.27) (2017-02-22)
 
