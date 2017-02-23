@@ -14,7 +14,8 @@
     "es": "babel src -d lib",
     "prod": "npm run es && npm run build",
     "product": "npm run es && npm run build && npm run dev && gulp dist",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 "
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 ",
+    "docs": "node bin/mdconcat.js"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.1.1",
     "eslint-loader": "^1.4.1",
+    "fs-extra": "^2.0.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.2",

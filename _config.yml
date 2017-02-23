@@ -1,6 +1,6 @@
 # layout布局
-source: src
-
+source: docs
+example: examples
 
 # 文档片段
 snip_dir: snippets
