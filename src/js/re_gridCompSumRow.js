@@ -117,7 +117,7 @@ const re_repairSumRow = function(){
     this.re_repairSumRowSetTimeout = setTimeout(function(){
         re_repairSumRowFun.call(self);
     },100)
-	
+
 };
 
 const re_repairSumRowFun = function(){

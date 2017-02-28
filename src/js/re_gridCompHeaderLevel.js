@@ -1,34 +1,57 @@
 const re_resetThVariableHeaderLevel = function(){
-	var oThis = this,oldParentHeaderStr = '',parentWidth = 0;
+	var oThis = this,oldParentHeaderStr = '',parentWidth = 0,maxHeaderLevel = this.options.maxHeaderLevel,columnWidthArr = [];
+	// 遍历所有已经创建的th创建对象记录column的width
 	$('#' + this.options.id + '_header_table th', this.$ele).each(function(i) {
 		var gridCompColumn = oThis.gridCompColumnArr[i];
-		var parentHeaderStr = oThis.getString(gridCompColumn.options.parentHeader,'');
+		var field = gridCompColumn.options.field;
 		var w = 0;
 		if(gridCompColumn.options.visible){
 			w = parseInt(gridCompColumn.options.width);
 		}
-		// 处理多表头
-		if(oldParentHeaderStr != '' && parentHeaderStr != oldParentHeaderStr){ // 上一个父项结束
-			// 设置宽度
-			$('#' + oThis.options.id + oldParentHeaderStr).css('width',parentWidth - 1 + 'px');
+		var obj = {
+			field:field,
+			width:w
 		}
-		if(parentHeaderStr != ''){
-			var parentHeaderTitleStr = oThis.getLevelTitleByField(parentHeaderStr);
-			if(parentHeaderStr != oldParentHeaderStr){  //一个新的父项开始
-				parentWidth = 0;
-				if(!oThis.parentFlag){ //只添加一次
-					var htmlStr ='<div id="' + oThis.options.id + parentHeaderStr + '" class="u-gird-parent"><div class="u-grid-header-link" title="' + parentHeaderTitleStr + '">' + parentHeaderTitleStr +'</div></div>';
-					this.insertAdjacentHTML('afterBegin',htmlStr);
+		columnWidthArr.push(obj);
+	});
+	// 遍历所有headerLevel > 1的column，创建div并设置top及width值
+	var firstColumnField = this.getColumnByVisibleIndex(0).options.field;
+	for(var i = 0; i < this.gridCompLevelColumn.length; i++){
+		var column = this.gridCompLevelColumn[i];
+		var field = column.field;
+		var title = column.title;
+		var startField = column.startField;
+		var endField = column.endField;
+		var startTh = $('th[field='+startField+']',this.$ele.find('#' + this.options.id + '_header_thead'));
+		var styleStr = ' style="';
+		var classStr = ''
+		var headerLevel = column.headerLevel;
+		var top = (parseInt(maxHeaderLevel) - parseInt(headerLevel) ) * this.baseHeaderHeight;
+		styleStr += 'top:' + top + 'px;z-index:' + headerLevel + ';';
+		var width = 0;
+		var startFlag = false;
+		for(var j = 0; j < columnWidthArr.length;j++){
+			var nowColumn = columnWidthArr[j];
+			var nowField = nowColumn.field;
+			if(nowField == startField || startFlag){
+				startFlag = true;
+				width += nowColumn.width;
+				if(nowField == endField){
+					break;
 				}
 			}
-			parentWidth += w;
 		}
-		oldParentHeaderStr = parentHeaderStr;
-	});
-	if(oldParentHeaderStr != ''){
-		$('#' + oThis.options.id + oldParentHeaderStr).css('width',parentWidth - 1 + 'px');
+		styleStr += 'width:' + width + 'px;';
+		styleStr += '" ';
+		if(firstColumnField == startField){
+			classStr += ' grid-no-left-border ';
+		}
+		if(maxHeaderLevel == headerLevel){
+			classStr += ' grid-max-level-div ';
+		}
+		var htmlStr ='<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" title="' + title + '">' + title +'</div></div>';
+		startTh[0].insertAdjacentHTML('afterBegin',htmlStr);
 	}
-	this.parentFlag = true;
 };
 
 const re_initGridCompColumnHeaderLevelFun = function(columnOptions){

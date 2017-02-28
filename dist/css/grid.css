@@ -138,8 +138,15 @@ header区域css begin
   background: #eeeff1;
 }
 
-.u-grid-header-th:hover{
+.u-grid-header-th>div:hover{
   background:#d7d7d7;
+}
+
+.u-grid-header-level-div{
+  z-index: 1;
+  border-style: solid;
+  border-color: #cecece;
+  border-width: 0px 1px 0px 0px;
 }
 
 .u-grid-header-th-first {
@@ -165,14 +172,25 @@ header区域css begin
   position: absolute;
   top: 0px;
   text-align: center;
-  background-color: #F9F9F9;
+  /*background-color: #F9F9F9;*/
+  background-color: #eeeff1;
   z-index: 1;
   border-style: solid;
   border-color: #cecece;
-  border-width: 0 0 1px 0px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  margin-left: -1px;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+}
+
+.grid-no-left-border{
+  border-left-width: 0px;
+  margin: 0px;
+}
+
+.grid-max-level-div{
+  border-top: 0px;
 }
 .u-grid-header-link:hover {
   //color: #a8a8a8;
