@@ -859,8 +859,8 @@ form展示区域css end
   left: 0;
   height: 100%;
   width: 100%;
-  -webkit-mask: url(../images/tick.svg?embed);
-  mask: url(../images/tick.svg?embed);
+  -webkit-mask: url(../../images/tick.svg?embed);
+  mask: url(../../images/tick.svg?embed);
   background: transparent;
   transition-duration: 0.28s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -883,6 +883,6 @@ form展示区域css end
 .u-grid-checkbox-outline.is-checked .u-grid-checkbox-tick-outline{
   -webkit-mask: none;
   mask: none;
-  background: #1baede url(../images/tick.svg?embed);
+  background: #1baede url(../../images/tick.svg?embed);
 }
 /*复选框end*/
