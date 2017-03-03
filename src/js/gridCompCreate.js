@@ -170,7 +170,9 @@ const createColgroup = function(createFlag) {
     $.each(gridCompColumnArr, function() {
         if(this.options.visible){
             htmlStr += '<col';
-            htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+						if(!this.options.autoExpand){ 
+							htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+						}
             htmlStr += '>';
         }
     });
