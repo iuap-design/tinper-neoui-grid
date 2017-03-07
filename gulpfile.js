@@ -57,17 +57,17 @@ var globs = {
 
 gulp.task('js-init', function() {
     return gulp.src(globs.js)
-        .pipe(concat('u-grid.js'))
-        .pipe(gulp.dest('dist/js'))
+        .pipe(concat('tinper-neoui-grid.js'))
+        .pipe(gulp.dest('dist'))
         .pipe(uglify().on('error', errHandle))
-        .pipe(rename('u-grid.min.js'))
-        .pipe(gulp.dest('dist/js'));
+        .pipe(rename('tinper-neoui-grid.min.js'))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('js', ['js-init'], function(){
     version.init([
-            'dist/js/u-grid.js',
-            'dist/js/u-grid.min.js',
+            'dist/tinper-neoui-grid.js',
+            'dist/tinper-neoui-grid.min.js',
         ]);
 })
 
@@ -75,10 +75,11 @@ gulp.task('js', ['js-init'], function(){
 gulp.task('css-init',function(){
     return gulp.src(globs.css)
         .pipe(base64().on('error',errHandle))
-        .pipe(gulp.dest('dist/css'))
+        .pipe(rename('tinper-neoui-grid.css'))
+        .pipe(gulp.dest('dist'))
         .pipe(minifycss())
-        .pipe(rename('grid.min.css'))
-        .pipe(gulp.dest('dist/css'));
+        .pipe(rename('tinper-neoui-grid.min.css'))
+        .pipe(gulp.dest('dist'));
 })
 
 gulp.task('css', ['css-init'], function(){

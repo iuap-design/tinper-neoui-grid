@@ -3,7 +3,7 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
 var env = require('yargs').argv.mode;
 
-var libraryName = 'u-grid';
+var libraryName = 'tinper-neoui-grid';
 
 var plugins = [],
 	outputFile;
@@ -21,7 +21,7 @@ var config = {
 	entry: __dirname + '/src/js/index.js',
 	// devtool: 'source-map',
 	output: {
-		path: __dirname + '/dist/js',
+		path: __dirname + '/dist',
 		filename: outputFile,
 		//library: 'u',
 		libraryTarget: 'var',

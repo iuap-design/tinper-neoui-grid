@@ -1129,7 +1129,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.column = undefined;
 
@@ -1140,9 +1140,9 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var column = function column(options, gridComp) {
-	    _classCallCheck(this, column);
+	  _classCallCheck(this, column);
 
-	    this.init(options, gridComp);
+	  this.init(options, gridComp);
 	};
 
 	;
@@ -4967,7 +4967,7 @@
 	                }
 	                this.setColumnWidth(column, newWidth);
 	            }
-	         } else {*/
+	          } else {*/
 	        //先按100%来处理
 	        var nowW = 0;
 	        for (var i = 0; i < this.gridCompColumnArr.length; i++) {

@@ -6,9 +6,9 @@ var data = fs.readFileSync('./package.json', 'utf8');
 var packageObj = JSON.parse(data);
 var filesArr = [];
 if(env == "dev") {
-	filesArr.push('./dist/js/u-grid.js');
+	filesArr.push('./dist/tinper-neoui-grid.js');
 } else if(env == "build") {
-	filesArr.push('./dist/js/u-grid.min.js');
+	filesArr.push('./dist/tinper-neoui-grid.min.js');
 }
 var headerStr = '/** \r\n';
 headerStr += ' * ' + packageObj.name + ' v' + packageObj.version + '\r\n';
