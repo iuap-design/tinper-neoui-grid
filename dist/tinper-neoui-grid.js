@@ -1672,6 +1672,84 @@
 	gridCompProto.renderSumRow = _re_gridCompSumRow.renderSumRow;
 	gridCompProto.renderTypeSumRow = _re_gridCompSumRow.re_renderTypeSumRow;
 
+	// 增加预制render
+	window.maxSumRender = function maxSumRender(opt) {
+	  var gridComp = opt.gridObj;
+	  var gridCompColumn = opt.gridCompColumn;
+	  var field = gridCompColumn.options.field;
+	  var element = opt.element;
+	  var nowMax;
+	  $.each(gridComp.dataSourceObj.rows, function (i) {
+	    var v = $(this.value).attr(field);
+	    if (gridCompColumn.options.dataType == 'Int') {
+	      v = gridComp.getInt(v, 0);
+	    } else {
+	      v = gridComp.getFloat(v, 0);
+	    }
+	    if (typeof nowMax == 'undefined') {
+	      nowMax = v;
+	    } else {
+	      if (v > nowMax) nowMax = v;
+	    }
+	  });
+
+	  // 处理精度
+	  if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+	    var o = {};
+	    o.value = nowMax;
+	    o.precision = gridCompColumn.options.precision;
+	    nowMax = gridComp.DicimalFormater(o);
+	  }
+
+	  element.innerHTML = nowMax + '';
+	};
+	window.minSumRender = function minSumRender(opt) {
+	  var gridComp = opt.gridObj;
+	  var gridCompColumn = opt.gridCompColumn;
+	  var field = gridCompColumn.options.field;
+	  var element = opt.element;
+	  var nowMax;
+	  $.each(gridComp.dataSourceObj.rows, function (i) {
+	    var v = $(this.value).attr(field);
+	    if (gridCompColumn.options.dataType == 'Int') {
+	      v = gridComp.getInt(v, 0);
+	    } else {
+	      v = gridComp.getFloat(v, 0);
+	    }
+	    if (typeof nowMax == 'undefined') {
+	      nowMax = v;
+	    } else {
+	      if (v < nowMax) nowMax = v;
+	    }
+	  });
+
+	  // 处理精度
+	  if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+	    var o = {};
+	    o.value = nowMax;
+	    o.precision = gridCompColumn.options.precision;
+	    nowMax = gridComp.DicimalFormater(o);
+	  }
+	  element.innerHTML = nowMax + '';
+	};
+	window.avgSumRender = function avgSumRender(opt) {
+	  var sumValue = opt.value;
+	  var gridComp = opt.gridObj;
+	  var gridCompColumn = opt.gridCompColumn;
+	  var element = opt.element;
+	  var l = gridComp.dataSourceObj.rows.length;
+	  var avgValue = sumValue / l;
+
+	  // 处理精度
+	  if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+	    var o = {};
+	    o.value = avgValue;
+	    o.precision = gridCompColumn.options.precision;
+	    avgValue = gridComp.DicimalFormater(o);
+	  }
+	  element.innerHTML = avgValue + '';
+	};
+
 	/*
 	 * swap
 	 */
@@ -1919,7 +1997,9 @@
 	    $.each(gridCompColumnArr, function () {
 	        if (this.options.visible) {
 	            htmlStr += '<col';
-	            htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+	            if (!this.options.autoExpand) {
+	                htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+	            }
 	            htmlStr += '>';
 	        }
 	    });
@@ -1933,9 +2013,11 @@
 	    var oThis = this,
 	        visibleIndex = 0,
 	        gridCompColumnArr,
-	        trStyle = '';
+	        trStyle = '',
+	        thLevelClass = '';
 	    if (this.options.maxHeaderLevel > 1) {
 	        trStyle = 'style="height:' + (this.headerHeight - 1) + 'px;"';
+	        thLevelClass = ' u-grid-header-level-div ';
 	    }
 	    var htmlStr = '<tr role="row" ' + trStyle + '>';
 	    if (createFlag == 'fixed') {
@@ -1952,8 +2034,9 @@
 	        } else {
 	            visibleIndex++;
 	        }
+
 	        // 低版本浏览器不支持th position为relative，因此加入空div
-	        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;">';
+	        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div ' + thLevelClass + '">';
 	        var colorStype = '';
 	        if (this.options.headerColor) {
 	            colorStype = 'style="color:' + this.options.headerColor + '"';
@@ -2817,7 +2900,8 @@
 	    this.columnMenuHeight = 33; // column menu的高度
 	    this.gridCompColumnFixedArr = new Array(); // 存储设置默认值之后的固定列columns对象
 	    this.gridCompLevelColumn = new Array(); // 存储多级表头时的多级
-	    this.headerHeight = 44 * parseInt(this.options.maxHeaderLevel) + 1;
+	    this.baseHeaderHeight = 44;
+	    this.headerHeight = this.baseHeaderHeight * parseInt(this.options.maxHeaderLevel) + 1;
 	    this.gridCompHiddenLevelColumnArr = new Array(); // 存储自动隐藏时隐藏优先级排序后的column
 	    this.treeLeft = 10; // 树表时每一级之间的差值
 	    this.overWidthVisibleColumnArr = new Array(); // 超出定义宽度的column集合
@@ -6088,39 +6172,61 @@
 	var re_resetThVariableHeaderLevel = function re_resetThVariableHeaderLevel() {
 		var oThis = this,
 		    oldParentHeaderStr = '',
-		    parentWidth = 0;
+		    parentWidth = 0,
+		    maxHeaderLevel = this.options.maxHeaderLevel,
+		    columnWidthArr = [];
+		// 遍历所有已经创建的th创建对象记录column的width
 		$('#' + this.options.id + '_header_table th', this.$ele).each(function (i) {
 			var gridCompColumn = oThis.gridCompColumnArr[i];
-			var parentHeaderStr = oThis.getString(gridCompColumn.options.parentHeader, '');
+			var field = gridCompColumn.options.field;
 			var w = 0;
 			if (gridCompColumn.options.visible) {
 				w = parseInt(gridCompColumn.options.width);
 			}
-			// 处理多表头
-			if (oldParentHeaderStr != '' && parentHeaderStr != oldParentHeaderStr) {
-				// 上一个父项结束
-				// 设置宽度
-				$('#' + oThis.options.id + oldParentHeaderStr).css('width', parentWidth - 1 + 'px');
-			}
-			if (parentHeaderStr != '') {
-				var parentHeaderTitleStr = oThis.getLevelTitleByField(parentHeaderStr);
-				if (parentHeaderStr != oldParentHeaderStr) {
-					//一个新的父项开始
-					parentWidth = 0;
-					if (!oThis.parentFlag) {
-						//只添加一次
-						var htmlStr = '<div id="' + oThis.options.id + parentHeaderStr + '" class="u-gird-parent"><div class="u-grid-header-link" title="' + parentHeaderTitleStr + '">' + parentHeaderTitleStr + '</div></div>';
-						this.insertAdjacentHTML('afterBegin', htmlStr);
+			var obj = {
+				field: field,
+				width: w
+			};
+			columnWidthArr.push(obj);
+		});
+		// 遍历所有headerLevel > 1的column，创建div并设置top及width值
+		var firstColumnField = this.getColumnByVisibleIndex(0).options.field;
+		for (var i = 0; i < this.gridCompLevelColumn.length; i++) {
+			var column = this.gridCompLevelColumn[i];
+			var field = column.field;
+			var title = column.title;
+			var startField = column.startField;
+			var endField = column.endField;
+			var startTh = $('th[field=' + startField + ']', this.$ele.find('#' + this.options.id + '_header_thead'));
+			var styleStr = ' style="';
+			var classStr = '';
+			var headerLevel = column.headerLevel;
+			var top = (parseInt(maxHeaderLevel) - parseInt(headerLevel)) * this.baseHeaderHeight;
+			styleStr += 'top:' + top + 'px;z-index:' + headerLevel + ';';
+			var width = 0;
+			var startFlag = false;
+			for (var j = 0; j < columnWidthArr.length; j++) {
+				var nowColumn = columnWidthArr[j];
+				var nowField = nowColumn.field;
+				if (nowField == startField || startFlag) {
+					startFlag = true;
+					width += nowColumn.width;
+					if (nowField == endField) {
+						break;
 					}
 				}
-				parentWidth += w;
 			}
-			oldParentHeaderStr = parentHeaderStr;
-		});
-		if (oldParentHeaderStr != '') {
-			$('#' + oThis.options.id + oldParentHeaderStr).css('width', parentWidth - 1 + 'px');
+			styleStr += 'width:' + width + 'px;';
+			styleStr += '" ';
+			if (firstColumnField == startField) {
+				classStr += ' grid-no-left-border ';
+			}
+			if (maxHeaderLevel == headerLevel) {
+				classStr += ' grid-max-level-div ';
+			}
+			var htmlStr = '<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" title="' + title + '">' + title + '</div></div>';
+			startTh[0].insertAdjacentHTML('afterBegin', htmlStr);
 		}
-		this.parentFlag = true;
 	};
 
 	var re_initGridCompColumnHeaderLevelFun = function re_initGridCompColumnHeaderLevelFun(columnOptions) {

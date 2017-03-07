@@ -170,7 +170,9 @@ const createColgroup = function(createFlag) {
     $.each(gridCompColumnArr, function() {
         if(this.options.visible){
             htmlStr += '<col';
-            htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+						if(!this.options.autoExpand){ 
+							htmlStr += ' style="width:' + oThis.formatWidth(this.options.width) + '"';
+						}
             htmlStr += '>';
         }
     });
@@ -181,9 +183,10 @@ const createColgroup = function(createFlag) {
  * 创建thead区域
  */
 const createThead = function(createFlag) {
-    var oThis = this,visibleIndex = 0,gridCompColumnArr,trStyle = '';
+    var oThis = this,visibleIndex = 0,gridCompColumnArr,trStyle = '',thLevelClass = '';
     if(this.options.maxHeaderLevel >1){
         trStyle = 'style="height:' + (this.headerHeight -1) + 'px;"';
+				thLevelClass = ' u-grid-header-level-div ';
     }
     var htmlStr = '<tr role="row" ' + trStyle + '>';
     if(createFlag == 'fixed'){
@@ -199,8 +202,9 @@ const createThead = function(createFlag) {
         }else{
             visibleIndex++;
         }
+
         // 低版本浏览器不支持th position为relative，因此加入空div
-        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;">';
+        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div ' + thLevelClass + '">';
         var colorStype = '';
         if(this.options.headerColor){
             colorStype = 'style="color:' + this.options.headerColor + '"';

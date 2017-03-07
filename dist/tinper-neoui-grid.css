@@ -138,8 +138,15 @@ header区域css begin
   background: #eeeff1;
 }
 
-.u-grid-header-th:hover{
+.u-grid-header-th>div:hover{
   background:#d7d7d7;
+}
+
+.u-grid-header-level-div{
+  z-index: 1;
+  border-style: solid;
+  border-color: #cecece;
+  border-width: 0px 1px 0px 0px;
 }
 
 .u-grid-header-th-first {
@@ -165,14 +172,25 @@ header区域css begin
   position: absolute;
   top: 0px;
   text-align: center;
-  background-color: #F9F9F9;
+  /*background-color: #F9F9F9;*/
+  background-color: #eeeff1;
   z-index: 1;
   border-style: solid;
   border-color: #cecece;
-  border-width: 0 0 1px 0px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  margin-left: -1px;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+}
+
+.grid-no-left-border{
+  border-left-width: 0px;
+  margin: 0px;
+}
+
+.grid-max-level-div{
+  border-top: 0px;
 }
 .u-grid-header-link:hover {
   //color: #a8a8a8;
@@ -841,8 +859,8 @@ form展示区域css end
   left: 0;
   height: 100%;
   width: 100%;
-  -webkit-mask: url(../images/tick.svg?embed);
-  mask: url(../images/tick.svg?embed);
+  -webkit-mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iDQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIg0KICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHZlcnNpb249IjEuMSINCiAgIHZpZXdCb3g9IjAgMCAxIDEiDQogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4NCiAgPHBhdGgNCiAgICAgZD0iTSAwLjA0MDM4MDU5LDAuNjI2Nzc2NyAwLjE0NjQ0NjYxLDAuNTIwNzEwNjggMC40MjkyODkzMiwwLjgwMzU1MzM5IDAuMzIzMjIzMywwLjkwOTYxOTQxIHogTSAwLjIxNzE1NzI5LDAuODAzNTUzMzkgMC44NTM1NTMzOSwwLjE2NzE1NzI5IDAuOTU5NjE5NDEsMC4yNzMyMjMzIDAuMzIzMjIzMywwLjkwOTYxOTQxIHoiDQogICAgIGlkPSJyZWN0Mzc4MCINCiAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZSIgLz4NCjwvc3ZnPg0K);
+  mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iDQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIg0KICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHZlcnNpb249IjEuMSINCiAgIHZpZXdCb3g9IjAgMCAxIDEiDQogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4NCiAgPHBhdGgNCiAgICAgZD0iTSAwLjA0MDM4MDU5LDAuNjI2Nzc2NyAwLjE0NjQ0NjYxLDAuNTIwNzEwNjggMC40MjkyODkzMiwwLjgwMzU1MzM5IDAuMzIzMjIzMywwLjkwOTYxOTQxIHogTSAwLjIxNzE1NzI5LDAuODAzNTUzMzkgMC44NTM1NTMzOSwwLjE2NzE1NzI5IDAuOTU5NjE5NDEsMC4yNzMyMjMzIDAuMzIzMjIzMywwLjkwOTYxOTQxIHoiDQogICAgIGlkPSJyZWN0Mzc4MCINCiAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZSIgLz4NCjwvc3ZnPg0K);
   background: transparent;
   transition-duration: 0.28s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -865,6 +883,6 @@ form展示区域css end
 .u-grid-checkbox-outline.is-checked .u-grid-checkbox-tick-outline{
   -webkit-mask: none;
   mask: none;
-  background: #1baede url(../images/tick.svg?embed);
+  background: #1baede url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iDQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIg0KICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyINCiAgIHZlcnNpb249IjEuMSINCiAgIHZpZXdCb3g9IjAgMCAxIDEiDQogICBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWluWU1pbiBtZWV0Ij4NCiAgPHBhdGgNCiAgICAgZD0iTSAwLjA0MDM4MDU5LDAuNjI2Nzc2NyAwLjE0NjQ0NjYxLDAuNTIwNzEwNjggMC40MjkyODkzMiwwLjgwMzU1MzM5IDAuMzIzMjIzMywwLjkwOTYxOTQxIHogTSAwLjIxNzE1NzI5LDAuODAzNTUzMzkgMC44NTM1NTMzOSwwLjE2NzE1NzI5IDAuOTU5NjE5NDEsMC4yNzMyMjMzIDAuMzIzMjIzMywwLjkwOTYxOTQxIHoiDQogICAgIGlkPSJyZWN0Mzc4MCINCiAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZSIgLz4NCjwvc3ZnPg0K);
 }
 /*复选框end*/

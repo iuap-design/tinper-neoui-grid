@@ -6,7 +6,7 @@ import {
 	createColumnMenu,
     createHeader,
     createHeaderTable,
-    createHeaderTableFixed,  
+    createHeaderTableFixed,
     createHeaderDrag,
     createColgroup,
     createThead,
@@ -14,7 +14,7 @@ import {
     createContentSumRow,
     createContentLeft,
     createContentLeftMultiSelectRow,
-    createContentLeftNumColRow, 
+    createContentLeftNumColRow,
     createContentTable,
     createContentTableFixed,
     createNoRowsDiv,
@@ -651,6 +651,83 @@ gridCompProto.repairSumRow = re_repairSumRow;
 gridCompProto.renderSumRow = renderSumRow;
 gridCompProto.renderTypeSumRow = re_renderTypeSumRow;
 
+// 增加预制render
+window.maxSumRender = function maxSumRender(opt) {
+		var gridComp = opt.gridObj;
+		var gridCompColumn = opt.gridCompColumn;
+		var field = gridCompColumn.options.field;
+		var element = opt.element;
+		var nowMax;
+		$.each(gridComp.dataSourceObj.rows, function (i) {
+				var v = $(this.value).attr(field);
+				if (gridCompColumn.options.dataType == 'Int') {
+						v = gridComp.getInt(v, 0);
+				} else {
+						v = gridComp.getFloat(v, 0);
+				}
+				if (typeof nowMax == 'undefined') {
+						nowMax = v;
+				} else {
+						if (v > nowMax) nowMax = v;
+				}
+		});
+
+		// 处理精度
+		if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+				var o = {};
+				o.value = nowMax;
+				o.precision = gridCompColumn.options.precision;
+				nowMax = gridComp.DicimalFormater(o);
+		}
+
+		element.innerHTML = nowMax + '';
+};
+window.minSumRender = function minSumRender(opt) {
+		var gridComp = opt.gridObj;
+		var gridCompColumn = opt.gridCompColumn;
+		var field = gridCompColumn.options.field;
+		var element = opt.element;
+		var nowMax;
+		$.each(gridComp.dataSourceObj.rows, function (i) {
+				var v = $(this.value).attr(field);
+				if (gridCompColumn.options.dataType == 'Int') {
+						v = gridComp.getInt(v, 0);
+				} else {
+						v = gridComp.getFloat(v, 0);
+				}
+				if (typeof nowMax == 'undefined') {
+						nowMax = v;
+				} else {
+						if (v < nowMax) nowMax = v;
+				}
+		});
+
+		// 处理精度
+		if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+				var o = {};
+				o.value = nowMax;
+				o.precision = gridCompColumn.options.precision;
+				nowMax = gridComp.DicimalFormater(o);
+		}
+		element.innerHTML = nowMax + '';
+};
+window.avgSumRender = function avgSumRender(opt) {
+		var sumValue = opt.value;
+		var gridComp = opt.gridObj;
+		var gridCompColumn = opt.gridCompColumn;
+		var element = opt.element;
+		var l = gridComp.dataSourceObj.rows.length;
+		var avgValue = sumValue / l;
+
+		// 处理精度
+		if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+				var o = {};
+				o.value = avgValue;
+				o.precision = gridCompColumn.options.precision;
+				avgValue = gridComp.DicimalFormater(o);
+		}
+		element.innerHTML = avgValue + '';
+};
 
 /*
  * swap
