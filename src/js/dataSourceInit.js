@@ -1,7 +1,7 @@
 /*
  * 处理参数
  */
-const init = function(options, gridComp){
+const init = function(options, gridComp) {
     this.defaults = {}
     this.gridComp = gridComp;
     this.options = $.extend({}, this.defaults, options);
@@ -12,11 +12,11 @@ const init = function(options, gridComp){
 /*
  * 将values转化为rows并进行排序
  */
-const sortRows = function(field,sortType){
-    if(this.gridComp.options.showTree){
-        this.treeSortRows(field,sortType);
-    }else{
-        this.basicSortRows(field,sortType);
+const sortRows = function(field, sortType) {
+    if (this.gridComp.options.showTree) {
+        this.treeSortRows(field, sortType);
+    } else {
+        this.basicSortRows(field, sortType);
     }
     this.gridComp.eidtRowIndex = -1;
 };
@@ -24,12 +24,13 @@ const sortRows = function(field,sortType){
  * 将values转化为rows并进行排序(标准)
  */
 const basicSortRows = function(field, sortType) {
-    var oThis = this,dataType = "";
-    if(field){
+    var oThis = this,
+        dataType = "";
+    if (field) {
         dataType = this.gridComp.getColumnByField(field).options.dataType;
     }
     this.rows = new Array();
-    if(this.options.values){
+    if (this.options.values) {
         $.each(this.options.values, function(i) {
             var rowObj = {};
             rowObj.value = this;
@@ -39,43 +40,43 @@ const basicSortRows = function(field, sortType) {
     }
 
 };
-const treeSortRows = function(field,sortType){
-    this.basicSortRows(field,sortType);
+const treeSortRows = function(field, sortType) {
+    this.basicSortRows(field, sortType);
 };
 /*
  * 获取合计值
  */
-const getSumValue = function(field,gridCompColumn,gridComp){
+const getSumValue = function(field, gridCompColumn, gridComp) {
     var sumValue = null;
-    if(gridCompColumn.options.sumCol){
+    if (gridCompColumn.options.sumCol) {
         $.each(this.rows, function(i) {
             var v = $(this.value).attr(field);
-            if(gridCompColumn.options.dataType == 'Int'){
-                v = gridComp.getInt(v,0);
-                sumValue  += parseInt(v);
-            }else{
-                v = gridComp.getFloat(v,0);
-                sumValue  = gridComp.accAdd(sumValue,parseFloat(v));
+            if (gridCompColumn.options.dataType == 'Int') {
+                v = gridComp.getInt(v, 0);
+                sumValue += parseInt(v);
+            } else {
+                v = gridComp.getFloat(v, 0);
+                sumValue = gridComp.accAdd(sumValue, parseFloat(v));
             }
         });
     }
     // 处理精度
-    if(gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision){
+    if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
         var o = {};
         o.value = sumValue;
         o.precision = gridCompColumn.options.precision;
         sumValue = gridComp.DicimalFormater(o);
     }
-    if(sumValue != null && sumValue != undefined && sumValue != 'null' && sumValue != 'undefined'){
+    if (sumValue != null && sumValue != undefined && sumValue != 'null' && sumValue != 'undefined') {
         return sumValue + '';
-    }else{
+    } else {
         return '';
     }
 };
-export{
-    init,
-    sortRows,
-    basicSortRows,
-    treeSortRows,
-    getSumValue
+export const initFunObj = {
+    init: init,
+    sortRows: sortRows,
+    basicSortRows: basicSortRows,
+    treeSortRows: treeSortRows,
+    getSumValue: getSumValue
 }

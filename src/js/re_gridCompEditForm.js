@@ -48,9 +48,9 @@ const formEditCell = function(value,field,title,required,headerColor){
 	htmlStr += '</div>';
 	return htmlStr;
 };
-export{
-    editForm_initDefault,
-    editForm_setRequired,
-    re_editorRowChangeFun,
-    formEditCell
+export const editFromFunObj = {
+    editForm_initDefault:editForm_initDefault,
+    editForm_setRequired:editForm_setRequired,
+		editorRowChangeFun: re_editorRowChangeFun,
+    formEditCell: formEditCell
 }

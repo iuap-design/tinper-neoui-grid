@@ -3,16 +3,16 @@
  */
 
 const isCheckedHeaderRow = function() {
-        if (this.selectRows.length !== 0 && (this.selectRows.length == this.dataSourceObj.rows.length)) {
-            //修改全选标记为false
-            $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
-        } else {
-            $('#' + this.options.id + '_header_multi_input').removeClass('is-checked')
-        }
+    if (this.selectRows.length !== 0 && (this.selectRows.length == this.dataSourceObj.rows.length)) {
+        //修改全选标记为false
+        $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+    } else {
+        $('#' + this.options.id + '_header_multi_input').removeClass('is-checked')
     }
-    /*
-     * 添加一行
-     */
+}
+/*
+ * 添加一行
+ */
 const addOneRow = function(row, index) {
     var oThis = this,
         displayFlag = 'none',
@@ -139,7 +139,7 @@ const addOneRow = function(row, index) {
         obj.length = 1;
         this.renderTypeFun(obj);
     }
-    
+
 };
 const addOneRowTree = function(row, index) {
     return index;
@@ -274,7 +274,7 @@ const addRows = function(rows, index) {
         obj.length = rows.length;
         this.renderTypeFun(obj);
     }
-    
+
     this.updateLastRowFlag();
     this.isCheckedHeaderRow();
 };
@@ -339,7 +339,7 @@ const deleteOneRow = function(index) {
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
     }
-    
+
     this.deleteOneRowTree();
     if (typeof this.options.onRowDelete == 'function') {
         var obj = {};
@@ -408,7 +408,7 @@ const updateValueAt = function(rowIndex, field, value, force) {
                 obj.oldValue = oldValue;
                 obj.newValue = value;
                 var flag = this.options.onBeforeValueChange(obj);
-                if(!flag)
+                if (!flag)
                     return;
             }
             $(this.dataSourceObj.rows[rowIndex].value).attr(field, value);
@@ -539,7 +539,7 @@ const setRowSelect = function(rowIndex, doms) {
     //     $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
     // }
     this.isCheckedHeaderRow();
-    if(typeof this.defaultOnRowSelected == 'function'){
+    if (typeof this.defaultOnRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
         obj.rowObj = this.dataSourceObj.rows[rowIndex];
@@ -639,7 +639,12 @@ const setAllRowSelect = function() {
         fixContentTrs = this.$ele.find('#' + this.options.id + '_content_fixed_tbody tr[role="row"]');
     this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]')
     for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
-        this.setRowSelect(i, { multiSelectDivs: multiSelectDivs, numColDivs: numColDivs, contentTrs: contentTrs, fixContentTrs: fixContentTrs });
+        this.setRowSelect(i, {
+            multiSelectDivs: multiSelectDivs,
+            numColDivs: numColDivs,
+            contentTrs: contentTrs,
+            fixContentTrs: fixContentTrs
+        });
     }
     if (typeof this.options.onAllRowSelected == 'function') {
         var obj = {};
@@ -792,28 +797,28 @@ const resetNumCol = function() {
         this.innerHTML = i + 1 + "";
     });
 };
-export {
-    isCheckedHeaderRow,
-    addOneRow,
-    addOneRowTree,
-    addOneRowTreeHasChildF,
-    editClose,
-    addRows,
-    createContentOneRowFixed,
-    updateEditRowIndex,
-    deleteOneRow,
-    repairSumRow,
-    deleteOneRowTree,
-    deleteRows,
-    updateRow,
-    updateValueAt,
-    updateValueAtTree,
-    updateValueAtEdit,
-    setRowSelect,
-    setRowUnselect,
-    setAllRowSelect,
-    setAllRowUnSelect,
-    setRowFocus,
-    setRowUnFocus,
-    resetNumCol
+export const operateRowFunObj = {
+    isCheckedHeaderRow: isCheckedHeaderRow,
+    addOneRow: addOneRow,
+    addOneRowTree: addOneRowTree,
+    addOneRowTreeHasChildF: addOneRowTreeHasChildF,
+    editClose: editClose,
+    addRows: addRows,
+    createContentOneRowFixed: createContentOneRowFixed,
+    updateEditRowIndex: updateEditRowIndex,
+    deleteOneRow: deleteOneRow,
+    repairSumRow: repairSumRow,
+    deleteOneRowTree: deleteOneRowTree,
+    deleteRows: deleteRows,
+    updateRow: updateRow,
+    updateValueAt: updateValueAt,
+    updateValueAtTree: updateValueAtTree,
+    updateValueAtEdit: updateValueAtEdit,
+    setRowSelect: setRowSelect,
+    setRowUnselect: setRowUnselect,
+    setAllRowSelect: setAllRowSelect,
+    setAllRowUnSelect: setAllRowUnSelect,
+    setRowFocus: setRowFocus,
+    setRowUnFocus: setRowUnFocus,
+    resetNumCol: resetNumCol,
 }

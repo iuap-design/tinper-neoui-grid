@@ -1,42 +1,36 @@
 import {
-    init,
-    sortRows,
-    basicSortRows,
-    treeSortRows,
-    getSumValue
+    initFunObj
 } from './dataSourceInit';
 
-class dataSource{
-    constructor(options, gridComp){
+class dataSource {
+    constructor(options, gridComp) {
 
         this.init(options, gridComp);
-    	this.sortRows();
+        this.sortRows();
 
     }
 };
 
 var dataSourceProto = dataSource.prototype;
-
-dataSourceProto.init = init;
-dataSourceProto.sortRows = sortRows;
-dataSourceProto.basicSortRows = basicSortRows;
-dataSourceProto.treeSortRows = treeSortRows;
-dataSourceProto.getSumValue = getSumValue;
+Object.assign(dataSourceProto, initFunObj);
 
 
-import{re_basicSortRows} from './re_gridCompSort';
-dataSourceProto.basicSortRows = re_basicSortRows;
+import {
+    sortFunObj
+} from './re_gridCompSort';
+dataSourceProto.basicSortRows = sortFunObj.re_basicSortRows;
 
 
 /*
  * tree
  */
-import{
-    re_treeSortRows,
-    pushChildRows
+import {
+    treeFunObj
 } from './re_gridCompTree';
 
-dataSourceProto.treeSortRows = re_treeSortRows;
-dataSourceProto.pushChildRows = pushChildRows;
+dataSourceProto.treeSortRows = treeFunObj.re_treeSortRows;
+dataSourceProto.pushChildRows = treeFunObj.pushChildRows;
 
-export{dataSource}
+export {
+    dataSource
+}

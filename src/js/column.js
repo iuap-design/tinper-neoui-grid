@@ -1,28 +1,24 @@
 import {
-    init,
-    initTree,
-    getBooleanOptions
+    initFunObj
 } from './columnInit';
 
-class column{
-    constructor(options, gridComp){
-
+class column {
+    constructor(options, gridComp) {
         this.init(options, gridComp);
-
     }
 };
+var gridCompColumnProto = column.prototype;
+Object.assign(gridCompColumnProto, initFunObj);
 
- var gridCompColumnProto = column.prototype;
+/*
+ * tree
+ */
+import {
+    treeFunObj
+} from './re_gridCompTree';
 
- gridCompColumnProto.init = init;
- gridCompColumnProto.initTree = initTree;
- gridCompColumnProto.getBooleanOptions = getBooleanOptions;
+gridCompColumnProto.initTree = treeFunObj.re_initTree;
 
- /*
-  * tree
-  */
- import{re_initTree} from './re_gridCompTree';
-
- gridCompColumnProto.initTree = re_initTree;
-
-export{column}
+export {
+    column
+}

@@ -96,9 +96,9 @@ const getLevelTitleByField = function(field){
 	}
 	return '';
 };
-export{
-    re_resetThVariableHeaderLevel,
-    re_initGridCompColumnHeaderLevelFun,
-    initGridHiddenLevelColumn,
-    getLevelTitleByField
+export const headerLevelFunObj = {
+	resetThVariableHeaderLevel: re_resetThVariableHeaderLevel,
+	initGridCompColumnHeaderLevelFun: re_initGridCompColumnHeaderLevelFun,
+	// initGridHiddenLevelColumn : initGridHiddenLevelColumn,
+	getLevelTitleByField: getLevelTitleByField
 }

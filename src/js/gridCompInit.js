@@ -1,14 +1,22 @@
-import {gridBrowser} from './gridBrowser';
+import {
+    gridBrowser
+} from './gridBrowser';
 
-import {dataSource}  from './dataSource';
-import {column as gridCompColumn}  from './column';
+import {
+    dataSource
+} from './dataSource';
+import {
+    column as gridCompColumn
+} from './column';
 
-import {editHeadTitleIcon} from "./re_gridCompEdit";
+import {
+    editHeadTitleIcon
+} from "./re_gridCompEdit";
 
- /*
+/*
  * 处理参数
  */
-const init = function(ele, options){
+const init = function(ele, options) {
     this.dataSource = dataSource;
     this.gridCompColumn = gridCompColumn;
     this.ele = ele[0];
@@ -17,17 +25,17 @@ const init = function(ele, options){
     this.options = $.extend({}, this.defaults, options);
     this.getBooleanOptions();
     this.transDefault = {
-        ml_show_column:'显示/隐藏列',
-        ml_clear_set:'清除设置',
-        ml_no_rows:'无数据',
-        ml_sum:'合计:',
-        ml_close:'关闭'
+        ml_show_column: '显示/隐藏列',
+        ml_clear_set: '清除设置',
+        ml_no_rows: '无数据',
+        ml_sum: '合计:',
+        ml_close: '关闭'
     }
-    this.transMap = $.extend({},this.transDefault,options.transMap);
+    this.transMap = $.extend({}, this.transDefault, options.transMap);
     this.gridCompColumnFixedArr = new Array();
     this.gridCompColumnArr = new Array(); // 存储设置默认值之后的columns对象
     // this.headerHeight = 45; // header区域高度
-    this.countContentHeight = true;// 是否计算内容区的高度（是否为流式）
+    this.countContentHeight = true; // 是否计算内容区的高度（是否为流式）
     this.minColumnWidth = 80; // 最小列宽
     this.scrollBarHeight = 16; // 滚动条高度
     this.numWidth = this.options.numWidth || 40; // 数字列宽度
@@ -44,7 +52,7 @@ const init = function(ele, options){
     this.treeLeft = 10; // 树表时每一级之间的差值
     this.overWidthVisibleColumnArr = new Array(); // 超出定义宽度的column集合
 };
-const getBooleanOptions = function(){
+const getBooleanOptions = function() {
     this.options.cancelFocus = this.getBoolean(this.options.cancelFocus);
     this.options.showHeader = this.getBoolean(this.options.showHeader);
     this.options.showNumCol = this.getBoolean(this.options.showNumCol);
@@ -67,31 +75,31 @@ const getBooleanOptions = function(){
 /*
  * 初始化默认参数
  */
-const initDefault = function(){
+const initDefault = function() {
     this.defaults = {
         id: (new Date).valueOf(),
         editType: 'default',
-        cancelFocus:true, // 第二次点击是否取消focus
-        cancelSelect:true, // 第二次点击是否取消select
+        cancelFocus: true, // 第二次点击是否取消focus
+        cancelSelect: true, // 第二次点击是否取消select
         showHeader: true, // 是否显示表头
         showNumCol: false, // 是否显示数字列
-        multiSelect:false, // 是否显示复选框
+        multiSelect: false, // 是否显示复选框
         columnMenu: true, // 是否存在列头操作按钮
         canDrag: true, // 是否可以拖动
         // formMaxWidth: 300, // 整体宽度小于某一值之后以form展示
-        formMaxWidth:0,
-        maxHeaderLevel:1, // header的最高层级，用于计算header区域的高度
-        overWidthHiddenColumn:false, // 宽度不足时是否自动隐藏column
+        formMaxWidth: 0,
+        maxHeaderLevel: 1, // header的最高层级，用于计算header区域的高度
+        overWidthHiddenColumn: false, // 宽度不足时是否自动隐藏column
         sortable: true, // 是否可以排序
         showSumRow: false, // 是否显示合计行
         canSwap: true, // 是否可以交换列位置
-        showTree:false, // 是否显示树表
-        autoExpand:true, // 是否默认展开
-        needTreeSort:false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
-        needLocalStorage:false, // 是否使用前端缓存
-        noScroll:false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
+        showTree: false, // 是否显示树表
+        autoExpand: true, // 是否默认展开
+        needTreeSort: false, // 是否需要对传入数据进行排序，此设置为优化性能，如果传入数据是无序的则设置为true，如果可以保证先传入父节点后传入子节点则设置为false提高性能
+        needLocalStorage: false, // 是否使用前端缓存
+        noScroll: false, // 是否显示滚动条,宽度设置百分比的话不显示滚动条
         contentSelect: true, // 点击内容区是否执行选中逻辑
-        showEditIcon: false,// 是否显示编辑图标
+        showEditIcon: false, // 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
         fixedFloat: 'left',
     }
@@ -100,7 +108,7 @@ const initDefault = function(){
  * 创建grid
  */
 const initGrid = function() {
-    if(!this.options.columns || this.options.columns.length == 0){
+    if (!this.options.columns || this.options.columns.length == 0) {
         return;
     }
     var oThis = this;
@@ -111,14 +119,16 @@ const initGrid = function() {
     this.initDataSource();
     this.createDivs();
     // UAP-NC 轻量化项目：切换tab时添加form会消失问题
-    this.inte = setInterval(function(){oThis.setIntervalFun.call(oThis)}, 300);
+    this.inte = setInterval(function() {
+        oThis.setIntervalFun.call(oThis)
+    }, 300);
 };
 /*
  * 销毁自身
  */
-const destroySelf = function(){
+const destroySelf = function() {
     clearInterval(this.inte);
-    this.$ele.data('gridComp',null);
+    this.$ele.data('gridComp', null);
     this.ele.innerHTML = '';
     this.showTree = '';
     this.showType = '';
@@ -132,7 +142,7 @@ const destroySelf = function(){
 const initOptions = function() {
     this.options.width = this.formatWidth(this.options.width);
     this.options.height = this.formatWidth(this.options.height);
-    if(this.options.height == '100%' || !this.options.height){
+    if (this.options.height == '100%' || !this.options.height) {
         this.countContentHeight = false;
     }
     this.initOptionsTree();
@@ -140,32 +150,31 @@ const initOptions = function() {
     if (this.options.showNumCol) {
         this.leftW += this.numWidth;
     }
-    if(this.options.multiSelect){
+    if (this.options.multiSelect) {
         this.leftW += this.multiSelectWidth;
     }
     this.exceptContentHeight = 0; // 内容区域之外的高度
-    if(this.options.showHeader){
-        this.exceptContentHeight +=this.headerHeight;
+    if (this.options.showHeader) {
+        this.exceptContentHeight += this.headerHeight;
     }
     this.fixedWidth = 0;
-    if(this.options.maxHeaderLevel > 1){
+    if (this.options.maxHeaderLevel > 1) {
         this.options.canSwap = false;
     }
     // 获取缓存id
     var url = window.location.href;
     var index = url.indexOf('?');
-    if(index > 0){
-        url = url.substring(0,index);
+    if (index > 0) {
+        url = url.substring(0, index);
     }
     this.localStorageId = this.options.id + url;
 
 };
-const initOptionsTree = function(){
-};
+const initOptionsTree = function() {};
 /*
  * 初始化变量
  */
-const initVariable = function(){
+const initVariable = function() {
     this.initDataSourceVariable();
     // 鼠标点击移动时位置记录
     this.mouseUpX = 'mouseUpX';
@@ -175,25 +184,25 @@ const initVariable = function(){
     this.mouseMoveX = 'mouseMoveX';
     this.mouseMoveY = 'mouseMoveY';
     this.scrollLeft = 0; // 记录横向滚动条
-    this.scrollTop = 0;// 记录纵向滚动条
+    this.scrollTop = 0; // 记录纵向滚动条
     this.showType = ''; // 记录grid显示方式，form和grid
     this.createGridFlag = false; // 是否已经创建grid展示
     this.columnClickX = 0; // 点击处的X坐标
     this.columnClickY = 0; // 点击处的Y坐标
-    this.columnMenuMove = false;// 是否在column menu区域移动
+    this.columnMenuMove = false; // 是否在column menu区域移动
     this.firstColumn = true; // 用于记录是否已经存在第一列，true表示还没有，false表示已经存在
     this.lastVisibleColumn = null;
     this.lastVisibleColumnWidth = 0;
-    this.columnMenuMove = false;// 是否在column menu区域移动
+    this.columnMenuMove = false; // 是否在column menu区域移动
     this.createColumnMenuFlag = false; // 是否已经创建column menu 区域
     this.menuColumnsHeight = 0;
     this.createFormFlag = false; // 是否已经创建form展示
-    this.$sd_storageData = null;// 本地缓存内容为object
+    this.$sd_storageData = null; // 本地缓存内容为object
 };
 /*
  * 初始化datasource相关变量
  */
-const initDataSourceVariable = function(){
+const initDataSourceVariable = function() {
     this.selectRows = new Array();
     this.selectRowsObj = new Array();
     this.selectRowsIndex = new Array();
@@ -202,7 +211,7 @@ const initDataSourceVariable = function(){
 };
 
 // 初始化宽度相关变量
-const initWidthVariable = function(){
+const initWidthVariable = function() {
     // 计算用变量
     this.wholeWidth = 0; // 整体宽度
     this.wholeHeight = 0; // 整体高度
@@ -230,21 +239,21 @@ const initGridCompColumn = function() {
     this.initGridCompFixedColumn();
     this.columnsVisibleFun();
 };
-const initGridCompColumnVar = function(){
+const initGridCompColumnVar = function() {
     this.gridCompColumnArr = new Array();
     this.basicGridCompColumnArr = new Array();
     this.gridCompColumnFixedArr = new Array();
     this.gridCompLevelColumn = new Array();
     this.gridCompHiddenLevelColumnArr = new Array();
 };
-const initGridCompColumnFun = function(columnOptions){
+const initGridCompColumnFun = function(columnOptions) {
     var column = new gridCompColumn(columnOptions, this);
     // 如果可编辑增加修改图标
     this.editHeadTitleIcon(column);
     var widthStr = column.options.width + '';
-    if(widthStr.indexOf("%") > 0){
+    if (widthStr.indexOf("%") > 0) {
         this.options.noScroll = 'true';
-    }else{
+    } else {
         column.options.width = parseInt(column.options.width);
     }
     column.options.optionsWidth = column.options.width;
@@ -253,47 +262,41 @@ const initGridCompColumnFun = function(columnOptions){
     this.initGridCompColumnColumnMenuFun(columnOptions);
     this.initGridCompColumnHeaderLevelFun(columnOptions);
 };
-const initGridCompColumnColumnMenuFun = function(columnOptions){
-};
-const initGridCompColumnHeaderLevelFun = function(columnOptions){
-};
-const initGridCompColumnLoacl = function(columnOptions){
-};
-const initGridHiddenLevelColumn = function(){
-};
-const initGridCompFixedColumn = function(){
-};
+const initGridCompColumnColumnMenuFun = function(columnOptions) {};
+const initGridCompColumnHeaderLevelFun = function(columnOptions) {};
+const initGridCompColumnLoacl = function(columnOptions) {};
+const initGridHiddenLevelColumn = function() {};
+const initGridCompFixedColumn = function() {};
 /*
  * 设置某列是否必输
  */
-const setRequired = function(field, value){
-};
+const setRequired = function(field, value) {};
 /*
  * 创建dataSource对象方便后续处理
  */
 const initDataSource = function() {
     var oThis = this;
-    this.dataSourceObj = new dataSource(this.options.dataSource,this);
+    this.dataSourceObj = new dataSource(this.options.dataSource, this);
 };
-export{
-    init,
-    getBooleanOptions,
-    initDefault,
-    initGrid,
-    destroySelf,
-    initOptions,
-    initOptionsTree,
-    initVariable,
-    initDataSourceVariable,
-    initWidthVariable,
-    initGridCompColumn,
-    initGridCompColumnVar,
-    initGridCompColumnFun,
-    initGridCompColumnColumnMenuFun,
-    initGridCompColumnHeaderLevelFun,
-    initGridCompColumnLoacl,
-    initGridHiddenLevelColumn,
-    initGridCompFixedColumn,
-    setRequired,
-    initDataSource
+export const initFunObj = {
+    init: init,
+    getBooleanOptions: getBooleanOptions,
+    initDefault: initDefault,
+    initGrid: initGrid,
+    destroySelf: destroySelf,
+    initOptions: initOptions,
+    initOptionsTree: initOptionsTree,
+    initVariable: initVariable,
+    initDataSourceVariable: initDataSourceVariable,
+    initWidthVariable: initWidthVariable,
+    initGridCompColumn: initGridCompColumn,
+    initGridCompColumnVar: initGridCompColumnVar,
+    initGridCompColumnFun: initGridCompColumnFun,
+    initGridCompColumnColumnMenuFun: initGridCompColumnColumnMenuFun,
+    initGridCompColumnHeaderLevelFun: initGridCompColumnHeaderLevelFun,
+    initGridCompColumnLoacl: initGridCompColumnLoacl,
+    initGridHiddenLevelColumn: initGridHiddenLevelColumn,
+    initGridCompFixedColumn: initGridCompFixedColumn,
+    setRequired: setRequired,
+    initDataSource: initDataSource
 }

@@ -1,19 +1,19 @@
 /*
  * 设置某列是否显示(传入column)
  */
-const setColumnVisibleByColumn = function(column,visible){
+const setColumnVisibleByColumn = function(column, visible) {
     var index = this.getIndexOfColumn(column);
-    this.setColumnVisibleByIndex(index,visible);
+    this.setColumnVisibleByIndex(index, visible);
 };
 /*
  * 设置某列是否显示(传入index为gridCompColumnArr中的数据)
  */
-const setColumnVisibleByIndex = function(index,visible){
-    if(index >= 0){
+const setColumnVisibleByIndex = function(index, visible) {
+    if (index >= 0) {
         var column = this.gridCompColumnArr[index],
             visibleIndex = this.getVisibleIndexOfColumn(column);
         // 显示处理
-        if(column.options.visible == false && visible){
+        if (column.options.visible == false && visible) {
             var htmlStr = '<col';
             if (column.options.width) {
                 htmlStr += ' style="width:' + this.formatWidth(column.options.width) + '"';
@@ -22,37 +22,37 @@ const setColumnVisibleByIndex = function(index,visible){
 
             $('#' + this.options.id + '_header th:eq(' + index + ')').css('display', "");
             $('#' + this.options.id + '_content th:eq(' + index + ')').css('display', "");
-            $('td:eq(' + index + ')',$('#' + this.options.id + '_content tbody tr')).css('display', "");
+            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
             // 当前列之后的显示列的index
             var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
-            if(nextVisibleIndex < 1){
+            if (nextVisibleIndex < 1) {
                 // 添加在最后面
-                try{
-                    $('#' + this.options.id + '_header col:last')[0].insertAdjacentHTML('afterEnd',htmlStr);
-                    $('#' + this.options.id + '_content col:last')[0].insertAdjacentHTML('afterEnd',htmlStr);
-                }catch(e){
+                try {
+                    $('#' + this.options.id + '_header col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
+                    $('#' + this.options.id + '_content col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
+                } catch (e) {
                     $('#' + this.options.id + '_header col:last').after(htmlStr);
                     $('#' + this.options.id + '_content col:last').after(htmlStr);
                 }
-            }else{
+            } else {
                 // 添加在下一个显示列之前
-                try{
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex -1) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex -1) + ')')[0].insertAdjacentHTML('beforeBegin',htmlStr);
-                }catch(e){
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex -1) + ')').before(htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex -1) + ')').before(htmlStr);
+                try {
+                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+                } catch (e) {
+                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
+                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
         }
         // 隐藏处理
-        if(column.options.visible == true && !visible){
+        if (column.options.visible == true && !visible) {
             $('#' + this.options.id + '_header th:eq(' + index + ')').css('display', "none");
             $('#' + this.options.id + '_header col:eq(' + visibleIndex + ')').remove();
             $('#' + this.options.id + '_content th:eq(' + index + ')').css('display', "none");
             $('#' + this.options.id + '_content col:eq(' + visibleIndex + ')').remove();
-            $('td:eq(' + index + ')',$('#' + this.options.id + '_content tbody tr')).css('display', "none");
+            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "none");
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
         }
@@ -69,38 +69,38 @@ const setColumnVisibleByIndex = function(index,visible){
 /*
  * 根据field设置宽度
  */
-const setCoulmnWidthByField = function(field, newWidth){
+const setCoulmnWidthByField = function(field, newWidth) {
     var column = this.getColumnByField(field);
     this.setColumnWidth(column, newWidth);
 };
 /*
  * 根据column对象设置宽度
  */
-const setColumnWidth = function(column, newWidth){
+const setColumnWidth = function(column, newWidth) {
     // if(column != this.lastVisibleColumn){
-        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
-            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
+    if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
+        var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
             oldWidth = column.options.width,
-            changeWidth  = newWidth - oldWidth,
+            changeWidth = newWidth - oldWidth,
             cWidth = this.contentWidth + changeWidth;
-            this.contentWidth = this.contentWidthChange(cWidth);
-            $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-            $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+        this.contentWidth = this.contentWidthChange(cWidth);
+        $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+        $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
 
-            column.options.width = newWidth;
-            column.options.realWidth = newWidth;
+        column.options.width = newWidth;
+        column.options.realWidth = newWidth;
 
-            this.resetThVariable();
-            this.saveGridCompColumnArrToLocal();
-        }
-        this.columnsVisibleFun();
+        this.resetThVariable();
+        this.saveGridCompColumnArrToLocal();
+    }
+    this.columnsVisibleFun();
     // }
 };
 /*
  * 设置数据源
  */
 const setDataSource = function(dataSource) {
-    if(!(this.$ele.data('gridComp') == this))
+    if (!(this.$ele.data('gridComp') == this))
         return;
     this.initDataSourceVariable();
     this.options.dataSource = dataSource;
@@ -122,28 +122,29 @@ const setDataSource = function(dataSource) {
 
     }
  */
-const setDataSourceFun1 = function(dataSource){
+const setDataSourceFun1 = function(dataSource) {
     var dataSourceObj = {};
-    if(dataSource.values){
+    if (dataSource.values) {
         var valuesArr = new Array();
         $.each(dataSource.values, function() {
-            if(dataSource.fields){
-                var valueObj = {},value = this;
+            if (dataSource.fields) {
+                var valueObj = {},
+                    value = this;
                 $.each(dataSource.fields, function(j) {
-                    $(valueObj).attr(this,value[j])
+                    $(valueObj).attr(this, value[j])
                 });
                 valuesArr.push(valueObj);
             }
         });
     }
-    $(dataSourceObj).attr('values',valuesArr);
+    $(dataSourceObj).attr('values', valuesArr);
     this.setDataSource(dataSourceObj);
 };
-export{
-    setColumnVisibleByColumn,
-    setColumnVisibleByIndex,
-    setCoulmnWidthByField,
-    setColumnWidth,
-    setDataSource,
-    setDataSourceFun1
+export const setFunObj = {
+    setColumnVisibleByColumn: setColumnVisibleByColumn,
+    setColumnVisibleByIndex: setColumnVisibleByIndex,
+    setCoulmnWidthByField: setCoulmnWidthByField,
+    setColumnWidth: setColumnWidth,
+    setDataSource: setDataSource,
+    setDataSourceFun1: setDataSourceFun1,
 }

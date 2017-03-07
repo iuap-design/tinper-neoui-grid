@@ -135,13 +135,13 @@ const re_resetThVariableDrag = function(nowTh,gridCompColumn,width){
 		$('#' + this.options.id + '_resize_handle')[0].nowTh = nowTh;
 	}
 };
-export{
-    re_createHeaderDrag,
-    drag_initEventFun,
-    drag_initGridEventFun,
-    dragStart,
-    dragFun,
-    dragEnd,
-    headerThDrag,
-    re_resetThVariableDrag
+export const dragFunObj = {
+	createHeaderDrag: re_createHeaderDrag,
+	dragStart: dragStart,
+	dragFun: dragFun,
+	dragEnd: dragEnd,
+	headerThDrag: headerThDrag,
+	resetThVariableDrag: re_resetThVariableDrag,
+	drag_initEventFun:drag_initEventFun,
+	drag_initGridEventFun:drag_initGridEventFun
 }
