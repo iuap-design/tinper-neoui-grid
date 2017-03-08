@@ -211,8 +211,8 @@ const swapColumnEnd = function(e) {
                 swapToColumnIndex = $(swapToColumnEle).attr('index'),
                 swapGridCompColumn = this.gridCompColumnArr[swapColumnIndex];
             this.gridCompColumnArr.splice(parseInt(swapToColumnIndex) + 1, 0, swapGridCompColumn);
-            if (swapColumnIndex < swapToColumnIndex)
-                this.gridCompColumnArr.splice(swapColumnIndex, 1);
+            if (parseInt(swapColumnIndex) < parseInt(swapToColumnIndex))
+                this.gridCompColumnArr.splice(parseInt(swapColumnIndex), 1);
             else
                 this.gridCompColumnArr.splice(parseInt(swapColumnIndex) + 1, 1);
             this.saveGridCompColumnArrToLocal();
