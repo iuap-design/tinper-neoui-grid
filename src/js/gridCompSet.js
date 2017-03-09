@@ -20,39 +20,39 @@ const setColumnVisibleByIndex = function(index, visible) {
             }
             htmlStr += '>';
 
-            $('#' + this.options.id + '_header th:eq(' + index + ')').css('display', "");
-            $('#' + this.options.id + '_content th:eq(' + index + ')').css('display', "");
+            $('#' + this.options.id + '_header_table th:eq(' + index + ')').css('display', "");
+            $('#' + this.options.id + '_content_table th:eq(' + index + ')').css('display', "");
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
             // 当前列之后的显示列的index
             var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
             if (nextVisibleIndex < 1) {
                 // 添加在最后面
                 try {
-                    $('#' + this.options.id + '_header col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
-                    $('#' + this.options.id + '_content col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
+                    $('#' + this.options.id + '_header_table col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
+                    $('#' + this.options.id + '_content_table col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
                 } catch (e) {
-                    $('#' + this.options.id + '_header col:last').after(htmlStr);
-                    $('#' + this.options.id + '_content col:last').after(htmlStr);
+                    $('#' + this.options.id + '_header_table col:last').after(htmlStr);
+                    $('#' + this.options.id + '_content_table col:last').after(htmlStr);
                 }
             } else {
                 // 添加在下一个显示列之前
                 try {
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+                    $('#' + this.options.id + '_header_table col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
+                    $('#' + this.options.id + '_content_table col:eq(' + (nextVisibleIndex - 1) + ')')[0].insertAdjacentHTML('beforeBegin', htmlStr);
                 } catch (e) {
-                    $('#' + this.options.id + '_header col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
-                    $('#' + this.options.id + '_content col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
+                    $('#' + this.options.id + '_header_table col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
+                    $('#' + this.options.id + '_content_table col:eq(' + (nextVisibleIndex - 1) + ')').before(htmlStr);
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
         }
         // 隐藏处理
         if (column.options.visible == true && !visible) {
-            $('#' + this.options.id + '_header th:eq(' + index + ')').css('display', "none");
-            $('#' + this.options.id + '_header col:eq(' + visibleIndex + ')').remove();
-            $('#' + this.options.id + '_content th:eq(' + index + ')').css('display', "none");
-            $('#' + this.options.id + '_content col:eq(' + visibleIndex + ')').remove();
-            $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "none");
+            $('#' + this.options.id + '_header_table th:eq(' + index + ')').css('display', "none");
+            $('#' + this.options.id + '_header_table col:eq(' + visibleIndex + ')').remove();
+            $('#' + this.options.id + '_content_table th:eq(' + index + ')').css('display', "none");
+            $('#' + this.options.id + '_content_table col:eq(' + visibleIndex + ')').remove();
+            $('td:eq(' + index + ')', $('#' + this.options.id + '_content_table tbody tr')).css('display', "none");
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
         }

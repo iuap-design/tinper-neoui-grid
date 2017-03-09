@@ -160,6 +160,8 @@ const initOptions = function() {
     this.fixedWidth = 0;
     if (this.options.maxHeaderLevel > 1) {
         this.options.canSwap = false;
+        this.options.canDrag = false;
+        this.options.columnMenu = false;
     }
     // 获取缓存id
     var url = window.location.href;
