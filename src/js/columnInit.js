@@ -28,6 +28,7 @@ const init = function(options, gridComp) {
         // 目前仅支持两级，多级的话需要改变头的高度，另外处理当前级别的时候需要看下是否存在上级，如果存在上级的话
         // 则创建新的div，这就涉及到需要躲变量计算每级的宽度，需要考虑下如何实现。
         // headerColor:'#a8a8a8'
+        textAlign: 'left', // 显示时对齐方式
     };
     // 从grid继承的属性
     var gridDefault = {

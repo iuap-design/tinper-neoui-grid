@@ -574,8 +574,13 @@ const createContentOneRowTd = function(row, createFlag) {
             } else {
                 l += 16;
             }
+            treeStyle += 'text-align:' + this.options.textAlign + ';';
             treeStyle += 'left:' + l + 'px;"';
+
+        }else{
+            treeStyle += 'style="text-align:' + this.options.textAlign + '";';
         }
+
         if (!this.options.visible) {
             tdStyle = 'style="display:none;"';
         }
