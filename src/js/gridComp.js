@@ -281,7 +281,7 @@ var oldInitGridEventFun_rowDrag = gridCompProto.initGridEventFun;
 import {
     rowDragFunObj
 } from './re_gridCompRowDrag';
-Object.assign(gridCompProto, treeFunObj);
+Object.assign(gridCompProto, rowDragFunObj);
 
 gridCompProto.initGridEventFun = function() {
     // 执行原有方法

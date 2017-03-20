@@ -279,6 +279,7 @@ const re_editClose = function() {
     if (this.eidtRowIndex < 0)
         return;
     var row = this.dataSourceObj.rows[this.eidtRowIndex];
+    var editField = this.gridCompColumnArr[this.editColIndex].options.field;
     var inputDom = null;
     //在chrome下
     // if (dohideFlag && this.editComp && this.editComp.hide) {
@@ -331,6 +332,7 @@ const re_editClose = function() {
         var obj = {};
         obj.begin = this.eidtRowIndex;
         obj.length = 1;
+        obj.field = editField;
         this.renderTypeFun(obj);
     }
 
