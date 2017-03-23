@@ -107,6 +107,7 @@ const re_addOneRowTree = function(row, index, rowObj) {
         }
         if (this.hasParent) {
             var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(oThis.addRowParentIndex);
+            $pTr.removeClass('u-grid-content-leaf-row').addClass('u-grid-content-parent-row');
             if (parentChildLength > 0) {
                 // 如果存在父项并且父项存在子项则需要判断父项是否展开
                 var openDiv = $('.uf-add-s-o', $pTr);
