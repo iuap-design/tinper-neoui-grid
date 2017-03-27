@@ -1,5 +1,5 @@
 /*!
- * tinper-neoui-grid v3.1.28
+ * tinper-neoui-grid v3.2.0
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -34,7 +34,7 @@
         return __webpack_require__.d(getter, "a", getter), getter;
     }, __webpack_require__.o = function(object, property) {
         return Object.prototype.hasOwnProperty.call(object, property);
-    }, __webpack_require__.p = "", __webpack_require__(__webpack_require__.s = 32);
+    }, __webpack_require__.p = "", __webpack_require__(__webpack_require__.s = 20);
 }([ function(module, exports, __webpack_require__) {
     var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
     !function(global, factory) {
@@ -331,7 +331,8 @@
                     if (nowParentKeyValue == keyValue && (oThis.hasChildF = !0), oThis.hasParent && oThis.hasChildF) return !1;
                 }), this.hasParent || (rowObj.level = 0, index != l && (index = l)), this.hasParent) {
                     var $pTr = $("#" + this.options.id + "_content_div").find("tbody").find('tr[role="row"]').eq(oThis.addRowParentIndex);
-                    if (parentChildLength > 0) {
+                    if ($pTr.removeClass("u-grid-content-leaf-row").addClass("u-grid-content-parent-row"), 
+                    parentChildLength > 0) {
                         var openDiv = $(".uf-add-s-o", $pTr);
                         openDiv.length > 0 || (displayFlag = "block");
                     } else {
@@ -436,9 +437,8 @@
                     var index = oThis.hasParentRows.indexOf(this);
                     oThis.hasParentRows.splice(index, 1);
                 }), oThis.rows = new Array();
-                var level = 0;
                 $.each(this.nothasParentRows, function(i) {
-                    this.level = level, oThis.rows.push(this), oThis.pushChildRows(this, level);
+                    this.level = 0, oThis.rows.push(this), oThis.pushChildRows(this, 0);
                 });
             }
         }, pushChildRows = function(row, level) {
@@ -990,7 +990,7 @@
 }, function(module, exports, __webpack_require__) {
     var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
     !function(global, factory) {
-        __WEBPACK_AMD_DEFINE_ARRAY__ = [ exports, __webpack_require__(13), __webpack_require__(14), __webpack_require__(0), __webpack_require__(15), __webpack_require__(2), __webpack_require__(16), __webpack_require__(17), __webpack_require__(18), __webpack_require__(19), __webpack_require__(12), __webpack_require__(6), __webpack_require__(31), __webpack_require__(20), __webpack_require__(21), __webpack_require__(7), __webpack_require__(22), __webpack_require__(23), __webpack_require__(24), __webpack_require__(25), __webpack_require__(26), __webpack_require__(27), __webpack_require__(8), __webpack_require__(29), __webpack_require__(30), __webpack_require__(28), __webpack_require__(3) ], 
+        __WEBPACK_AMD_DEFINE_ARRAY__ = [ exports, __webpack_require__(13), __webpack_require__(14), __webpack_require__(0), __webpack_require__(15), __webpack_require__(2), __webpack_require__(16), __webpack_require__(17), __webpack_require__(18), __webpack_require__(19), __webpack_require__(12), __webpack_require__(6), __webpack_require__(32), __webpack_require__(21), __webpack_require__(22), __webpack_require__(7), __webpack_require__(23), __webpack_require__(24), __webpack_require__(25), __webpack_require__(26), __webpack_require__(27), __webpack_require__(28), __webpack_require__(8), __webpack_require__(30), __webpack_require__(31), __webpack_require__(29), __webpack_require__(3) ], 
         __WEBPACK_AMD_DEFINE_FACTORY__ = factory, void 0 !== (__WEBPACK_AMD_DEFINE_RESULT__ = "function" == typeof __WEBPACK_AMD_DEFINE_FACTORY__ ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__) && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__);
     }(0, function(exports, _gridCompCreate, _gridCompCreateCal, _gridCompEvent, _gridCompGet, _gridCompInit, _gridCompOperateRow, _gridCompRenderType, _gridCompSet, _gridCompWDChange, _gridCompClick, _gridCompOther, _ut_utility, _re_gridCompColMenu, _re_gridCompDrag, _re_gridCompEdit, _re_gridCompEditForm, _re_gridCompFixed, _re_gridCompFormShow, _re_gridCompHeaderLevel, _re_gridCompLocalStorage, _re_gridCompOverWidthHidden, _re_gridCompSort, _re_gridCompSumRow, _re_gridCompSwap, _re_gridCompRowDrag, _re_gridCompTree) {
         "use strict";
@@ -1231,8 +1231,8 @@
         }), exports.createFunObj = void 0;
         var createDivs = function() {
             var styleStr = "", str = "", mobileClass = "";
-            this.ele.innerHTML = "", str += this.options.width ? "width:" + this.options.width + ";" : "width:auto;", 
-            str += this.options.height ? "height:" + this.options.height + ";" : "height:auto;", 
+            this.ele.innerHTML = "", this.options.width ? str += "width:" + this.options.width + ";" : str += "width:auto;", 
+            this.options.height ? str += "height:" + this.options.height + ";" : str += "height:auto;", 
             "" != str && (styleStr = 'style="' + str + '"'), _gridBrowser.gridBrowser.isMobile && (mobileClass = "u-grid-mobile");
             var htmlStr = '<div id="' + this.options.id + '" data-role="grid" class="u-grid ' + mobileClass + '" ' + styleStr + ">";
             htmlStr += "</div>", this.ele.insertAdjacentHTML("afterBegin", htmlStr);
@@ -1255,12 +1255,12 @@
         }, createColumnMenu = function() {
             return "";
         }, createHeader = function() {
-            var wrapStr = "", headerShowStr = "";
+            var headerShowStr = "";
             this.options.showHeader || (headerShowStr = 'style="display:none;"');
-            var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" ' + wrapStr + ">";
+            var htmlStr = '<div class="u-grid-header" id="' + this.options.id + '_header" ' + headerShowStr + '><div class="u-grid-header-wrap" id="' + this.options.id + '_header_wrap" data-role="resizable" >';
             return this.options.columnMenu && (htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light"></div>'), 
             (this.options.multiSelect || this.options.showNumCol) && (htmlStr += '<div id="' + this.options.id + '_header_left" class="u-grid-header-left" style="width:' + this.leftW + 'px;">', 
-            this.options.multiSelect && (htmlStr += _gridBrowser.gridBrowser.isIE8 ? '<div class="u-grid-header-multi-select" style="width:' + this.multiSelectWidth + 'px;"><span class="u-grid-checkbox-outline" id="' + this.options.id + '_header_multi_input"><span class="u-grid-checkbox-tick-outline"></span></span></div>' : '<div class="u-grid-header-multi-select  checkbox check-success" style="width:' + this.multiSelectWidth + 'px;"><span class="u-grid-checkbox-outline" id="' + this.options.id + '_header_multi_input"><span class="u-grid-checkbox-tick-outline"></span></span></div>'), 
+            this.options.multiSelect && (_gridBrowser.gridBrowser.isIE8 ? htmlStr += '<div class="u-grid-header-multi-select" style="width:' + this.multiSelectWidth + 'px;"><span class="u-grid-checkbox-outline" id="' + this.options.id + '_header_multi_input"><span class="u-grid-checkbox-tick-outline"></span></span></div>' : htmlStr += '<div class="u-grid-header-multi-select  checkbox check-success" style="width:' + this.multiSelectWidth + 'px;"><span class="u-grid-checkbox-outline" id="' + this.options.id + '_header_multi_input"><span class="u-grid-checkbox-tick-outline"></span></span></div>'), 
             this.options.showNumCol && (htmlStr += '<div class="u-grid-header-num" style="width:' + this.numWidth + 'px;"></div>'), 
             htmlStr += "</div>"), htmlStr += this.createHeaderTableFixed(), htmlStr += this.createHeaderTable(), 
             htmlStr += "</div>", htmlStr += this.createHeaderDrag(), htmlStr += "</div>";
@@ -1316,11 +1316,11 @@
         }, createContentSumRow = function() {
             return "";
         }, createContentLeft = function() {
-            var hStr, oThis = this, htmlStr = "", left = 0, sumRowClass = "";
-            return this.options.showSumRow && (sumRowClass = "u-grid-content-left-sum"), this.options.multiSelect && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + "px;" + hStr + '">', 
+            var oThis = this, htmlStr = "", left = 0, sumRowClass = "";
+            return this.options.showSumRow && (sumRowClass = "u-grid-content-left-sum"), this.options.multiSelect && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;undefined">', 
             this.dataSourceObj.rows && $.each(this.dataSourceObj.rows, function(i) {
                 htmlStr += oThis.createContentLeftMultiSelectRow(this);
-            }), htmlStr += "</div>", left += this.multiSelectWidth), this.options.showNumCol && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + "px;left:" + left + "px;" + hStr + '">', 
+            }), htmlStr += "</div>", left += this.multiSelectWidth), this.options.showNumCol && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + "px;left:" + left + 'px;undefined">', 
             this.dataSourceObj.rows && $.each(this.dataSourceObj.rows, function(i, row) {
                 htmlStr += oThis.createContentLeftNumColRow(i, row.value);
             }), htmlStr += "</div>"), htmlStr;
@@ -1371,12 +1371,16 @@
         }, createContentOneRow = function(row, createFlag, displayFlag) {
             var styleStr = "";
             !this.options.autoExpand && row.level > 0 && "block" != displayFlag && (styleStr = 'style="display:none"');
-            var rootObj = row.value, objAry = this.selectRows, re = objCompare(rootObj, objAry), htmlStr = "";
-            return htmlStr = re ? '<tr role="row" class="u-grid-content-sel-row" ' + styleStr + ">" : '<tr role="row" ' + styleStr + ">", 
+            var rootObj = row.value, objAry = this.selectRows, re = objCompare(rootObj, objAry), htmlStr = "", classStr = "";
+            return this.options.showTree && (row.hasChild ? classStr += " u-grid-content-parent-row " : classStr += " u-grid-content-leaf-row ", 
+            0 == row.level ? classStr += " u-grid-content-level0-row " : classStr += " u-grid-content-levelother-row "), 
+            re && (classStr += "u-grid-content-sel-row"), htmlStr = '<tr role="row" class="' + classStr + '" ' + styleStr + ">", 
             htmlStr += this.createContentOneRowTd(row, createFlag), htmlStr += "</tr>";
         }, createContentOneRowForIE = function(table, index, rowObj, createFlag, displayFlag) {
             var row = table.insertRow(index + 1);
-            row.setAttribute("role", "row"), !this.options.autoExpand && row.level > 0 && "block" != displayFlag && (row.style.display = "none"), 
+            row.setAttribute("role", "row"), !this.options.autoExpand && rowObj.level > 0 && "block" != displayFlag && (row.style.display = "none"), 
+            this.options.showTree && (row.hasChild ? $(row).addClass("u-grid-content-parent-row") : $(row).addClass("u-grid-content-leaf-row"), 
+            0 == row.level ? $(row).addClass("u-grid-content-level0-row") : $(row).addClass("u-grid-content-levelother-row")), 
             this.createContentOneRowTdForIE(row, rowObj, createFlag);
         }, repaintRow = function(rowIndex) {
             var tr = $("#" + this.options.id + "_content_tbody").find('tr[role="row"]')[rowIndex], fixedtr = $("#" + this.options.id + "_content_fixed_tbody").find('tr[role="row"]')[rowIndex], row = this.dataSourceObj.rows[rowIndex], $tr = $(tr), index = this.getTrIndex($tr);
@@ -1414,7 +1418,7 @@
                 var treeStyle = (this.options.renderType, ""), spanStr = "", iconStr = "", htmlStr = "", newCell = row.insertCell();
                 if (newCell.setAttribute("role", "rowcell"), oThis.options.showTree && this.firstColumn) {
                     var l = parseInt(oThis.treeLeft) * parseInt(rowObj.level);
-                    treeStyle = 'style="position:relative;', rowObj.hasChild ? spanStr = oThis.options.autoExpand ? '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>' : '<span class=" uf uf-addsquarebutton2 u-grid-content-tree-span"></span>' : l += 18, 
+                    treeStyle = 'style="position:relative;', rowObj.hasChild ? spanStr = oThis.options.autoExpand ? '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>' : '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>' : l += 18, 
                     treeStyle += "left:" + l + 'px;"';
                 }
                 this.options.visible || (newCell.style.display = "none"), this.options.icon && (iconStr = '<span class="' + this.options.icon + '"></span>'), 
@@ -2301,6 +2305,23 @@
             heightChangeFun: heightChangeFun,
             contentWidthChange: contentWidthChange,
             noScrollWidthReset: noScrollWidthReset
+        };
+    });
+}, function(module, exports, __webpack_require__) {
+    var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+    !function(global, factory) {
+        __WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(5), __webpack_require__(4), __webpack_require__(9) ], 
+        __WEBPACK_AMD_DEFINE_FACTORY__ = factory, void 0 !== (__WEBPACK_AMD_DEFINE_RESULT__ = "function" == typeof __WEBPACK_AMD_DEFINE_FACTORY__ ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__) && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__);
+    }(0, function(_dataSource, _column, _gridComp) {
+        "use strict";
+        var old = $.fn.grid;
+        $.fn.grid = function(options) {
+            var grid = $(this).data("gridComp");
+            return grid || $(this).data("gridComp", grid = new _gridComp.gridComp(this, options)), 
+            grid;
+        }, $.fn.grid.gridComp = _gridComp.gridComp, $.fn.grid.gridCompColumn = _column.column, 
+        $.fn.grid.dataSource = _dataSource.dataSource, $.fn.grid.noConflict = function() {
+            return $.fn.grid = old, this;
         };
     });
 }, function(module, exports, __webpack_require__) {
@@ -3204,23 +3225,6 @@
             accAdd: accAdd,
             getTrIndex: getTrIndex,
             getDataTableRowIdByRow: getDataTableRowIdByRow
-        };
-    });
-}, function(module, exports, __webpack_require__) {
-    var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
-    !function(global, factory) {
-        __WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(5), __webpack_require__(4), __webpack_require__(9) ], 
-        __WEBPACK_AMD_DEFINE_FACTORY__ = factory, void 0 !== (__WEBPACK_AMD_DEFINE_RESULT__ = "function" == typeof __WEBPACK_AMD_DEFINE_FACTORY__ ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__) && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__);
-    }(0, function(_dataSource, _column, _gridComp) {
-        "use strict";
-        var old = $.fn.grid;
-        $.fn.grid = function(options) {
-            var grid = $(this).data("gridComp");
-            return grid || $(this).data("gridComp", grid = new _gridComp.gridComp(this, options)), 
-            grid;
-        }, $.fn.grid.gridComp = _gridComp.gridComp, $.fn.grid.gridCompColumn = _column.column, 
-        $.fn.grid.dataSource = _dataSource.dataSource, $.fn.grid.noConflict = function() {
-            return $.fn.grid = old, this;
         };
     });
 } ]);
