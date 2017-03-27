@@ -484,11 +484,25 @@ const createContentOneRow = function(row, createFlag, displayFlag) {
     var objAry = this.selectRows;
     var re = objCompare(rootObj, objAry);
     var htmlStr = ''
-    if (re) {
-        htmlStr = '<tr role="row" class="u-grid-content-sel-row" ' + styleStr + '>';
-    } else {
-        htmlStr = '<tr role="row" ' + styleStr + '>';
+    var classStr = ''
+    if (this.options.showTree) {
+        if (row.hasChild) {
+            classStr += ' u-grid-content-parent-row ';
+        } else {
+            classStr += ' u-grid-content-leaf-row ';
+        }
+
+        if(row.level == 0 ){
+          classStr += ' u-grid-content-level0-row ';
+        }else{
+          classStr += ' u-grid-content-levelother-row ';
+        }
     }
+
+    if (re) {
+        classStr += 'u-grid-content-sel-row';
+    }
+    htmlStr = '<tr role="row" class="' + classStr + '" ' + styleStr + '>';
     htmlStr += this.createContentOneRowTd(row, createFlag);
     htmlStr += '</tr>';
     return htmlStr;
@@ -499,9 +513,24 @@ const createContentOneRow = function(row, createFlag, displayFlag) {
 const createContentOneRowForIE = function(table, index, rowObj, createFlag, displayFlag) {
     var row = table.insertRow(index + 1);
     row.setAttribute("role", "row");
-    if (!this.options.autoExpand && row.level > 0 && displayFlag != 'block') {
+    if (!this.options.autoExpand && rowObj.level > 0 && displayFlag != 'block') {
         row.style.display = 'none';
     }
+
+    if (this.options.showTree) {
+        if (row.hasChild) {
+            $(row).addClass('u-grid-content-parent-row');
+        } else {
+            $(row).addClass('u-grid-content-leaf-row');
+        }
+
+        if(row.level == 0 ){
+          $(row).addClass('u-grid-content-level0-row');
+        }else{
+          $(row).addClass('u-grid-content-levelother-row');
+        }
+    }
+
     this.createContentOneRowTdForIE(row, rowObj, createFlag);
 };
 
@@ -577,7 +606,7 @@ const createContentOneRowTd = function(row, createFlag) {
             treeStyle += 'text-align:' + this.options.textAlign + ';';
             treeStyle += 'left:' + l + 'px;"';
 
-        }else{
+        } else {
             treeStyle += 'style="text-align:' + this.options.textAlign + '";';
         }
 
@@ -624,9 +653,9 @@ const createContentOneRowTdForIE = function(row, rowObj, createFlag) {
             treeStyle = 'style="position:relative;';
             if (rowObj.hasChild) {
                 if (oThis.options.autoExpand) {
-                    spanStr = '<span class=" uf uf-minusbutton u-grid-content-tree-span"></span>';
+                    spanStr = '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>';
                 } else {
-                    spanStr = '<span class=" uf uf-addsquarebutton2 u-grid-content-tree-span"></span>';
+                    spanStr = '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>';
                 }
             } else {
                 l += 18;
