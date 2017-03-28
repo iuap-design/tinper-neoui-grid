@@ -7,11 +7,26 @@ import {
 const re_initGridCompFixedColumn = function() {
     var oThis = this;
     var w = 0;
+    var removeArr = [];
     $.each(this.gridCompColumnArr, function(i) {
         if (this.options.fixed == true) {
             oThis.gridCompColumnFixedArr.push(this);
         }
     });
+    $.each(this.gridCompColumnFixedArr, function(i) {
+        if (this.options.fixed != true) {
+            oThis.gridCompColumnArr.push(this);
+            removeArr.push(this)
+        }
+    })
+    $.each(removeArr, function(i) {
+        for (var i = oThis.gridCompColumnFixedArr.length; i > -1; i--) {
+            if (this == oThis.gridCompColumnFixedArr[i]) {
+                oThis.gridCompColumnFixedArr.splice(i, 1);
+                break;
+            }
+        }
+    })
     $.each(this.gridCompColumnFixedArr, function(i) {
         for (var i = oThis.gridCompColumnArr.length; i > -1; i--) {
             if (oThis.gridCompColumnArr[i] == this) {
@@ -54,11 +69,20 @@ const re_widthChangeGridFunFixed = function(halfWholeWidth) {
         this.fixedWidth = this.fixedRealWidth;
     }
 }
+
+const setColumnFixed = function(field, fixed) {
+    var gridCompColumn = this.getColumnByField(field);
+    gridCompColumn.options.fixed = fixed;
+    this.initGridCompFixedColumn();
+    this.repaintDivs();
+}
+
 export const fixFunObj = {
     initGridCompFixedColumn: re_initGridCompFixedColumn,
     fixed_columnsVisibleFun: fixed_columnsVisibleFun,
     createHeaderTableFixed: re_createHeaderTableFixed,
     createContentTableFixed: re_createContentTableFixed,
     createContentOneRowFixed: re_createContentOneRowFixed,
-    widthChangeGridFunFixed: re_widthChangeGridFunFixed
+    widthChangeGridFunFixed: re_widthChangeGridFunFixed,
+    setColumnFixed: setColumnFixed
 }

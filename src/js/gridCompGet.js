@@ -7,6 +7,11 @@ const getColumnAttr = function(attr, field) {
             return $(this.gridCompColumnArr[i].options).attr(attr);
         }
     }
+    for (var i = 0; i < this.gridCompColumnFixedArr.length; i++) {
+        if (this.gridCompColumnFixedArr[i].options.field == field) {
+            return $(this.gridCompColumnFixedArr[i].options).attr(attr);
+        }
+    }
     return "";
 };
 /*
@@ -18,6 +23,12 @@ const getColumnByField = function(field) {
             return this.gridCompColumnArr[i];
         }
     }
+    for (var i = 0; i < this.gridCompColumnFixedArr.length; i++) {
+        if (this.gridCompColumnFixedArr[i].options.field == field) {
+            return this.gridCompColumnFixedArr[i];
+        }
+    }
+
     return null;
 };
 /*
