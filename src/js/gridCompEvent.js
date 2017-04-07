@@ -25,13 +25,10 @@ const initGridEventFun = function() {
     this.initContentDivEventFun();
     // 全选
     $('#' + this.options.id + '_header_multi_input').on('click', function(e) {
-        if (this.hasChecked) {
+        if (oThis.hasChecked) {
             oThis.setAllRowUnSelect();
-            this.hasChecked = false;
         } else {
             oThis.setAllRowSelect();
-            this.hasChecked = true;
-
         }
     });
 };

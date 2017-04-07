@@ -6,8 +6,10 @@ const isCheckedHeaderRow = function() {
     if (this.selectRows.length !== 0 && (this.selectRows.length == this.dataSourceObj.rows.length)) {
         //修改全选标记为false
         $('#' + this.options.id + '_header_multi_input').addClass('is-checked')
+        this.hasChecked = true;
     } else {
         $('#' + this.options.id + '_header_multi_input').removeClass('is-checked')
+        this.hasChecked = false;
     }
 }
 /*
@@ -646,6 +648,7 @@ const setAllRowSelect = function() {
             fixContentTrs: fixContentTrs
         });
     }
+    this.hasChecked = true;
     if (typeof this.options.onAllRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
@@ -670,6 +673,7 @@ const setAllRowUnSelect = function() {
     for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
         this.setRowUnselect(i);
     }
+    this.hasChecked = false;
     if (typeof this.options.onAllRowUnSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
