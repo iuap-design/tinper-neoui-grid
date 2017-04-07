@@ -20,7 +20,7 @@ const rowDrag_initGridEventFun = function() {
                 oThis.rowDragStart(e, eleTr);
 
             }
-            e.preventDefault();
+            // e.preventDefault();
         }
     });
 

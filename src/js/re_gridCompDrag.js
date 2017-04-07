@@ -42,7 +42,7 @@ const drag_initGridEventFun = function(){
 	var oThis = this;
 	$('#' + this.options.id + '_resize_handle').on('mousedown', function(e) {
 		oThis.dragStart(e);
-		return false;
+		// return false;
 	});
 };
 /*
