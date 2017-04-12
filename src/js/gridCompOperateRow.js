@@ -16,6 +16,10 @@ const isCheckedHeaderRow = function() {
  * 添加一行
  */
 const addOneRow = function(row, index) {
+    if (typeof this.options.filterDataFun == 'function') {
+        var rows = this.options.filterDataFun.call(this, [row]);
+        row = rows[0];
+    }
     var oThis = this,
         displayFlag = 'none',
         rowObj = {},
@@ -136,6 +140,7 @@ const addOneRow = function(row, index) {
         this.repairSumRow();
         this.noRowsShowFun();
         this.updateLastRowFlag();
+        this.resetLeftHeight();
         var obj = {};
         obj.begin = index;
         obj.length = 1;
@@ -152,6 +157,7 @@ const editClose = function() {};
  * 添加多行
  */
 const addRows = function(rows, index) {
+
     if (!(this.$ele.data('gridComp') == this)) return;
     if (this.options.showTree) {
         // 树表待优化
@@ -160,6 +166,9 @@ const addRows = function(rows, index) {
             this.addOneRow(rows[i], l);
         }
         return;
+    }
+    if (typeof this.options.filterDataFun == 'function') {
+        rows = this.options.filterDataFun.call(this, rows);
     }
     this.editClose();
     var htmlStr = '',
@@ -279,6 +288,7 @@ const addRows = function(rows, index) {
 
     this.updateLastRowFlag();
     this.isCheckedHeaderRow();
+    this.resetLeftHeight();
 };
 const createContentOneRowFixed = function(rowObj) {
     return '';
@@ -332,8 +342,8 @@ const deleteOneRow = function(index) {
         }
     }
     if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
-        $('#' + this.options.id + '_content_div tbody tr:eq(' + index + ')').remove();
-        $('#' + this.options.id + '_content_fixed_div tbody tr:eq(' + index + ')').remove();
+        $('#' + this.options.id + '_content_div tbody tr[role="row"]:eq(' + index + ')').remove();
+        $('#' + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_numCol >.u-grid-content-num:eq(' + index + ')').remove();
         this.resetNumCol();
@@ -489,10 +499,10 @@ const setRowSelect = function(rowIndex, doms) {
         this.selectRowsObj = new Array();
         this.selectRowsIndex = new Array();
         if (this.showType == 'grid') {
-            $('#' + this.options.id + '_content_tbody tr').removeClass("u-grid-content-sel-row");
-            $('#' + this.options.id + '_content_tbody tr a').removeClass("u-grid-content-sel-row");
-            $('#' + this.options.id + '_content_fixed_tbody tr').removeClass("u-grid-content-sel-row");
-            $('#' + this.options.id + '_content_fixed_tbody tr a').removeClass("u-grid-content-sel-row");
+            $('#' + this.options.id + '_content_tbody tr[role="row"]').removeClass("u-grid-content-sel-row");
+            $('#' + this.options.id + '_content_tbody tr[role="row"] a').removeClass("u-grid-content-sel-row");
+            $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]').removeClass("u-grid-content-sel-row");
+            $('#' + this.options.id + '_content_fixed_tbody tr[role="row"] a').removeClass("u-grid-content-sel-row");
             if (this.options.multiSelect) {
                 $('#' + this.options.id + '_content_multiSelect div').removeClass("u-grid-content-sel-row");
             }
@@ -588,10 +598,10 @@ const setRowUnselect = function(rowIndex) {
     if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && this.options.editType == 'form') {
         ini++;
     }
-    $('#' + this.options.id + '_content_tbody tr:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_tbody tr:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
     if (this.options.multiSelect) {
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
     }
@@ -700,10 +710,10 @@ const setRowFocus = function(rowIndex) {
             return false;
         }
     }
-    $('#' + this.options.id + '_content_tbody tr').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_tbody tr a').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr a').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"]').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"] a').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"] a').removeClass("u-grid-content-focus-row");
     if (this.options.multiSelect) {
         $('#' + this.options.id + '_content_multiSelect').find('div').removeClass("u-grid-content-focus-row");
     }
@@ -766,10 +776,10 @@ const setRowUnFocus = function(rowIndex) {
     if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && this.options.editType == 'form') {
         ini++;
     }
-    $('#' + this.options.id + '_content_tbody tr:eq(' + ini + ')').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_tbody tr:eq(' + ini + ') a').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr:eq(' + ini + ')').removeClass("u-grid-content-focus-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr:eq(' + ini + ') a').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-focus-row");
+    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-focus-row");
     if (this.options.multiSelect) {
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + ini + ')').removeClass("u-grid-content-focus-row");
     }
