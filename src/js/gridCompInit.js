@@ -62,6 +62,7 @@ const getBooleanOptions = function() {
     this.options.overWidthHiddenColumn = this.getBoolean(this.options.overWidthHiddenColumn);
     this.options.sortable = this.getBoolean(this.options.sortable);
     this.options.showSumRow = this.getBoolean(this.options.showSumRow);
+    this.options.sumRowFirst = this.getBoolean(this.options.sumRowFirst);
     this.options.canSwap = this.getBoolean(this.options.canSwap);
     this.options.showTree = this.getBoolean(this.options.showTree);
     this.options.autoExpand = this.getBoolean(this.options.autoExpand);
@@ -71,6 +72,7 @@ const getBooleanOptions = function() {
     this.options.cancelSelect = this.getBoolean(this.options.cancelSelect);
     this.options.contentSelect = this.getBoolean(this.options.contentSelect);
     this.options.contentFocus = this.getBoolean(this.options.contentFocus);
+
 };
 /*
  * 初始化默认参数
@@ -92,6 +94,7 @@ const initDefault = function() {
         overWidthHiddenColumn: false, // 宽度不足时是否自动隐藏column
         sortable: true, // 是否可以排序
         showSumRow: false, // 是否显示合计行
+        sumRowFirst: false, // 合计行是否显示在第一行，true表示显示在第一行，false表示显示在最后一行
         canSwap: true, // 是否可以交换列位置
         showTree: false, // 是否显示树表
         autoExpand: true, // 是否默认展开

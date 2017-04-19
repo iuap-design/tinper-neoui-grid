@@ -108,7 +108,7 @@ const accAdd = function(v1, v2) {
     return (v1 * m + v2 * m) / m;
 };
 const getTrIndex = function($tr) {
-    return $('tr[id!="' + this.options.id + '_edit_tr"]', $tr.parent()).index($tr);
+    return $('tr[id!="' + this.options.id + '_edit_tr"][role="row"]', $tr.parent()).index($tr);
 };
 
 const getDataTableRowIdByRow = function(row) {

@@ -197,7 +197,7 @@ const createThead = function(createFlag) {
         thLevelClass = '';
     if (this.options.maxHeaderLevel > 1) {
         trStyle = 'style="height:' + (this.headerHeight - 1) + 'px;"';
-        thLevelClass = ' u-grid-header-level-div ';
+        thLevelClass = ' u-grid-header-level-th ';
     }
     var htmlStr = '<tr role="row" ' + trStyle + '>';
     if (createFlag == 'fixed') {
@@ -216,7 +216,7 @@ const createThead = function(createFlag) {
         }
 
         // 低版本浏览器不支持th position为relative，因此加入空div
-        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div ' + thLevelClass + '">';
+        htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th ' + thLevelClass + '" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div">';
         var colorStype = '';
         if (this.options.headerColor) {
             colorStype = 'style="color:' + this.options.headerColor + '"';
@@ -293,6 +293,9 @@ const createContentLeft = function() {
     // }
     if (this.options.showSumRow) {
         sumRowClass = 'u-grid-content-left-sum';
+        if(this.options.sumRowFirst){
+          sumRowClass += ' u-grid-content-left-sum-first';
+        }
     }
     if (this.options.multiSelect) {
         htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
@@ -460,10 +463,15 @@ const createContentRows = function(createFlag) {
     // 遍历生成所有行
     if (this.dataSourceObj.rows) {
         htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_content_' + idStr + 'tbody">';
+        if (this.options.sumRowFirst) {
+            htmlStr += this.createContentRowsSumRow(createFlag);
+        }
         $.each(this.dataSourceObj.rows, function(i) {
             htmlStr += oThis.createContentOneRow(this, createFlag);
         });
-        htmlStr += this.createContentRowsSumRow(createFlag);
+        if (!this.options.sumRowFirst) {
+            htmlStr += this.createContentRowsSumRow(createFlag);
+        }
         htmlStr += '</tbody>';
     }
     return htmlStr;
@@ -492,10 +500,10 @@ const createContentOneRow = function(row, createFlag, displayFlag) {
             classStr += ' u-grid-content-leaf-row ';
         }
 
-        if(row.level == 0 ){
-          classStr += ' u-grid-content-level0-row ';
-        }else{
-          classStr += ' u-grid-content-levelother-row ';
+        if (row.level == 0) {
+            classStr += ' u-grid-content-level0-row ';
+        } else {
+            classStr += ' u-grid-content-levelother-row ';
         }
     }
 
@@ -524,10 +532,10 @@ const createContentOneRowForIE = function(table, index, rowObj, createFlag, disp
             $(row).addClass('u-grid-content-leaf-row');
         }
 
-        if(row.level == 0 ){
-          $(row).addClass('u-grid-content-level0-row');
-        }else{
-          $(row).addClass('u-grid-content-levelother-row');
+        if (row.level == 0) {
+            $(row).addClass('u-grid-content-level0-row');
+        } else {
+            $(row).addClass('u-grid-content-levelother-row');
         }
     }
 

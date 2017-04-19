@@ -29,7 +29,7 @@ const createSumRow = function(createFlag) {
         }
         var t = parseInt(this.wholeHeight) - this.exceptContentHeight - 48 - this.scrollBarHeight;
         t = t > 0 ? t : 0;
-        var htmlStr = '<tr role="row" class="u-grid-content-sum-row" id="' + this.options.id + '_content_' + idStr + 'sum_row" style="top:' + t + 'px;">';
+        var htmlStr = '<tr role="sumrow" class="u-grid-content-sum-row" id="' + this.options.id + '_content_' + idStr + 'sum_row" style="top:' + t + 'px;">';
         $.each(gridCompColumnArr, function() {
             var f = this.options.field;
             var precision = this.options.precision;
@@ -45,7 +45,7 @@ const createSumRow = function(createFlag) {
             if (!this.options.visible) {
                 tdStyle = 'style="display:none;"';
             }
-            htmlStr += '<td role="rowcell" title="' + sumValue + '" ' + tdStyle + '>';
+            htmlStr += '<td role="sumrowcell" title="' + sumValue + '" ' + tdStyle + '>';
             if (this.firstColumn) {
                 htmlStr += '<div class="u-gird-centent-sum-div"><span>' + oThis.transMap.ml_sum + '</span></div>';
             }
@@ -77,7 +77,7 @@ const createSumRowForIE = function(table, createFlag) {
         var t = parseInt(this.wholeHeight) - this.exceptContentHeight - 48 - this.scrollBarHeight;
         t = t > 0 ? t : 0;
         var row = table.insertRow();
-        row.row = 'row';
+        row.role = 'sumrow';
         row.className = 'u-grid-content-sum-row';
         row.id = this.options.id + '_content_' + idStr + 'sum_row';
         row.style.top = t + 'px';
@@ -93,7 +93,7 @@ const createSumRowForIE = function(table, createFlag) {
                 sumValue = oThis.DicimalFormater(o)
             }
             var newCell = row.insertCell();
-            newCell.role = 'rowcell';
+            newCell.role = 'sumrowcell';
             newCell.title = sumValue;
             var contentStyle = '';
             if (this.options.dataType == 'integer' || this.options.dataType == 'float') {
@@ -129,10 +129,20 @@ const re_repairSumRowFun = function() {
         try {
             if (this.dataSourceObj.rows && this.dataSourceObj.rows.length > 0) {
                 var htmlStr = this.createSumRow();
-                $('#' + this.options.id + '_content_div tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
+                if (this.options.sumRowFirst) {
+                    $('#' + this.options.id + '_content_div tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
+                } else {
+                    $('#' + this.options.id + '_content_div tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
+                }
                 var htmlStr = this.createSumRow('fixed');
-                if ($('#' + this.options.id + '_content_fixed_div tbody')[0])
-                    $('#' + this.options.id + '_content_fixed_div tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
+                if ($('#' + this.options.id + '_content_fixed_div tbody')[0]) {
+                    if (this.options.sumRowFirst) {
+                        $('#' + this.options.id + '_content_fixed_div tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
+                    } else {
+                        $('#' + this.options.id + '_content_fixed_div tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
+                    }
+                }
+
             }
         } catch (e) {
             var table = $('#' + this.options.id + '_content_div table')[0];
