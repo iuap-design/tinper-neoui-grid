@@ -52,6 +52,7 @@ const initContentDivEventFun = function() {
     });
     // 同步滚动条
     $('#' + this.options.id + '_content_div').on('scroll', function(e) {
+        var sumRowH = 0;
         oThis.scrollLeft = this.scrollLeft;
         oThis.scrollTop = this.scrollTop;
         if (oThis.options.fixedFloat == 'right') {
@@ -61,9 +62,14 @@ const initContentDivEventFun = function() {
         }
         $('#' + oThis.options.id + '_noRowsShow').css('left', oThis.scrollLeft + "px");
         $('#' + oThis.options.id + '_edit_form').css('left', oThis.scrollLeft + "px");
-        $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + "px");
-        $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + "px");
-        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
+        if (oThis.options.showSumRow && oThis.options.sumRowFirst) {
+            sumRowH = 44;
+            if (oThis.options.sumRowHeight)
+                sumRowH = oThis.options.sumRowHeight;
+        }
+        $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + sumRowH + "px");
+        $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + sumRowH + "px");
+        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop  + "px");
         if (gridBrowser.isIE10 || gridBrowser.isIPAD) {
             //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
         } else {

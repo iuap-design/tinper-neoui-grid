@@ -43,7 +43,15 @@ const createSumRow = function(createFlag) {
             }
             var tdStyle = '';
             if (!this.options.visible) {
-                tdStyle = 'style="display:none;"';
+                tdStyle = 'style="display:none;';
+                if (oThis.options.rowHeight) {
+                    tdStyle += 'height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;';
+                }
+                tdStyle += '"';
+            } else {
+                if (oThis.options.rowHeight) {
+                    tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;"';
+                }
             }
             htmlStr += '<td role="sumrowcell" title="' + sumValue + '" ' + tdStyle + '>';
             if (this.firstColumn) {
@@ -95,6 +103,10 @@ const createSumRowForIE = function(table, createFlag) {
             var newCell = row.insertCell();
             newCell.role = 'sumrowcell';
             newCell.title = sumValue;
+            if (oThis.options.sumRowHeight) {
+                newCell.style.height = oThis.options.sumRowHeight + 'px';
+                newCell.style.lineHeight = oThis.options.sumRowHeight + 'px';
+            }
             var contentStyle = '';
             if (this.options.dataType == 'integer' || this.options.dataType == 'float') {
                 contentStyle = 'style="text-align: right;"'

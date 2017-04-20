@@ -218,8 +218,14 @@ const createThead = function(createFlag) {
         // 低版本浏览器不支持th position为relative，因此加入空div
         htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th ' + thLevelClass + '" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div">';
         var colorStype = '';
-        if (this.options.headerColor) {
-            colorStype = 'style="color:' + this.options.headerColor + '"';
+        if (this.options.headerColor || oThis.options.headerHeight) {
+            var headerC = '';
+            var headerH = '';
+            if (this.options.headerColor)
+                headerC = 'color:' + this.options.headerColor + ';';
+            if (oThis.options.headerHeight)
+                headerH = 'height:' + oThis.options.headerHeight + 'px;line-height:' + oThis.options.headerHeight + 'px;';
+            colorStype = 'style="' + headerC + headerH + '"';
         }
         htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + '</div>';
         /*if(oThis.options.columnMenu && createFlag != 'fixed'){
@@ -284,21 +290,26 @@ const createContentLeft = function() {
     var oThis = this,
         htmlStr = "",
         left = 0,
-        hStr, sumRowClass = '';
+        hStr = "",
+        sumRowClass = '',
+        topStr = "";
     // 高度可伸缩，暂时去掉内部的高度设置
     // if(this.countContentHeight && parseInt(this.contentHeight) > 0){
     // 	hStr = 'max-height:' + this.contentHeight + 'px;overflow:hidden;';
     // }else{
     // 	hStr = '';
     // }
+    if (this.options.showSumRow && this.options.sumRowFirst && this.options.sumRowHeight) {
+        topStr = "top:" + this.options.sumRowHeight + 'px';
+    }
     if (this.options.showSumRow) {
         sumRowClass = 'u-grid-content-left-sum';
-        if(this.options.sumRowFirst){
-          sumRowClass += ' u-grid-content-left-sum-first';
+        if (this.options.sumRowFirst) {
+            sumRowClass += ' u-grid-content-left-sum-first';
         }
     }
     if (this.options.multiSelect) {
-        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + '">';
+        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
             $.each(this.dataSourceObj.rows, function(i) {
@@ -309,7 +320,7 @@ const createContentLeft = function() {
         left += this.multiSelectWidth;
     }
     if (this.options.showNumCol) {
-        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + '">';
+        htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
             $.each(this.dataSourceObj.rows, function(i, row) {
@@ -619,8 +630,17 @@ const createContentOneRowTd = function(row, createFlag) {
         }
 
         if (!this.options.visible) {
-            tdStyle = 'style="display:none;"';
+            tdStyle = 'style="display:none;';
+            if (oThis.options.rowHeight) {
+                tdStyle += 'height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;';
+            }
+            tdStyle += '"';
+        } else {
+            if (oThis.options.rowHeight) {
+                tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;"';
+            }
         }
+
         if (this.options.icon) {
             iconStr = '<span class="' + this.options.icon + '"></span>';
         }
@@ -672,6 +692,10 @@ const createContentOneRowTdForIE = function(row, rowObj, createFlag) {
         }
         if (!this.options.visible) {
             newCell.style.display = "none";
+        }
+        if (oThis.options.rowHeight) {
+            newCell.style.height = oThis.options.rowHeight + 'px';
+            newCell.style.lineHeight = oThis.options.rowHeight + 'px';
         }
         if (this.options.icon) {
             iconStr = '<span class="' + this.options.icon + '"></span>';

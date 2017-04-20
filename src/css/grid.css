@@ -112,7 +112,7 @@ header区域css begin
 }
 .u-grid-header-th {
   vertical-align: bottom;
-  height: 2.75em;
+  /*height: 2.75em;*/
   font-weight: normal;
   overflow: hidden;
   white-space: nowrap;
@@ -320,7 +320,6 @@ content区域css begin
 }
 
 .u-grid-content-left-sum-first{
-  bottom:0px;
   border-style: solid;
   border-color: #cecece;
   border-width: 0px;

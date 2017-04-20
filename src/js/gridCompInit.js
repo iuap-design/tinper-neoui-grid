@@ -46,7 +46,7 @@ const init = function(ele, options) {
     this.columnMenuHeight = 33; // column menu的高度
     this.gridCompColumnFixedArr = new Array(); // 存储设置默认值之后的固定列columns对象
     this.gridCompLevelColumn = new Array(); // 存储多级表头时的多级
-    this.baseHeaderHeight = 44;
+    this.baseHeaderHeight = this.options.headerHeight || 44;
     this.headerHeight = this.baseHeaderHeight * parseInt(this.options.maxHeaderLevel) + 1;
     this.gridCompHiddenLevelColumnArr = new Array(); // 存储自动隐藏时隐藏优先级排序后的column
     this.treeLeft = 10; // 树表时每一级之间的差值
@@ -105,6 +105,9 @@ const initDefault = function() {
         showEditIcon: false, // 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
         fixedFloat: 'left',
+        // rowHeight 行高
+        // sumRowHeight 合计行行高
+        // headerHeight 表头高
     }
 };
 /*
@@ -165,6 +168,9 @@ const initOptions = function() {
         this.options.canSwap = false;
         this.options.canDrag = false;
         this.options.columnMenu = false;
+    }
+    if (this.options.rowHeight && !this.options.sumRowHeight) {
+        this.options.sumRowHeight = this.options.rowHeight;
     }
     // 获取缓存id
     var url = window.location.href;
