@@ -26,39 +26,41 @@ const re_resetThVariableHeaderLevel = function() {
         var title = column.title;
         var startField = column.startField;
         var endField = column.endField;
-        var startTh = $('th[field=' + startField + ']', this.$ele.find('#' + this.options.id + '_header_thead'));
-        var styleStr = ' style="';
-        var classStr = '';
-        var linkStyleStr = '';
-        var headerLevel = column.headerLevel;
-        var top = (parseInt(maxHeaderLevel) - parseInt(headerLevel)) * this.baseHeaderHeight;
-        styleStr += 'top:' + top + 'px;z-index:' + headerLevel + ';';
-        var width = 0;
-        var startFlag = false;
-        for (var j = 0; j < columnWidthArr.length; j++) {
-            var nowColumn = columnWidthArr[j];
-            var nowField = nowColumn.field;
-            if (nowField == startField || startFlag) {
-                startFlag = true;
-                width += nowColumn.width;
-                if (nowField == endField) {
-                    break;
+        if (startField && endField) {
+            var startTh = $('th[field=' + startField + ']', this.$ele.find('#' + this.options.id + '_header_thead'));
+            var styleStr = ' style="';
+            var classStr = '';
+            var linkStyleStr = '';
+            var headerLevel = column.headerLevel;
+            var top = (parseInt(maxHeaderLevel) - parseInt(headerLevel)) * this.baseHeaderHeight;
+            styleStr += 'top:' + top + 'px;z-index:' + headerLevel + ';';
+            var width = 0;
+            var startFlag = false;
+            for (var j = 0; j < columnWidthArr.length; j++) {
+                var nowColumn = columnWidthArr[j];
+                var nowField = nowColumn.field;
+                if (nowField == startField || startFlag) {
+                    startFlag = true;
+                    width += nowColumn.width;
+                    if (nowField == endField) {
+                        break;
+                    }
                 }
             }
-        }
-        styleStr += 'width:' + width + 'px;';
-        styleStr += '" ';
-        if (firstColumnField == startField) {
-            classStr += ' grid-no-left-border ';
-        }
-        if (maxHeaderLevel == headerLevel) {
-            classStr += ' grid-max-level-div ';
-        }
+            styleStr += 'width:' + width + 'px;';
+            styleStr += '" ';
+            if (firstColumnField == startField) {
+                classStr += ' grid-no-left-border ';
+            }
+            if (maxHeaderLevel == headerLevel) {
+                classStr += ' grid-max-level-div ';
+            }
 
-        if (this.options.headerHeight)
-            linkStyleStr = 'style="height:' + this.options.headerHeight + 'px;line-height:' + this.options.headerHeight + 'px;"';
-        var htmlStr = '<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" ' + linkStyleStr + ' title="' + title + '">' + title + '</div></div>';
-        startTh[0].insertAdjacentHTML('afterBegin', htmlStr);
+            if (this.options.headerHeight)
+                linkStyleStr = 'style="height:' + this.options.headerHeight + 'px;line-height:' + this.options.headerHeight + 'px;"';
+            var htmlStr = '<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" ' + linkStyleStr + ' title="' + title + '">' + title + '</div></div>';
+            startTh[0].insertAdjacentHTML('afterBegin', htmlStr);
+        }
     }
 };
 
