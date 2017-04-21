@@ -1,3 +1,29 @@
+<a name="3.2.1"></a>
+## [3.2.1](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.0...v3.2.1) (2017-04-21)
+
+
+### Bug Fixes
+
+* 仓库重命名 ([ea2daa3](https://github.com/iuap-design/tinper-neoui-grid/commit/ea2daa3))
+* 解决grid中输入时无法通过鼠标滑动选择 ([54d7aa8](https://github.com/iuap-design/tinper-neoui-grid/commit/54d7aa8))
+* 解决grid超过10列之后交换最后一列导致显示错误的问题 ([01592de](https://github.com/iuap-design/tinper-neoui-grid/commit/01592de))
+* 解决表格全选操作之后翻页需要点击2次才能执行全选操作 ([2eae2b9](https://github.com/iuap-design/tinper-neoui-grid/commit/2eae2b9))
+
+
+### Features
+
+* grid增加filterDataFun用于在新增数据之前进行过滤 ([3799a5a](https://github.com/iuap-design/tinper-neoui-grid/commit/3799a5a))
+* grid增加参数支持控制左右对齐 ([cb7c48c](https://github.com/iuap-design/tinper-neoui-grid/commit/cb7c48c))
+* grid支持多级表头 ([e3dc21b](https://github.com/iuap-design/tinper-neoui-grid/commit/e3dc21b))
+* grid组件支持动态设置固定列 ([30ef645](https://github.com/iuap-design/tinper-neoui-grid/commit/30ef645))
+* 优化grid组件添加function的方式 ([230af94](https://github.com/iuap-design/tinper-neoui-grid/commit/230af94))
+* 优化grid编辑时只重绘当前编辑单元格，不再重绘整行数据 ([a0e6d84](https://github.com/iuap-design/tinper-neoui-grid/commit/a0e6d84))
+* 合计行支持在第一行显示，同时优化多级表头样式 ([48efee1](https://github.com/iuap-design/tinper-neoui-grid/commit/48efee1))
+* 增加参数rowHeight、sumRowHeight、headerHeight用于控制行高 ([b9406b8](https://github.com/iuap-design/tinper-neoui-grid/commit/b9406b8))
+* 树表情况下增加不同的class以区分不同层级的节点 ([a5f1da2](https://github.com/iuap-design/tinper-neoui-grid/commit/a5f1da2))
+
+
+
 <a name="3.1.28"></a>
 ## [3.1.28](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.1.27...v3.1.28) (2017-02-22)
 

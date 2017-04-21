@@ -112,7 +112,7 @@ header区域css begin
 }
 .u-grid-header-th {
   vertical-align: bottom;
-  height: 2.75em;
+  /*height: 2.75em;*/
   font-weight: normal;
   overflow: hidden;
   white-space: nowrap;
@@ -142,11 +142,9 @@ header区域css begin
   background:#d7d7d7;
 }
 
-.u-grid-header-level-div{
+.u-grid-header-level-th{
   z-index: 1;
-  border-style: solid;
-  border-color: #cecece;
-  border-width: 0px 1px 0px 0px;
+  border-width: 0px 0px 0px 1px;
 }
 
 .u-grid-header-th-first {
@@ -172,16 +170,16 @@ header区域css begin
   position: absolute;
   top: 0px;
   text-align: center;
-  /*background-color: #F9F9F9;*/
   background-color: #eeeff1;
   z-index: 1;
   border-style: solid;
   border-color: #cecece;
   border-width: 1px;
+  border-right-width: 0px;
   margin-left: -1px;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .grid-no-left-border{
@@ -315,6 +313,17 @@ content区域css begin
 
 .u-grid-content-left.u-grid-content-left-sum>div:last-child{
   border-bottom-width: 1px;
+}
+
+.u-grid-content-left.u-grid-content-left-sum.u-grid-content-left-sum-first>div:last-child{
+  border-bottom-width: 0px;
+}
+
+.u-grid-content-left-sum-first{
+  border-style: solid;
+  border-color: #cecece;
+  border-width: 0px;
+  border-top-width: 1px;
 }
 
 .u-grid-content tr{

@@ -1,5 +1,5 @@
 /*!
- * tinper-neoui-grid v3.2.0
+ * tinper-neoui-grid v3.2.1
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -54,8 +54,7 @@
         }, initGridEventFun = function() {
             var oThis = this;
             this.initContentDivEventFun(), $("#" + this.options.id + "_header_multi_input").on("click", function(e) {
-                this.hasChecked ? (oThis.setAllRowUnSelect(), this.hasChecked = !1) : (oThis.setAllRowSelect(), 
-                this.hasChecked = !0);
+                oThis.hasChecked ? oThis.setAllRowUnSelect() : oThis.setAllRowSelect();
             });
         }, initContentDivEventFun = function() {
             var oThis = this;
@@ -66,10 +65,12 @@
                     $input.hasClass("is-checked") ? oThis.setRowUnselect(index) : oThis.setRowSelect(index);
                 }
             }), $("#" + this.options.id + "_content_div").on("scroll", function(e) {
+                var sumRowH = 0;
                 oThis.scrollLeft = this.scrollLeft, oThis.scrollTop = this.scrollTop, "right" == oThis.options.fixedFloat ? $("#" + oThis.options.id + "_header_table").css("left", oThis.leftW - oThis.scrollLeft + "px") : $("#" + oThis.options.id + "_header_table").css("left", oThis.leftW - oThis.scrollLeft + oThis.fixedWidth + "px"), 
                 $("#" + oThis.options.id + "_noRowsShow").css("left", oThis.scrollLeft + "px"), 
-                $("#" + oThis.options.id + "_edit_form").css("left", oThis.scrollLeft + "px"), $("#" + oThis.options.id + "_content_multiSelect").css("top", -oThis.scrollTop + "px"), 
-                $("#" + oThis.options.id + "_content_numCol").css("top", -oThis.scrollTop + "px"), 
+                $("#" + oThis.options.id + "_edit_form").css("left", oThis.scrollLeft + "px"), oThis.options.showSumRow && oThis.options.sumRowFirst && (sumRowH = 44, 
+                oThis.options.sumRowHeight && (sumRowH = oThis.options.sumRowHeight)), $("#" + oThis.options.id + "_content_multiSelect").css("top", -oThis.scrollTop + sumRowH + "px"), 
+                $("#" + oThis.options.id + "_content_numCol").css("top", -oThis.scrollTop + sumRowH + "px"), 
                 $("#" + oThis.options.id + "_content_fixed_div").css("top", -oThis.scrollTop + "px"), 
                 _gridBrowser.gridBrowser.isIE10 || _gridBrowser.gridBrowser.isIPAD || oThis.editClose();
             }), $("#" + this.options.id + "_content_tbody").on("click", function(e) {
@@ -149,7 +150,7 @@
             this.scrollBarHeight = 16, this.numWidth = this.options.numWidth || 40, this.multiSelectWidth = this.options.multiSelectWidth || 40, 
             this.basicGridCompColumnArr = new Array(), this.columnMenuWidth = 160, this.columnMenuHeight = 33, 
             this.gridCompColumnFixedArr = new Array(), this.gridCompLevelColumn = new Array(), 
-            this.baseHeaderHeight = 44, this.headerHeight = this.baseHeaderHeight * parseInt(this.options.maxHeaderLevel) + 1, 
+            this.baseHeaderHeight = this.options.headerHeight || 44, this.headerHeight = this.baseHeaderHeight * parseInt(this.options.maxHeaderLevel) + 1, 
             this.gridCompHiddenLevelColumnArr = new Array(), this.treeLeft = 10, this.overWidthVisibleColumnArr = new Array();
         }, getBooleanOptions = function() {
             this.options.cancelFocus = this.getBoolean(this.options.cancelFocus), this.options.showHeader = this.getBoolean(this.options.showHeader), 
@@ -157,9 +158,9 @@
             this.options.columnMenu = this.getBoolean(this.options.columnMenu), this.options.canDrag = this.getBoolean(this.options.canDrag), 
             this.options.overWidthHiddenColumn = this.getBoolean(this.options.overWidthHiddenColumn), 
             this.options.sortable = this.getBoolean(this.options.sortable), this.options.showSumRow = this.getBoolean(this.options.showSumRow), 
-            this.options.canSwap = this.getBoolean(this.options.canSwap), this.options.showTree = this.getBoolean(this.options.showTree), 
-            this.options.autoExpand = this.getBoolean(this.options.autoExpand), this.options.needTreeSort = this.getBoolean(this.options.needTreeSort), 
-            this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage), 
+            this.options.sumRowFirst = this.getBoolean(this.options.sumRowFirst), this.options.canSwap = this.getBoolean(this.options.canSwap), 
+            this.options.showTree = this.getBoolean(this.options.showTree), this.options.autoExpand = this.getBoolean(this.options.autoExpand), 
+            this.options.needTreeSort = this.getBoolean(this.options.needTreeSort), this.options.needLocalStorage = this.getBoolean(this.options.needLocalStorage), 
             this.options.noScroll = this.getBoolean(this.options.noScroll), this.options.cancelSelect = this.getBoolean(this.options.cancelSelect), 
             this.options.contentSelect = this.getBoolean(this.options.contentSelect), this.options.contentFocus = this.getBoolean(this.options.contentFocus);
         }, initDefault = function() {
@@ -178,6 +179,7 @@
                 overWidthHiddenColumn: !1,
                 sortable: !0,
                 showSumRow: !1,
+                sumRowFirst: !1,
                 canSwap: !0,
                 showTree: !1,
                 autoExpand: !0,
@@ -207,7 +209,7 @@
             this.options.multiSelect && (this.leftW += this.multiSelectWidth), this.exceptContentHeight = 0, 
             this.options.showHeader && (this.exceptContentHeight += this.headerHeight), this.fixedWidth = 0, 
             this.options.maxHeaderLevel > 1 && (this.options.canSwap = !1, this.options.canDrag = !1, 
-            this.options.columnMenu = !1);
+            this.options.columnMenu = !1), this.options.rowHeight && !this.options.sumRowHeight && (this.options.sumRowHeight = this.options.rowHeight);
             var url = window.location.href, index = url.indexOf("?");
             index > 0 && (url = url.substring(0, index)), this.localStorageId = this.options.id + url;
         }, initOptionsTree = function() {}, initVariable = function() {
@@ -1130,6 +1132,7 @@
             this.defaults = {}, this.gridComp = gridComp, this.options = $.extend({}, this.defaults, options), 
             this.rows = new Array(), this.hasParentRows = new Array(), this.nothasParentRows = new Array();
         }, sortRows = function(field, sortType) {
+            "function" == typeof this.gridComp.options.filterDataFun && (this.options.values = this.gridComp.options.filterDataFun.call(this, this.options.values)), 
             this.gridComp.options.showTree ? this.treeSortRows(field, sortType) : this.basicSortRows(field, sortType), 
             this.gridComp.eidtRowIndex = -1;
         }, basicSortRows = function(field, sortType) {
@@ -1284,17 +1287,22 @@
                 htmlStr += ">");
             }), htmlStr += "</colgroup>";
         }, createThead = function(createFlag) {
-            var gridCompColumnArr, visibleIndex = 0, trStyle = "", thLevelClass = "";
+            var gridCompColumnArr, oThis = this, visibleIndex = 0, trStyle = "", thLevelClass = "";
             this.options.maxHeaderLevel > 1 && (trStyle = 'style="height:' + (this.headerHeight - 1) + 'px;"', 
-            thLevelClass = " u-grid-header-level-div ");
+            thLevelClass = " u-grid-header-level-th ");
             var htmlStr = '<tr role="row" ' + trStyle + ">";
             return gridCompColumnArr = "fixed" == createFlag ? this.gridCompColumnFixedArr : this.gridCompColumnArr, 
             $.each(gridCompColumnArr, function(i) {
                 var vi = visibleIndex, displayStyle = "";
                 0 == this.options.visible ? (vi = -1, displayStyle = 'style="display:none;"') : visibleIndex++, 
-                htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div ' + thLevelClass + '">';
+                htmlStr += '<th role="columnheader" data-filed="' + this.options.field + '" rowspan="1" class="u-grid-header-th ' + thLevelClass + '" ' + displayStyle + 'field="' + this.options.field + '" index="' + i + '" visibleIndex="' + vi + '"><div style="position:relative;" class="u-grid-header-div">';
                 var colorStype = "";
-                this.options.headerColor && (colorStype = 'style="color:' + this.options.headerColor + '"'), 
+                if (this.options.headerColor || oThis.options.headerHeight) {
+                    var headerC = "", headerH = "";
+                    this.options.headerColor && (headerC = "color:" + this.options.headerColor + ";"), 
+                    oThis.options.headerHeight && (headerH = "height:" + oThis.options.headerHeight + "px;line-height:" + oThis.options.headerHeight + "px;"), 
+                    colorStype = 'style="' + headerC + headerH + '"';
+                }
                 htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + ">" + this.options.title + "</div>", 
                 htmlStr += "</div></th>";
             }), htmlStr += "</tr>";
@@ -1316,11 +1324,13 @@
         }, createContentSumRow = function() {
             return "";
         }, createContentLeft = function() {
-            var oThis = this, htmlStr = "", left = 0, sumRowClass = "";
-            return this.options.showSumRow && (sumRowClass = "u-grid-content-left-sum"), this.options.multiSelect && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;undefined">', 
+            var oThis = this, htmlStr = "", left = 0, sumRowClass = "", topStr = "";
+            return this.options.showSumRow && this.options.sumRowFirst && this.options.sumRowHeight && (topStr = "top:" + this.options.sumRowHeight + "px"), 
+            this.options.showSumRow && (sumRowClass = "u-grid-content-left-sum", this.options.sumRowFirst && (sumRowClass += " u-grid-content-left-sum-first")), 
+            this.options.multiSelect && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + "px;" + topStr + '">', 
             this.dataSourceObj.rows && $.each(this.dataSourceObj.rows, function(i) {
                 htmlStr += oThis.createContentLeftMultiSelectRow(this);
-            }), htmlStr += "</div>", left += this.multiSelectWidth), this.options.showNumCol && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + "px;left:" + left + 'px;undefined">', 
+            }), htmlStr += "</div>", left += this.multiSelectWidth), this.options.showNumCol && (htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + "px;left:" + left + "px;" + topStr + '">', 
             this.dataSourceObj.rows && $.each(this.dataSourceObj.rows, function(i, row) {
                 htmlStr += oThis.createContentLeftNumColRow(i, row.value);
             }), htmlStr += "</div>"), htmlStr;
@@ -1362,10 +1372,11 @@
         }, createContentRows = function(createFlag) {
             var idStr, oThis = this, htmlStr = "";
             return idStr = "fixed" == createFlag ? "fixed_" : "", this.dataSourceObj.rows && (htmlStr += '<tbody role="rowgroup" id="' + this.options.id + "_content_" + idStr + 'tbody">', 
+            this.options.sumRowFirst && (htmlStr += this.createContentRowsSumRow(createFlag)), 
             $.each(this.dataSourceObj.rows, function(i) {
                 htmlStr += oThis.createContentOneRow(this, createFlag);
-            }), htmlStr += this.createContentRowsSumRow(createFlag), htmlStr += "</tbody>"), 
-            htmlStr;
+            }), this.options.sumRowFirst || (htmlStr += this.createContentRowsSumRow(createFlag)), 
+            htmlStr += "</tbody>"), htmlStr;
         }, createContentRowsSumRow = function() {
             return "";
         }, createContentOneRow = function(row, createFlag, displayFlag) {
@@ -1406,7 +1417,9 @@
                     treeStyle = 'style="position:relative;', row.hasChild ? spanStr = oThis.options.autoExpand ? '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>' : '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>' : l += 16, 
                     treeStyle += "text-align:" + this.options.textAlign + ";", treeStyle += "left:" + l + 'px;"';
                 } else treeStyle += 'style="text-align:' + this.options.textAlign + '";';
-                this.options.visible || (tdStyle = 'style="display:none;"'), this.options.icon && (iconStr = '<span class="' + this.options.icon + '"></span>'), 
+                this.options.visible ? oThis.options.rowHeight && (tdStyle += 'style="height:' + oThis.options.rowHeight + "px;line-height:" + oThis.options.rowHeight + 'px;"') : (tdStyle = 'style="display:none;', 
+                oThis.options.rowHeight && (tdStyle += "height:" + oThis.options.rowHeight + "px;line-height:" + oThis.options.rowHeight + "px;"), 
+                tdStyle += '"'), this.options.icon && (iconStr = '<span class="' + this.options.icon + '"></span>'), 
                 htmlStr += '<td role="rowcell"  ' + tdStyle + ' ><div class="u-grid-content-td-div" ' + treeStyle + ">" + spanStr + iconStr + "<span>" + v.replace(/\</g, "&lt;").replace(/\>/g, "&gt;") + "</span></div></td>";
             }), htmlStr;
         }, createContentOneRowTdForIE = function(row, rowObj, createFlag) {
@@ -1421,7 +1434,8 @@
                     treeStyle = 'style="position:relative;', rowObj.hasChild ? spanStr = oThis.options.autoExpand ? '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>' : '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>' : l += 18, 
                     treeStyle += "left:" + l + 'px;"';
                 }
-                this.options.visible || (newCell.style.display = "none"), this.options.icon && (iconStr = '<span class="' + this.options.icon + '"></span>'), 
+                this.options.visible || (newCell.style.display = "none"), oThis.options.rowHeight && (newCell.style.height = oThis.options.rowHeight + "px", 
+                newCell.style.lineHeight = oThis.options.rowHeight + "px"), this.options.icon && (iconStr = '<span class="' + this.options.icon + '"></span>'), 
                 htmlStr += '<div class="u-grid-content-td-div" ' + treeStyle + ">" + spanStr + iconStr + "<span>" + v.replace(/\</g, "&lt;").replace(/\>/g, "&gt;") + "</span></div>", 
                 newCell.insertAdjacentHTML("afterBegin", htmlStr);
             });
@@ -1482,15 +1496,15 @@
         });
         var trHoverFun = function(index) {
             var oThis = this;
-            if ($("#" + oThis.options.id + "_content_tbody").find("tr").removeClass("u-grid-move-bg"), 
-            $("#" + oThis.options.id + "_content_fixed_tbody").find("tr").removeClass("u-grid-move-bg"), 
+            if ($("#" + oThis.options.id + "_content_tbody").find('tr[role="row"]').removeClass("u-grid-move-bg"), 
+            $("#" + oThis.options.id + "_content_fixed_tbody").find('tr[role="row"]').removeClass("u-grid-move-bg"), 
             oThis.options.multiSelect && $("#" + oThis.options.id + "_content_multiSelect").find("div").removeClass("u-grid-move-bg"), 
             oThis.options.showNumCol && $("#" + oThis.options.id + "_content_numCol").find("div").removeClass("u-grid-move-bg"), 
             index > -1) {
-                var $tr = $("#" + oThis.options.id + "_content_tbody").find("tr").eq(index);
+                var $tr = $("#" + oThis.options.id + "_content_tbody").find('tr[role="row"]').eq(index);
                 if ($tr[0].id && $tr[0].id == oThis.options.id + "_edit_tr") return;
-                if ($("#" + oThis.options.id + "_content_tbody").find("tr").eq(index).addClass("u-grid-move-bg"), 
-                $("#" + oThis.options.id + "_content_fixed_tbody").find("tr").eq(index).addClass("u-grid-move-bg"), 
+                if ($("#" + oThis.options.id + "_content_tbody").find('tr[role="row"]').eq(index).addClass("u-grid-move-bg"), 
+                $("#" + oThis.options.id + "_content_fixed_tbody").find('tr[role="row"]').eq(index).addClass("u-grid-move-bg"), 
                 oThis.options.multiSelect && $("#" + oThis.options.id + "_content_multiSelect").find("div").eq(index).addClass("u-grid-move-bg"), 
                 oThis.options.showNumCol && $("#" + oThis.options.id + "_content_numCol").find("div").eq(index).addClass("u-grid-move-bg"), 
                 "function" == typeof oThis.options.onRowHover && !$tr.is(".u-grid-content-sum-row")) {
@@ -1554,9 +1568,11 @@
         });
         var getColumnAttr = function(attr, field) {
             for (var i = 0; i < this.gridCompColumnArr.length; i++) if (this.gridCompColumnArr[i].options.field == field) return $(this.gridCompColumnArr[i].options).attr(attr);
+            for (var i = 0; i < this.gridCompColumnFixedArr.length; i++) if (this.gridCompColumnFixedArr[i].options.field == field) return $(this.gridCompColumnFixedArr[i].options).attr(attr);
             return "";
         }, getColumnByField = function(field) {
             for (var i = 0; i < this.gridCompColumnArr.length; i++) if (this.gridCompColumnArr[i].options.field == field) return this.gridCompColumnArr[i];
+            for (var i = 0; i < this.gridCompColumnFixedArr.length; i++) if (this.gridCompColumnFixedArr[i].options.field == field) return this.gridCompColumnFixedArr[i];
             return null;
         }, getIndexOfColumn = function(column) {
             for (var index = -1, i = 0; i < this.gridCompColumnArr.length; i++) if (this.gridCompColumnArr[i] == column) {
@@ -1644,8 +1660,13 @@
             value: !0
         });
         var isCheckedHeaderRow = function() {
-            0 !== this.selectRows.length && this.selectRows.length == this.dataSourceObj.rows.length ? $("#" + this.options.id + "_header_multi_input").addClass("is-checked") : $("#" + this.options.id + "_header_multi_input").removeClass("is-checked");
+            0 !== this.selectRows.length && this.selectRows.length == this.dataSourceObj.rows.length ? ($("#" + this.options.id + "_header_multi_input").addClass("is-checked"), 
+            this.hasChecked = !0) : ($("#" + this.options.id + "_header_multi_input").removeClass("is-checked"), 
+            this.hasChecked = !1);
         }, addOneRow = function(row, index) {
+            if ("function" == typeof this.options.filterDataFun) {
+                row = this.options.filterDataFun.call(this, [ row ])[0];
+            }
             var displayFlag = "none", rowObj = {}, l = this.dataSourceObj.rows.length, endFlag = !1;
             rowObj.value = row;
             var treeObj = this.addOneRowTree(row, index, rowObj);
@@ -1693,7 +1714,7 @@
                     }
                     this.resetNumCol(), this.updateNumColLastRowFlag();
                 }
-                this.repairSumRow(), this.noRowsShowFun(), this.updateLastRowFlag();
+                this.repairSumRow(), this.noRowsShowFun(), this.updateLastRowFlag(), this.resetLeftHeight();
                 var obj = {};
                 obj.begin = index, obj.length = 1, this.renderTypeFun(obj);
             }
@@ -1701,6 +1722,7 @@
             return index;
         }, addOneRowTreeHasChildF = function() {}, editClose = function() {}, addRows = function(rows, index) {
             if (this.$ele.data("gridComp") == this) if (this.options.showTree) for (var l = rows.length, i = 0; i < l; i++) this.addOneRow(rows[i], l); else {
+                "function" == typeof this.options.filterDataFun && (rows = this.options.filterDataFun.call(this, rows)), 
                 this.editClose();
                 var htmlStr = "", htmlStrmultiSelect = "", htmlStrNumCol = "", htmlStrFixed = "", oThis = this, l = this.dataSourceObj.rows.length, endFlag = !1;
                 0 != index && (index && index > 0 ? l < index && (index = l) : index = 0), l == index && (endFlag = !0);
@@ -1744,7 +1766,7 @@
                     var obj = {};
                     obj.begin = index, obj.length = rows.length, this.renderTypeFun(obj);
                 }
-                this.updateLastRowFlag(), this.isCheckedHeaderRow();
+                this.updateLastRowFlag(), this.isCheckedHeaderRow(), this.resetLeftHeight();
             }
         }, createContentOneRowFixed = function(rowObj) {
             return "";
@@ -1766,8 +1788,8 @@
                     oThis.selectRowsIndex.splice(i, 1)) : oThis.selectRowsIndex[i] > index && (oThis.selectRowsIndex[i] = oThis.selectRowsIndex[i] - 1);
                 }), this.focusRow && (this.focusRow == rowValue ? (this.focusRow = null, this.focusRowObj = null, 
                 this.focusRowIndex = null) : this.focusRowIndex > index && (this.focusRowIndex = this.focusRowIndex - 1)), 
-                "grid" == this.showType && ($("#" + this.options.id + "_content_div tbody tr:eq(" + index + ")").remove(), 
-                $("#" + this.options.id + "_content_fixed_div tbody tr:eq(" + index + ")").remove(), 
+                "grid" == this.showType && ($("#" + this.options.id + '_content_div tbody tr[role="row"]:eq(' + index + ")").remove(), 
+                $("#" + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ")").remove(), 
                 $("#" + this.options.id + "_content_multiSelect >div:eq(" + index + ")").remove(), 
                 $("#" + this.options.id + "_content_numCol >.u-grid-content-num:eq(" + index + ")").remove(), 
                 this.resetNumCol(), this.repairSumRow(), this.noRowsShowFun(), this.updateNumColLastRowFlag()), 
@@ -1845,10 +1867,10 @@
             } else this.selectRowsObj && this.selectRowsObj.length > 0 && $.each(this.selectRowsObj, function() {
                 this.checked = !1;
             }), this.selectRows = new Array(), this.selectRowsObj = new Array(), this.selectRowsIndex = new Array(), 
-            "grid" == this.showType && ($("#" + this.options.id + "_content_tbody tr").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_tbody tr a").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr a").removeClass("u-grid-content-sel-row"), 
+            "grid" == this.showType && ($("#" + this.options.id + '_content_tbody tr[role="row"]').removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"] a').removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]').removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"] a').removeClass("u-grid-content-sel-row"), 
             this.options.multiSelect && $("#" + this.options.id + "_content_multiSelect div").removeClass("u-grid-content-sel-row"), 
             this.options.showNumCol && $("#" + this.options.id + "_content_numCol div").removeClass("u-grid-content-sel-row"));
             if ("grid" == this.showType) {
@@ -1886,10 +1908,10 @@
             this.options.multiSelect && $("#" + this.options.id + "_content_multiSelect .u-grid-checkbox-outline:eq(" + rowIndex + ")").removeClass("is-checked");
             var ini = rowIndex;
             if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && "form" == this.options.editType && ini++, 
-            $("#" + this.options.id + "_content_tbody tr:eq(" + ini + ")").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_tbody tr:eq(" + ini + ") a").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr:eq(" + ini + ")").removeClass("u-grid-content-sel-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr:eq(" + ini + ") a").removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ")").removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ") a").removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ")").removeClass("u-grid-content-sel-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ") a").removeClass("u-grid-content-sel-row"), 
             this.options.multiSelect && $("#" + this.options.id + "_content_multiSelect >div:eq(" + ini + ")").removeClass("u-grid-content-sel-row"), 
             this.options.showNumCol && $("#" + this.options.id + "_content_numCol >div:eq(" + ini + ")").removeClass("u-grid-content-sel-row"), 
             $.each(this.selectRows, function(i) {
@@ -1915,7 +1937,7 @@
                 contentTrs: contentTrs,
                 fixContentTrs: fixContentTrs
             });
-            if ("function" == typeof this.options.onAllRowSelected) {
+            if (this.hasChecked = !0, "function" == typeof this.options.onAllRowSelected) {
                 var obj = {};
                 obj.gridObj = this, obj.rowObjs = this.dataSourceObj.rows, this.options.onAllRowSelected(obj);
             }
@@ -1926,7 +1948,7 @@
                 if (obj.gridObj = this, obj.rowObjs = this.dataSourceObj.rows, !this.options.onBeforeAllRowUnSelected(obj)) return;
             }
             for (var i = 0; i < this.dataSourceObj.rows.length; i++) this.setRowUnselect(i);
-            if ("function" == typeof this.options.onAllRowUnSelected) {
+            if (this.hasChecked = !1, "function" == typeof this.options.onAllRowUnSelected) {
                 var obj = {};
                 obj.gridObj = this, obj.rowObjs = this.dataSourceObj.rows, this.options.onAllRowUnSelected(obj);
             }
@@ -1938,10 +1960,10 @@
                 if (obj.gridObj = this, obj.rowObj = this.dataSourceObj.rows[rowIndex], obj.rowIndex = rowIndex, 
                 !this.options.onBeforeRowFocus(obj)) return !1;
             }
-            $("#" + this.options.id + "_content_tbody tr").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_tbody tr a").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr a").removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"]').removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"] a').removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]').removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"] a').removeClass("u-grid-content-focus-row"), 
             this.options.multiSelect && $("#" + this.options.id + "_content_multiSelect").find("div").removeClass("u-grid-content-focus-row"), 
             this.options.showNumCol && $("#" + this.options.id + "_content_numCol").find("div").removeClass("u-grid-content-focus-row"), 
             this.focusRowObj && (this.focusRowObj.focus = !1), $("#" + this.options.id + '_content_tbody tr[role="row"]:eq(' + rowIndex + ")").addClass("u-grid-content-focus-row"), 
@@ -1969,10 +1991,10 @@
             if (!this.dataSourceObj.rows[rowIndex].focus) return !0;
             var ini = rowIndex;
             if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && "form" == this.options.editType && ini++, 
-            $("#" + this.options.id + "_content_tbody tr:eq(" + ini + ")").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_tbody tr:eq(" + ini + ") a").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr:eq(" + ini + ")").removeClass("u-grid-content-focus-row"), 
-            $("#" + this.options.id + "_content_fixed_tbody tr:eq(" + ini + ") a").removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ")").removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ") a").removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ")").removeClass("u-grid-content-focus-row"), 
+            $("#" + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ") a").removeClass("u-grid-content-focus-row"), 
             this.options.multiSelect && $("#" + this.options.id + "_content_multiSelect >div:eq(" + ini + ")").removeClass("u-grid-content-focus-row"), 
             this.options.showNumCol && $("#" + this.options.id + "_content_numCol >div:eq(" + ini + ")").removeClass("u-grid-content-focus-row"), 
             this.dataSourceObj.rows[rowIndex].focus = !1, this.focusRow = null, this.focusRowObj = null, 
@@ -2097,13 +2119,7 @@
                 }
             }), this.renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn);
         }, getRenderOverFlag = function(obj) {
-            var span = obj.span, nowHeight = span.offsetHeight, newSpan = (span.offsetWidth, 
-            $(span).clone()[0]), overFlag = !1;
-            obj.span.parentNode.appendChild(newSpan);
-            var oldDisplay = span.style.display;
-            return span.style.display = "none", newSpan.style.height = "", newSpan.style.maxHeight = "999999px", 
-            newSpan.offsetHeight > nowHeight && (overFlag = !0), obj.span.parentNode.removeChild(newSpan), 
-            span.style.display = oldDisplay, overFlag;
+            return;
         }, renderTypeSumRow = function(gridCompColumn, i, begin, length, isFixedColumn) {};
         exports.renderTypeFunObj = {
             renderTypeFun: renderTypeFun,
@@ -2450,7 +2466,7 @@
         }, drag_initGridEventFun = function() {
             var oThis = this;
             $("#" + this.options.id + "_resize_handle").on("mousedown", function(e) {
-                return oThis.dragStart(e), !1;
+                oThis.dragStart(e);
             });
         }, dragStart = function(e) {
             this.dragFlag = !0, this.dragW = null, this.dragStartX = e.clientX;
@@ -2554,9 +2570,16 @@
             value: !0
         }), exports.fixFunObj = void 0;
         var re_initGridCompFixedColumn = function() {
-            var oThis = this;
+            var oThis = this, removeArr = [];
             $.each(this.gridCompColumnArr, function(i) {
                 1 == this.options.fixed && oThis.gridCompColumnFixedArr.push(this);
+            }), $.each(this.gridCompColumnFixedArr, function(i) {
+                1 != this.options.fixed && (oThis.gridCompColumnArr.push(this), removeArr.push(this));
+            }), $.each(removeArr, function(i) {
+                for (var i = oThis.gridCompColumnFixedArr.length; i > -1; i--) if (this == oThis.gridCompColumnFixedArr[i]) {
+                    oThis.gridCompColumnFixedArr.splice(i, 1);
+                    break;
+                }
             }), $.each(this.gridCompColumnFixedArr, function(i) {
                 for (var i = oThis.gridCompColumnArr.length; i > -1; i--) if (oThis.gridCompColumnArr[i] == this) {
                     oThis.gridCompColumnArr.splice(i, 1);
@@ -2577,6 +2600,9 @@
             return this.createContentOneRow(rowObj, "fixed");
         }, re_widthChangeGridFunFixed = function(halfWholeWidth) {
             this.fixedRealWidth > halfWholeWidth ? this.fixedWidth = halfWholeWidth : this.fixedWidth = this.fixedRealWidth;
+        }, setColumnFixed = function(field, fixed) {
+            this.getColumnByField(field).options.fixed = fixed, this.initGridCompFixedColumn(), 
+            this.repaintDivs();
         };
         exports.fixFunObj = {
             initGridCompFixedColumn: re_initGridCompFixedColumn,
@@ -2584,7 +2610,8 @@
             createHeaderTableFixed: re_createHeaderTableFixed,
             createContentTableFixed: re_createContentTableFixed,
             createContentOneRowFixed: re_createContentOneRowFixed,
-            widthChangeGridFunFixed: re_widthChangeGridFunFixed
+            widthChangeGridFunFixed: re_widthChangeGridFunFixed,
+            setColumnFixed: setColumnFixed
         };
     });
 }, function(module, exports, __webpack_require__) {
@@ -2652,17 +2679,20 @@
                 columnWidthArr.push(obj);
             });
             for (var firstColumnField = this.getColumnByVisibleIndex(0).options.field, i = 0; i < this.gridCompLevelColumn.length; i++) {
-                var column = this.gridCompLevelColumn[i], field = column.field, title = column.title, startField = column.startField, endField = column.endField, startTh = $("th[field=" + startField + "]", this.$ele.find("#" + this.options.id + "_header_thead")), styleStr = ' style="', classStr = "", headerLevel = column.headerLevel;
-                styleStr += "top:" + (parseInt(maxHeaderLevel) - parseInt(headerLevel)) * this.baseHeaderHeight + "px;z-index:" + headerLevel + ";";
-                for (var width = 0, startFlag = !1, j = 0; j < columnWidthArr.length; j++) {
-                    var nowColumn = columnWidthArr[j], nowField = nowColumn.field;
-                    if ((nowField == startField || startFlag) && (startFlag = !0, width += nowColumn.width, 
-                    nowField == endField)) break;
+                var column = this.gridCompLevelColumn[i], field = column.field, title = column.title, startField = column.startField, endField = column.endField;
+                if (startField && endField) {
+                    var startTh = $("th[field=" + startField + "]", this.$ele.find("#" + this.options.id + "_header_thead")), styleStr = ' style="', classStr = "", linkStyleStr = "", headerLevel = column.headerLevel;
+                    styleStr += "top:" + (parseInt(maxHeaderLevel) - parseInt(headerLevel)) * this.baseHeaderHeight + "px;z-index:" + headerLevel + ";";
+                    for (var width = 0, startFlag = !1, j = 0; j < columnWidthArr.length; j++) {
+                        var nowColumn = columnWidthArr[j], nowField = nowColumn.field;
+                        if ((nowField == startField || startFlag) && (startFlag = !0, width += nowColumn.width, 
+                        nowField == endField)) break;
+                    }
+                    styleStr += "width:" + width + "px;", styleStr += '" ', firstColumnField == startField && (classStr += " grid-no-left-border "), 
+                    maxHeaderLevel == headerLevel && (classStr += " grid-max-level-div "), this.options.headerHeight && (linkStyleStr = 'style="height:' + this.options.headerHeight + "px;line-height:" + this.options.headerHeight + 'px;"');
+                    var htmlStr = '<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" ' + linkStyleStr + ' title="' + title + '">' + title + "</div></div>";
+                    startTh[0].insertAdjacentHTML("afterBegin", htmlStr);
                 }
-                styleStr += "width:" + width + "px;", styleStr += '" ', firstColumnField == startField && (classStr += " grid-no-left-border "), 
-                maxHeaderLevel == headerLevel && (classStr += " grid-max-level-div ");
-                var htmlStr = '<div id="' + this.options.id + field + '" class="u-gird-parent ' + classStr + '" ' + styleStr + '><div class="u-grid-header-link" title="' + title + '">' + title + "</div></div>";
-                startTh[0].insertAdjacentHTML("afterBegin", htmlStr);
             }
         }, re_initGridCompColumnHeaderLevelFun = function(columnOptions) {
             if (columnOptions.headerLevel > 1) {
@@ -2809,7 +2839,7 @@
                 var $tarTr = $(e.target).closest("tr"), isEditTr = $(e.target).closest("tr").hasClass("grid_edit_form_tr");
                 if ($tarTr.length > 0 && !isEditTr) {
                     var eleTr = $(e.target).closest("tr")[0];
-                    oThis.options.canRowDrag && oThis.rowDragStart(e, eleTr), e.preventDefault();
+                    oThis.options.canRowDrag && oThis.rowDragStart(e, eleTr);
                 }
             }), $("#" + this.options.id + "_content_tbody").on("mousemove", function(e) {
                 oThis.mouseMoveX = e.clientX, oThis.mouseMoveY = e.clientY, oThis.rowDragEle && (oThis.mouseMoveX != oThis.rowDragStartX || oThis.mouseMoveY != oThis.rowDragStartY) && oThis.options.canRowDrag && (oThis.rowDragFlag = !0, 
@@ -2875,7 +2905,7 @@
                 gridCompColumnArr = this.gridCompColumnArr);
                 var t = parseInt(this.wholeHeight) - this.exceptContentHeight - 48 - this.scrollBarHeight;
                 t = t > 0 ? t : 0;
-                var htmlStr = '<tr role="row" class="u-grid-content-sum-row" id="' + this.options.id + "_content_" + idStr + 'sum_row" style="top:' + t + 'px;">';
+                var htmlStr = '<tr role="sumrow" class="u-grid-content-sum-row" id="' + this.options.id + "_content_" + idStr + 'sum_row" style="top:' + t + 'px;">';
                 return $.each(gridCompColumnArr, function() {
                     var f = this.options.field, precision = this.options.precision, dataType = this.options.dataType, sumValue = oThis.dataSourceObj.getSumValue(f, this, oThis);
                     if ("float" == dataType) {
@@ -2883,7 +2913,9 @@
                         o.value = sumValue, o.precision = precision ? precision : 2, sumValue = oThis.DicimalFormater(o);
                     }
                     var tdStyle = "";
-                    this.options.visible || (tdStyle = 'style="display:none;"'), htmlStr += '<td role="rowcell" title="' + sumValue + '" ' + tdStyle + ">", 
+                    this.options.visible ? oThis.options.rowHeight && (tdStyle += 'style="height:' + oThis.options.rowHeight + "px;line-height:" + oThis.options.rowHeight + 'px;"') : (tdStyle = 'style="display:none;', 
+                    oThis.options.rowHeight && (tdStyle += "height:" + oThis.options.rowHeight + "px;line-height:" + oThis.options.rowHeight + "px;"), 
+                    tdStyle += '"'), htmlStr += '<td role="sumrowcell" title="' + sumValue + '" ' + tdStyle + ">", 
                     this.firstColumn && (htmlStr += '<div class="u-gird-centent-sum-div"><span>' + oThis.transMap.ml_sum + "</span></div>");
                     var contentStyle = "";
                     "integer" != this.options.dataType && "float" != this.options.dataType || (contentStyle = 'style="text-align: right;"'), 
@@ -2898,7 +2930,7 @@
                 var t = parseInt(this.wholeHeight) - this.exceptContentHeight - 48 - this.scrollBarHeight;
                 t = t > 0 ? t : 0;
                 var row = table.insertRow();
-                row.row = "row", row.className = "u-grid-content-sum-row", row.id = this.options.id + "_content_" + idStr + "sum_row", 
+                row.role = "sumrow", row.className = "u-grid-content-sum-row", row.id = this.options.id + "_content_" + idStr + "sum_row", 
                 row.style.top = t + "px", $.each(gridCompColumnArr, function() {
                     var f = this.options.field, precision = this.options.precision, dataType = this.options.dataType, sumValue = oThis.dataSourceObj.getSumValue(f, this, oThis);
                     if ("float" == dataType) {
@@ -2906,7 +2938,8 @@
                         o.value = sumValue, o.precision = precision ? precision : 2, sumValue = oThis.DicimalFormater(o);
                     }
                     var newCell = row.insertCell();
-                    newCell.role = "rowcell", newCell.title = sumValue;
+                    newCell.role = "sumrowcell", newCell.title = sumValue, oThis.options.sumRowHeight && (newCell.style.height = oThis.options.sumRowHeight + "px", 
+                    newCell.style.lineHeight = oThis.options.sumRowHeight + "px");
                     var contentStyle = "";
                     "integer" != this.options.dataType && "float" != this.options.dataType || (contentStyle = 'style="text-align: right;"');
                     var htmlStr = '<div class="u-grid-content-td-div" ' + contentStyle + ">";
@@ -2927,9 +2960,9 @@
                 try {
                     if (this.dataSourceObj.rows && this.dataSourceObj.rows.length > 0) {
                         var htmlStr = this.createSumRow();
-                        $("#" + this.options.id + "_content_div tbody")[0].insertAdjacentHTML("beforeEnd", htmlStr);
+                        this.options.sumRowFirst ? $("#" + this.options.id + "_content_div tbody")[0].insertAdjacentHTML("afterBegin", htmlStr) : $("#" + this.options.id + "_content_div tbody")[0].insertAdjacentHTML("beforeEnd", htmlStr);
                         var htmlStr = this.createSumRow("fixed");
-                        $("#" + this.options.id + "_content_fixed_div tbody")[0] && $("#" + this.options.id + "_content_fixed_div tbody")[0].insertAdjacentHTML("beforeEnd", htmlStr);
+                        $("#" + this.options.id + "_content_fixed_div tbody")[0] && (this.options.sumRowFirst ? $("#" + this.options.id + "_content_fixed_div tbody")[0].insertAdjacentHTML("afterBegin", htmlStr) : $("#" + this.options.id + "_content_fixed_div tbody")[0].insertAdjacentHTML("beforeEnd", htmlStr));
                     }
                 } catch (e) {
                     var table = $("#" + this.options.id + "_content_div table")[0];
@@ -3202,7 +3235,7 @@
             }
             return m = Math.pow(10, Math.max(r1, r2)), (v1 * m + v2 * m) / m;
         }, getTrIndex = function($tr) {
-            return $('tr[id!="' + this.options.id + '_edit_tr"]', $tr.parent()).index($tr);
+            return $('tr[id!="' + this.options.id + '_edit_tr"][role="row"]', $tr.parent()).index($tr);
         }, getDataTableRowIdByRow = function(row) {
             return row.value["$_#_@_id"];
         };
