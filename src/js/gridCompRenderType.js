@@ -200,6 +200,8 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
 };
 
 const getRenderOverFlag = function(obj) {
+    // 影响性能，不再支持此方式，按照maxLength来处理
+    return;
     var span = obj.span;
     var nowHeight = span.offsetHeight;
     var nowWidth = span.offsetWidth;
