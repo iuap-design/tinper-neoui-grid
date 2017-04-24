@@ -10,7 +10,7 @@ const swap_initEventFun = function() {
         if ($(e.target).closest('#' + oThis.options.id + '_header').length > 0) {
             // 点击的是header区域
             var eleTh = $(e.target).closest('th')[0];
-            if (oThis.options.canSwap) {
+            if (oThis.options.canSwap && eleTh) {
                 oThis.swapColumnStart(e, eleTh);
             }
             e.preventDefault();
@@ -132,11 +132,11 @@ const swapColumnFun = function(e) {
 
         // 创建提示div
         if ($('#' + this.options.id + '_swap_top').length == 0) {
-            var $d = $('<span class="uf uf-sortdown u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
+            var $d = $('<span class="uf uf-triangle-down u-grid-header-swap-tip-span"  id="' + this.options.id + '_swap_top"/>');
             $d.css({
                 top: $nowTh.height() - 6 + 'px'
             });
-            var $d1 = $('<span class="uf uf-sortup u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
+            var $d1 = $('<span class="uf uf-triangle-up u-grid-header-swap-tip-span" id="' + this.options.id + '_swap_down" />');
             $d1.css({
                 top: '6px'
             });
