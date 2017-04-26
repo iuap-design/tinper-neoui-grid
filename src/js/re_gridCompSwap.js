@@ -22,7 +22,7 @@ const swap_initEventFun = function() {
     $('#' + this.options.id).on('mousemove', function(e) {
         oThis.mouseMoveX = e.clientX;
         oThis.mouseMoveY = e.clientY;
-        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap) {
+        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap && oThis.swapColumnEle) {
             // 鼠标按下之后移动了
             oThis.swapColumnFlag = true;
         }
@@ -33,7 +33,7 @@ const swap_initEventFun = function() {
     $('#' + this.options.id + '_top').on('mousemove', function(e) {
         oThis.mouseMoveX = e.clientX;
         oThis.mouseMoveY = e.clientY;
-        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap) {
+        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap && oThis.swapColumnEle) {
             // 鼠标按下之后移动了
             oThis.swapColumnFlag = true;
         }
@@ -222,6 +222,7 @@ const swapColumnEnd = function(e) {
         $('#' + this.options.id + '_swap_top').css('display', 'none');
         $('#' + this.options.id + '_swap_down').css('display', 'none');
     }
+    this.swapColumnEle = null;
     this.swapColumnFlag = false;
     $('#' + this.options.id + '_top').css('display', 'none');
 };
