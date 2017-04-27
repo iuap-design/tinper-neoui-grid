@@ -1,12 +1,3 @@
-import {
-    initEventFun,
-    initGridEventFun
-} from './gridCompEvent';
-
-import {
-    initGridCompColumn
-} from './gridCompInit';
-
 const re_initGridCompColumnColumnMenuFun = function(columnOptions) {
     var column1 = new this.gridCompColumn(columnOptions, this);
     column1.options.realWidth = column1.options.width;

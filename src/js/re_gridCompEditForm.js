@@ -1,8 +1,3 @@
-import {
-	initDefault,
-    setRequired
-} from './gridCompInit';
-
 const editForm_initDefault = function(){
 	// 扩展方法
 	this.defaults = $.extend(true,{},this.defaults,{

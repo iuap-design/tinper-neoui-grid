@@ -1,8 +1,3 @@
-import {
-	initEventFun,
-    initGridEventFun
-} from './gridCompEvent';
-
 const re_createHeaderDrag = function(){
 	return '<div class="u-grid-header-resize-handle" id="' + this.options.id + '_resize_handle"><div class="u-grid-header-resize-handle-inner"></div></div>';
 };
