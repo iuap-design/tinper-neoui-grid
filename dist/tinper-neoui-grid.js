@@ -3812,27 +3812,28 @@ var contentWidthChange = function contentWidthChange(newContentWidth) {
 
     if (newContentWidth > this.contentMinWidth) {
         // 首先处理扩展列的宽度为原有宽度，然后再扩展最后一列
-        var l = this.overWidthVisibleColumnArr.length;
-        if (l > 0) {
-            for (var i = 0; i < l; i++) {
-                var overWidthColumn = this.overWidthVisibleColumnArr[i];
-                var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
-                var w = parseInt(overWidthColumn.options.width);
-                var realW = overWidthColumn.options.realWidth;
-                $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
-                $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
-                newContentWidth = newContentWidth - (w - realW);
-                overWidthColumn.options.width = overWidthColumn.options.realWidth;
-            }
-            if (newContentWidth < this.contentMinWidth) {
-                var oldW = parseInt(this.lastVisibleColumn.options.width);
-                this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
-                $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
-                $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
-                this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
-                newContentWidth = this.contentMinWidth;
-            }
-        }
+        // 解决dragdemo拖动的过程中会导致宽度错位，不再还原宽度
+        // var l = this.overWidthVisibleColumnArr.length;
+        // if (l > 0) {
+        //     for (var i = 0; i < l; i++) {
+        //         var overWidthColumn = this.overWidthVisibleColumnArr[i];
+        //         var nowVisibleIndex = this.getVisibleIndexOfColumn(overWidthColumn);
+        //         var w = parseInt(overWidthColumn.options.width);
+        //         var realW = overWidthColumn.options.realWidth;
+        //         $('#' + this.options.id + '_header_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
+        //         $('#' + this.options.id + '_content_table col:eq(' + nowVisibleIndex + ')').css('width', realW + "px");
+        //         newContentWidth = newContentWidth - (w - realW);
+        //         overWidthColumn.options.width = overWidthColumn.options.realWidth;
+        //     }
+        //     if (newContentWidth < this.contentMinWidth) {
+        //         var oldW = parseInt(this.lastVisibleColumn.options.width);
+        //         this.lastVisibleColumnWidth = oldW + (this.contentMinWidth - newContentWidth);
+        //         $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+        //         $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+        //         this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+        //         newContentWidth = this.contentMinWidth;
+        //     }
+        // }
         if (newContentWidth > this.contentMinWidth) {
             $('#' + this.options.id + '_content_left_bottom').css('display', 'block');
             $('#' + this.options.id + '_content_left_sum_bottom').css('bottom', 16);
@@ -3846,6 +3847,7 @@ var contentWidthChange = function contentWidthChange(newContentWidth) {
     }
     if (!this.options.noScroll) {
         $('#' + this.options.id + '_content_table').css('width', newContentWidth + "px");
+        $('#' + this.options.id + '_header_table').css('width', newContentWidth + "px");
         $('#' + this.options.id + '_noRows').css('width', newContentWidth + "px");
     }
 
@@ -6004,7 +6006,7 @@ var swap_initEventFun = function swap_initEventFun() {
     $('#' + this.options.id).on('mousemove', function (e) {
         oThis.mouseMoveX = e.clientX;
         oThis.mouseMoveY = e.clientY;
-        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap) {
+        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap && oThis.swapColumnEle) {
             // 鼠标按下之后移动了
             oThis.swapColumnFlag = true;
         }
@@ -6015,7 +6017,7 @@ var swap_initEventFun = function swap_initEventFun() {
     $('#' + this.options.id + '_top').on('mousemove', function (e) {
         oThis.mouseMoveX = e.clientX;
         oThis.mouseMoveY = e.clientY;
-        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap) {
+        if ((oThis.mouseMoveX != oThis.mouseDownX || oThis.mouseDownY != oThis.mouseMoveY) && oThis.mouseDownX != 'mouseDownX' && oThis.options.canSwap && oThis.swapColumnEle) {
             // 鼠标按下之后移动了
             oThis.swapColumnFlag = true;
         }
@@ -6201,6 +6203,7 @@ var swapColumnEnd = function swapColumnEnd(e) {
         $('#' + this.options.id + '_swap_top').css('display', 'none');
         $('#' + this.options.id + '_swap_down').css('display', 'none');
     }
+    this.swapColumnEle = null;
     this.swapColumnFlag = false;
     $('#' + this.options.id + '_top').css('display', 'none');
 };
