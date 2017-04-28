@@ -1,7 +1,3 @@
-import {
-    initEventFun,
-    initGridEventFun
-} from './gridCompEvent';
 
 const sort_initEventFun = function() {
     // 扩展方法

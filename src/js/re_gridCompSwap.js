@@ -1,8 +1,3 @@
-import {
-    initEventFun,
-    initGridEventFun
-} from './gridCompEvent';
-
 const swap_initEventFun = function() {
     // 扩展方法
     var oThis = this;

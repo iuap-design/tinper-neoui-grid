@@ -9,10 +9,6 @@ import {
     column as gridCompColumn
 } from './column';
 
-import {
-    editHeadTitleIcon
-} from "./re_gridCompEdit";
-
 /*
  * 处理参数
  */

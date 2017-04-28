@@ -1,6 +1,3 @@
-import {
-    columnsVisibleFun
-} from './gridCompOther';
 /*
  * 将固定列放入gridCompColumnFixedArr
  */

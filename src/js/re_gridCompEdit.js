@@ -1,7 +1,4 @@
 import {
-    initEventFun
-} from './gridCompEvent';
-import {
     gridBrowser
 } from './gridBrowser';
 

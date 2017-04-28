@@ -1,8 +1,3 @@
-import {
-    initEventFun,
-    initGridEventFun
-} from './gridCompEvent';
-
 const rowDrag_initGridEventFun = function() {
 
     var oThis = this;
