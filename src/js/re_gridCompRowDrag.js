@@ -34,7 +34,7 @@ const rowDrag_initGridEventFun = function() {
             oThis.rowDragFun(e);
         }
 
-        e.stopPropagation();
+        // e.stopPropagation();
     });
 
 

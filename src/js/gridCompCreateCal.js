@@ -1,4 +1,6 @@
 const trHoverFun = function(index) {
+    if (index < 0)
+        return;
     var oThis = this;
     $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').removeClass('u-grid-move-bg');
     $('#' + oThis.options.id + '_content_fixed_tbody').find('tr[role="row"]').removeClass('u-grid-move-bg');
@@ -8,7 +10,7 @@ const trHoverFun = function(index) {
         $('#' + oThis.options.id + '_content_numCol').find('div').removeClass('u-grid-move-bg');
     if (index > -1) {
         var $tr = $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').eq(index);
-        if ($tr[0].id && $tr[0].id == oThis.options.id + '_edit_tr') {
+        if ($tr && $tr[0] && $tr[0].id && $tr[0].id == oThis.options.id + '_edit_tr') {
             return;
         }
         $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').eq(index).addClass('u-grid-move-bg');

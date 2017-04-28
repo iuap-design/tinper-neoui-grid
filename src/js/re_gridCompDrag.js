@@ -20,7 +20,7 @@ const drag_initEventFun = function(){
 		}
 
 		oThis.dragFun(e);
-		e.stopPropagation();
+		// e.stopPropagation();
 	});
 	$('#' + this.options.id + '_top').on('mousemove', function(e) {
 		oThis.dragFun(e);
