@@ -583,6 +583,9 @@ const edit_initEventFun = function() {
             if ($e.attr('role') == 'grid-for-edit') {
                 flag = false;
             }
+            if($e.parent().length == 0){
+                flag = false;
+            }
             if (flag) {
                 oThis.editClose();
             }
