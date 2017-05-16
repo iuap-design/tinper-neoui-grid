@@ -273,7 +273,7 @@ const editRow = function($tr, colIndex) {
  */
 const re_editClose = function() {
     var dohideFlag = true; //标记是否执行过hide、blur事件
-    if (this.eidtRowIndex < 0)
+    if (this.eidtRowIndex < 0 || this.editColIndex < 0)
         return;
     var row = this.dataSourceObj.rows[this.eidtRowIndex];
     var editField = this.gridCompColumnArr[this.editColIndex].options.field;

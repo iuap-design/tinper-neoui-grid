@@ -28,10 +28,17 @@ const addOneRow = function(row, index) {
         l = this.dataSourceObj.rows.length,
         endFlag = false;
     rowObj.value = row, displayFlag;
+    if (this.options.showTree) {
+        var treeObj = this.addOneRowTree(row, index, rowObj);
+        index = treeObj.index;
+        displayFlag = treeObj.displayFlag;
+    }
 
-    var treeObj = this.addOneRowTree(row, index, rowObj);
-    index = treeObj.index;
-    displayFlag = treeObj.displayFlag;
+    if(this.options.groupField){
+        index = this.getGroupIndex(row,index,rowObj);
+    }
+
+
     if (index != 0) {
         if (index && index > 0) {
             if (l < index)
@@ -76,17 +83,16 @@ const addOneRow = function(row, index) {
 
     if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
-
         this.updateEditRowIndex('+', index);
         try {
             var htmlStr = this.createContentOneRow(rowObj, 'normal', displayFlag);
             if (endFlag) {
                 $('#' + this.options.id + '_content_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index];
+                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index-1];
                 var $$tbody = $('#' + this.options.id + '_content_tbody')[0];
                 if ($$tr)
-                    $$tr.insertAdjacentHTML('beforeBegin', htmlStr);
+                    $$tr.insertAdjacentHTML('afterEnd', htmlStr);
                 else if ($$tbody)
                     $$tbody.insertAdjacentHTML('afterBegin', htmlStr);
             }
@@ -95,9 +101,9 @@ const addOneRow = function(row, index) {
                 if (endFlag) {
                     $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
                 } else {
-                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index]
+                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index-1]
                     if ($$tr)
-                        $$tr.insertAdjacentHTML('beforeBegin', htmlStr);
+                        $$tr.insertAdjacentHTML('afterEnd', htmlStr);
                     else if ($('#' + this.options.id + '_content_fixed_tbody')[0])
                         $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
                 }
@@ -116,21 +122,21 @@ const addOneRow = function(row, index) {
             if (endFlag) {
                 $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index]
+                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index -1]
                 if ($$div)
-                    $$div.insertAdjacentHTML('beforeBegin', htmlStr);
+                    $$div.insertAdjacentHTML('afterEnd', htmlStr);
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
         }
         if (this.options.showNumCol) {
-            var htmlStr = this.createContentLeftNumColRow(l, row);
+            var htmlStr = this.createContentLeftNumColRow(index, row);
             if (endFlag) {
                 $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index]
+                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index-1]
                 if ($$div)
-                    $$div.insertAdjacentHTML('beforeBegin', htmlStr);
+                    $$div.insertAdjacentHTML('afterEnd', htmlStr);
                 else
                     $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
@@ -138,6 +144,7 @@ const addOneRow = function(row, index) {
             this.updateNumColLastRowFlag();
         }
         this.repairSumRow();
+        this.repairGroupSumRow(rowObj);
         this.noRowsShowFun();
         this.updateLastRowFlag();
         this.resetLeftHeight();
@@ -148,8 +155,16 @@ const addOneRow = function(row, index) {
     }
 
 };
+
+const repairGroupSumRow = function(){
+
+};
 const addOneRowTree = function(row, index) {
     return index;
+};
+
+const getGroupIndex = function(row, index){
+  return index;
 };
 const addOneRowTreeHasChildF = function() {};
 const editClose = function() {};
@@ -159,7 +174,7 @@ const editClose = function() {};
 const addRows = function(rows, index) {
 
     if (!(this.$ele.data('gridComp') == this)) return;
-    if (this.options.showTree) {
+    if (this.options.showTree || this.options.groupField) {
         // 树表待优化
         var l = rows.length;
         for (var i = 0; i < l; i++) {
@@ -304,6 +319,7 @@ const deleteOneRow = function(index) {
     if (!row)
         return;
     var rowValue = row.value;
+
     if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
     }
@@ -341,6 +357,7 @@ const deleteOneRow = function(index) {
             this.focusRowIndex = this.focusRowIndex - 1;
         }
     }
+    this.deleteOneRowGroup(row);
     if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         $('#' + this.options.id + '_content_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ')').remove();
@@ -348,6 +365,7 @@ const deleteOneRow = function(index) {
         $('#' + this.options.id + '_content_numCol >.u-grid-content-num:eq(' + index + ')').remove();
         this.resetNumCol();
         this.repairSumRow();
+        this.repairGroupSumRow(row);
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
     }
@@ -365,6 +383,7 @@ const deleteOneRow = function(index) {
     this.isCheckedHeaderRow();
 };
 const repairSumRow = function() {};
+const deleteOneRowGroupSum = function() {};
 const deleteOneRowTree = function() {};
 /*
  * 删除多行
@@ -424,7 +443,7 @@ const updateValueAt = function(rowIndex, field, value, force) {
                     return;
             }
             $(this.dataSourceObj.rows[rowIndex].value).attr(field, value);
-            $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value);
+            // $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value); //grouptest依次执行除删除后不存在分组表头按钮最后修改数据会错误
             if (this.showType == 'grid') {
                 var obj = {};
                 obj.field = field;
@@ -436,6 +455,7 @@ const updateValueAt = function(rowIndex, field, value, force) {
                 treeRowIndex = this.updateValueAtTree(rowIndex, field, value, force);
                 this.updateValueAtEdit(rowIndex, field, value, force);
                 this.repairSumRow();
+                this.repairGroupSumRow(this.dataSourceObj.rows[rowIndex]);
             }
             if (typeof this.options.onValueChange == 'function') {
                 var obj = {};
@@ -475,7 +495,7 @@ const setRowSelect = function(rowIndex, doms) {
     if (doms && doms['multiSelectDivs'])
         selectDiv = doms['multiSelectDivs'][rowIndex]
     else
-        selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').children()[rowIndex]
+        selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').find('div')[rowIndex]
     if (typeof this.options.onBeforeRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
@@ -531,14 +551,14 @@ const setRowSelect = function(rowIndex, doms) {
         }
         if (this.options.multiSelect) {
             if (ini != rowIndex)
-                selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').children()[ini]
+                selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').find('div')[ini]
             $(selectDiv).addClass('u-grid-content-sel-row');
         }
         if (this.options.showNumCol) {
             if (doms && doms['numColDivs'])
                 numColDiv = doms['numColDivs'][ini]
             else
-                numColDiv = this.$ele.find('#' + this.options.id + '_content_numCol').children()[ini]
+                numColDiv = this.$ele.find('#' + this.options.id + '_content_numCol').find('div')[ini]
             $(numColDiv).addClass('u-grid-content-sel-row');
         }
     }
@@ -816,6 +836,7 @@ export const operateRowFunObj = {
     addOneRow: addOneRow,
     addOneRowTree: addOneRowTree,
     addOneRowTreeHasChildF: addOneRowTreeHasChildF,
+    getGroupIndex: getGroupIndex,
     editClose: editClose,
     addRows: addRows,
     createContentOneRowFixed: createContentOneRowFixed,
@@ -835,4 +856,6 @@ export const operateRowFunObj = {
     setRowFocus: setRowFocus,
     setRowUnFocus: setRowUnFocus,
     resetNumCol: resetNumCol,
+    repairGroupSumRow:repairGroupSumRow,
+    deleteOneRowGroupSum: deleteOneRowGroupSum
 }

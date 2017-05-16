@@ -140,6 +140,57 @@ String.prototype.substrCH = function(nLen) {
     return this.substr(0, j);
 };
 
+const SortByFun = function(field, sortType, eqCall) {
+    var oThis = this;
+    return function(a, b) {
+        var v1 = $(a.value).attr(field);
+        var v2 = $(b.value).attr(field);
+        var dataType = oThis.getColumnByField(field).options.dataType;
+        if (dataType == 'Float') {
+            v1 = parseFloat(v1);
+            v2 = parseFloat(v2);
+            if (isNaN(v1)) {
+                return 1;
+            }
+            if (isNaN(v2)) {
+                return -1;
+            }
+            if (v1 == v2 && eqCall) {
+                return eqCall.apply(oThis, arguments)
+            }
+            return sortType == 'asc' ? (v1 - v2) : sortType == 'desc' ? (v2 - v1) : 0;
+        } else if (dataType == 'Int') {
+            v1 = parseInt(v1);
+            v2 = parseInt(v2);
+            if (isNaN(v1)) {
+                return 1;
+            }
+            if (isNaN(v2)) {
+                return -1;
+            }
+            if (v1 == v2 && eqCall) {
+                return eqCall.apply(oThis, arguments)
+            }
+            return sortType == 'asc' ? (v1 - v2) : sortType == 'desc' ? (v2 - v1) : 0;
+        } else {
+            v1 = oThis.getString(v1, '');
+            v2 = oThis.getString(v2, '');
+            try {
+                var rsl = v1.localeCompare(v2)
+                if (rsl === 0 && eqCall) {
+                    return eqCall.apply(oThis, arguments)
+                }
+                if (rsl === 0) {
+                    return 0
+                }
+                return sortType == 'asc' ? rsl : sortType == 'desc' ? -rsl : 0;
+            } catch (e) {
+                return 0;
+            }
+        }
+    }
+};
+
 
 export const utilFunOjb = {
     formatWidth: formatWidth,
@@ -152,4 +203,5 @@ export const utilFunOjb = {
     accAdd: accAdd,
     getTrIndex: getTrIndex,
     getDataTableRowIdByRow: getDataTableRowIdByRow,
+    SortByFun: SortByFun
 }

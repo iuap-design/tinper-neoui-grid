@@ -312,9 +312,14 @@ const createContentLeft = function() {
         htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
-            $.each(this.dataSourceObj.rows, function(i) {
-                htmlStr += oThis.createContentLeftMultiSelectRow(this);
-            });
+            if (this.options.groupSumRow) {
+                htmlStr += oThis.createContentLeftMultiSelectGroupRows();
+            } else {
+                $.each(this.dataSourceObj.rows, function(i) {
+                    htmlStr += oThis.createContentLeftMultiSelectRow(this);
+                });
+            }
+
         }
         htmlStr += '</div>';
         left += this.multiSelectWidth;
@@ -323,13 +328,25 @@ const createContentLeft = function() {
         htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
-            $.each(this.dataSourceObj.rows, function(i, row) {
-                htmlStr += oThis.createContentLeftNumColRow(i, row.value);
-            });
+            if (this.options.groupSumRow) {
+                htmlStr += oThis.createContentLeftNumColGroupRows();
+            } else {
+                $.each(this.dataSourceObj.rows, function(i, row) {
+                    htmlStr += oThis.createContentLeftNumColRow(i, row.value);
+                });
+            }
         }
         htmlStr += '</div>';
     }
     return htmlStr;
+};
+
+const createContentLeftMultiSelectGroupRows = function(){
+  return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
+};
+
+const createContentLeftNumColGroupRows = function(){
+  return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
 };
 /*
  * 创建内容区左侧区域复选区（一行）
@@ -477,9 +494,13 @@ const createContentRows = function(createFlag) {
         if (this.options.sumRowFirst) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
-        $.each(this.dataSourceObj.rows, function(i) {
-            htmlStr += oThis.createContentOneRow(this, createFlag);
-        });
+        if (this.options.groupField) {
+            htmlStr += oThis.createContentGroupRows(createFlag);
+        } else {
+            $.each(this.dataSourceObj.rows, function(i) {
+                htmlStr += oThis.createContentOneRow(this, createFlag);
+            });
+        }
         if (!this.options.sumRowFirst) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
@@ -488,8 +509,11 @@ const createContentRows = function(createFlag) {
     return htmlStr;
 };
 const createContentRowsSumRow = function() {
-    return '';
+    return '<div>参数设置显示合计行，但是未引入合计行资源</div>';
 };
+const createContentGroupRows = function() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
+}
 /*
  * 创建内容区域数据行
  */
@@ -755,11 +779,14 @@ export const createFunObj = {
     createContentLeft: createContentLeft,
     createContentLeftMultiSelectRow: createContentLeftMultiSelectRow,
     createContentLeftNumColRow: createContentLeftNumColRow,
+    createContentLeftMultiSelectGroupRows: createContentLeftMultiSelectGroupRows,
+    createContentLeftNumColGroupRows: createContentLeftNumColGroupRows,
     createContentTable: createContentTable,
     createContentTableFixed: createContentTableFixed,
     createNoRowsDiv: createNoRowsDiv,
     createContentRows: createContentRows,
     createContentRowsSumRow: createContentRowsSumRow,
+    createContentGroupRows: createContentGroupRows,
     createContentOneRow: createContentOneRow,
     createContentOneRowForIE: createContentOneRowForIE,
     repaintRow: repaintRow,

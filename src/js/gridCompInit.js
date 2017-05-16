@@ -25,6 +25,7 @@ const init = function(ele, options) {
         ml_clear_set: '清除设置',
         ml_no_rows: '无数据',
         ml_sum: '合计:',
+        ml_group_sum: '小计:',
         ml_close: '关闭'
     }
     this.transMap = $.extend({}, this.transDefault, options.transMap);
@@ -101,7 +102,9 @@ const initDefault = function() {
         showEditIcon: false, // 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
         fixedFloat: 'left',
-        // rowHeight 行高
+        groupField: '', // 是否按照某字段进行分组显示
+        groupSumRow: false, //是否显示分组小计
+        rowHeight: 44, // 行高
         // sumRowHeight 合计行行高
         // headerHeight 表头高
     }
@@ -144,6 +147,7 @@ const destroySelf = function() {
 const initOptions = function() {
     this.options.width = this.formatWidth(this.options.width);
     this.options.height = this.formatWidth(this.options.height);
+    this.options.rowHeight = parseInt(this.options.rowHeight);
     if (this.options.height == '100%' || !this.options.height) {
         this.countContentHeight = false;
     }

@@ -81,7 +81,7 @@ const resetLeftHeight = function() {
 
 const resetLeftHeightFun = function() {
     if (this.options.showNumCol || this.options.multiSelect) {
-        var $trs = $('#' + this.options.id + '_content_tbody tr');
+        var $trs = $('#' + this.options.id + '_content_tbody tr[role="row"]');
         var $leftNums = $('#' + this.options.id + '_content_numCol div');
         var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
         for (var i = 0; i < $trs.length; i++) {
@@ -98,6 +98,10 @@ const resetLeftHeightFun = function() {
 
         }
     }
+    this.resetLeftHeightGroupSumFun();
+}
+const resetLeftHeightGroupSumFun = function() {
+
 }
 /*
  * 处理是否显示无数据行
@@ -149,5 +153,6 @@ export const createCalFunOjb = {
     afterRepaintGrid: afterRepaintGrid,
     resetScrollLeft: resetScrollLeft,
     hideEditMenu: hideEditMenu,
-    resetLeftHeight: resetLeftHeight
+    resetLeftHeight: resetLeftHeight,
+    resetLeftHeightGroupSumFun: resetLeftHeightGroupSumFun
 }

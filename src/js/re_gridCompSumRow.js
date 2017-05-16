@@ -160,7 +160,7 @@ const re_repairSumRowFun = function() {
             var table = $('#' + this.options.id + '_content_div table')[0];
             var fixedTable = $('#' + this.options.id + '_content_fixed_div table')[0];
             this.createSumRowForIE(table);
-            this.createSumRowForIE(table, 'fixed');
+            this.createSumRowForIE(fixedTable, 'fixed');
         }
         this.renderSumRow();
     }

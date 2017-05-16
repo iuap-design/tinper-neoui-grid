@@ -100,7 +100,7 @@ const initContentDivEventFun = function() {
             mousemoveIndex = -1;
         // 首先清除所有的背景
         if ($tr.length > 0) {
-            mousemoveIndex = $('tr', $tr.parent()).index($tr);
+            mousemoveIndex = $('tr[role="row"]', $tr.parent()).index($tr);
         } else if ($div.length > 0 && ($div.hasClass('u-grid-content-multiSelect') || $div.hasClass('u-grid-content-num'))) { //左侧复选及数字列
             mousemoveIndex = $('div', $div.parent()).index($div);
         }

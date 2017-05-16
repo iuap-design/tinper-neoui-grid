@@ -71,14 +71,15 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
     if (length > 0) {
         end = parseInt(begin + length - 1);
     }
-    this.realtimeTableRows = document.getElementById(oThis.options.id + idSuffix).children;
+    this.realtimeTableRows = $('#' + this.options.id + idSuffix).find('tr[role="row"]')
+    // this.realtimeTableRows = document.getElementById(oThis.options.id + idSuffix).children;
     // 记录role不是row的行
     var notRowIndex = -1;
-    for (var k = 0; k < oThis.realtimeTableRows.length; k++) {
-        if (oThis.realtimeTableRows[k].getAttribute("role") != "row") {
-            notRowIndex = k
-        }
-    }
+    // for (var k = 0; k < oThis.realtimeTableRows.length; k++) {
+    //     if (oThis.realtimeTableRows[k].getAttribute("role") != "row") {
+    //         notRowIndex = k
+    //     }
+    // }
     $.each(oThis.dataSourceObj.rows, function(j) {
         if ((begin >= 0 && j >= begin && j <= end) || isNaN(begin)) {
             //如果当前修改此列则将变量重置
@@ -117,6 +118,7 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
                             obj.gridCompColumn = gridCompColumn;
                             obj.rowIndex = j;
                             renderType.call(oThis, obj);
+
                         } else if (dataType == 'Date' || dataType == 'Datetime') {
                             if (v == null || v == undefined || v == 'null' || v == 'undefined' || v == "") {
                                 v = "";
@@ -195,8 +197,10 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
 
             }
         }
+        oThis.renderTypeGroupSumRow(gridCompColumn,i, isFixedColumn,this);
     });
     this.renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn);
+
 };
 
 const getRenderOverFlag = function(obj) {
@@ -222,9 +226,11 @@ const getRenderOverFlag = function(obj) {
 };
 
 const renderTypeSumRow = function(gridCompColumn, i, begin, length, isFixedColumn) {};
+const renderTypeGroupSumRow = function() {};
 export const renderTypeFunObj = {
     renderTypeFun: renderTypeFun,
     renderTypeByColumn: renderTypeByColumn,
     renderTypeSumRow: renderTypeSumRow,
+    renderTypeGroupSumRow: renderTypeGroupSumRow,
     getRenderOverFlag: getRenderOverFlag
 }

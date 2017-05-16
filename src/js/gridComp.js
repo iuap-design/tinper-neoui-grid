@@ -301,6 +301,24 @@ import {
 Object.assign(gridCompProto, treeFunObj);
 
 
+/*
+ * group
+ */
+import {
+    groupFunObj
+} from './re_gridCompGroup';
+
+Object.assign(gridCompProto, groupFunObj);
+
+/*
+ * groupsum
+ */
+import {
+    groupSumRowFunObj
+} from './re_gridCompGroupSumRow';
+
+Object.assign(gridCompProto, groupSumRowFunObj);
+
 
 export {
     gridComp
