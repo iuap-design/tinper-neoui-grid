@@ -128,6 +128,7 @@ const addOneRow = function(row, index) {
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
+            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
             var htmlStr = this.createContentLeftNumColRow(index, row);
@@ -140,6 +141,7 @@ const addOneRow = function(row, index) {
                 else
                     $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
+            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
@@ -278,7 +280,7 @@ const addRows = function(rows, index) {
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStrmultiSelect);
             }
-
+            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
             if (endFlag) {
@@ -290,6 +292,7 @@ const addRows = function(rows, index) {
                 else
                     $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStrNumCol);
             }
+            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
@@ -363,6 +366,10 @@ const deleteOneRow = function(index) {
         $('#' + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_numCol >.u-grid-content-num:eq(' + index + ')').remove();
+        if(this.dataSourceObj.rows.length == 0){
+          $('#' + this.options.id + '_content_multiSelect').removeClass('u-grid-content-left-sum-first');
+          $('#' + this.options.id + '_content_numCol').removeClass('u-grid-content-left-sum-first');
+        }
         this.resetNumCol();
         this.repairSumRow();
         this.repairGroupSumRow(row);

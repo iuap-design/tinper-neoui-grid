@@ -304,7 +304,7 @@ const createContentLeft = function() {
     }
     if (this.options.showSumRow) {
         sumRowClass = 'u-grid-content-left-sum';
-        if (this.options.sumRowFirst) {
+        if (this.options.sumRowFirst  && this.dataSourceObj.rows.length > 0) {
             sumRowClass += ' u-grid-content-left-sum-first';
         }
     }

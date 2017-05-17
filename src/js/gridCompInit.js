@@ -92,6 +92,7 @@ const initDefault = function() {
         sortable: true, // 是否可以排序
         showSumRow: false, // 是否显示合计行
         sumRowFirst: false, // 合计行是否显示在第一行，true表示显示在第一行，false表示显示在最后一行
+        sumRowFixed: false, //合计行是否固定在头部，不随滚动条滚动
         canSwap: true, // 是否可以交换列位置
         showTree: false, // 是否显示树表
         autoExpand: true, // 是否默认展开

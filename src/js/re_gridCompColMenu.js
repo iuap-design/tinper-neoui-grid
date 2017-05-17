@@ -25,13 +25,15 @@ const re_createColumnMenu = function() {
     htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
     $.each(this.gridCompColumnArr, function(i) {
         if (oThis.getString(this.options.title, '') != '') {
-            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '">';
+            var styleStr = '';
+            if (!this.options.canVisible)
+                styleStr += ' style="display:none;"';
+            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
             htmlStr += '<div class="u-grid-column-menu-columns-div1">';
             var checkedStr = "";
             if (this.options.visible)
                 checkedStr = ' checked';
-            if (!this.options.canVisible)
-                checkedStr += ' style="display:none;"';
+
             htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
             htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
             htmlStr += '</div></li>';
