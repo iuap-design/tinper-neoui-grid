@@ -447,6 +447,7 @@ content区域css begin
 }
 
 .u-grid-content-left-bottom {
+    display: none;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -1027,3 +1028,24 @@ form展示区域css end
 
 
 /*复选框end*/
+
+.u-grid-noScroll tbody tr:last-child td {
+    border-bottom-width: 1px;
+}
+
+.u-grid-noScroll-wrap {
+    background-color: #FFF;
+}
+
+.u-grid-noScroll-left {
+    z-index: 11;
+    background-color: #FFF;
+    position: absolute;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    border-style: solid;
+    border-color: #cecece;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}

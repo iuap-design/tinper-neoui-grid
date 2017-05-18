@@ -56,9 +56,10 @@ const createGridDivs = function() {
     if ($('#' + this.options.id)[0])
         $('#' + this.options.id)[0].innerHTML = '';
     var htmlStr = '<div id="' + this.options.id + '_grid" class="u-grid-grid">';
-    // htmlStr += this.createColumnMenu();
     htmlStr += this.createHeader();
+    htmlStr += this.createBeginNoScroll();
     htmlStr += this.createContent();
+    htmlStr += this.createEndNoScroll();
     htmlStr += '</div>';
     if ($('#' + this.options.id)[0])
         $('#' + this.options.id).html(htmlStr);
@@ -71,6 +72,121 @@ const createGridDivs = function() {
     this.createGridFlag = true;
     this.realtimeTableRows = null;
 };
+
+
+
+const createBeginNoScroll = function() {
+    return this.createNoScroll('begin');
+};
+
+const createEndNoScroll = function() {
+    return this.createNoScroll('end');
+};
+
+const createNoScroll = function(type) {
+    var htmlStr = '<div id="' + this.options.id + '_noScroll_' + type + '" class="u-grid-noScroll ' + type + '"><div class="u-grid-noScroll-wrap ' +type+ '" id="' + this.options.id + '_noScroll_' +type+'_wrap">';
+
+    if ((this.options.multiSelect || this.options.showNumCol) && ((type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed) || (type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed))) {
+        htmlStr += '<div id="' + this.options.id + '_noScroll_left" class="u-grid-noScroll-left" style="width:' + this.leftW + 'px;height:' + this.noScrollHeight + 'px;">';
+        htmlStr += '</div>';
+    }
+    htmlStr += this.createNoScrollTableFixed(type);
+    htmlStr += this.createNoScrollTable(type);
+    htmlStr += '</div></div>';
+    return htmlStr;
+};
+
+const createNoScrollTableFixed = function(type) {
+    return this.createNoScrollTable(type, 'fixed');
+};
+
+const createNoScrollTable = function(type, createFlag) {
+    /*var leftW, idStr, styleStr, hStr, cssStr, tableStyleStr;
+    hStr = "";
+
+    if (createFlag == 'fixed') {
+        leftW = parseInt(this.leftW);
+        idStr = 'fixed_';
+        cssStr = 'fixed-';
+        if (this.options.fixedFloat == 'right') {
+            styleStr = 'style="position:absolute;width:' + this.fixedWidth + 'px;right:0px;' + hStr + '"';
+        } else {
+            styleStr = 'style="position:absolute;width:' + this.fixedWidth + 'px;left:' + leftW + 'px;' + hStr + '"';
+        }
+        tableStyleStr = 'style="width:' + this.fixedWidth + 'px;"';
+    } else {
+        if (this.options.fixedFloat == 'right') {
+            leftW = parseInt(this.leftW);
+        } else {
+            leftW = parseInt(this.leftW) + parseInt(this.fixedWidth, 0);
+        }
+        idStr = '';
+        cssStr = '';
+        styleStr = 'style="position:relative;left:' + leftW + 'px;' + hStr;
+        if (this.contentMinWidth > 0) {
+            styleStr += 'width:' + this.contentMinWidth + 'px;';
+        }
+        // 因为添加overflow-x之后会导致纵向也显示不全，后续出现问题通过修改宽度来实现，不再通过overflow来实现
+        if (this.options.noScroll) {
+            styleStr += 'overflow-x:hidden;'
+        }
+        styleStr += '"';
+        tableStyleStr = '';
+        if (this.contentMinWidth > 0) {
+            if (this.contentWidth > 0) {
+                tableStyleStr = 'style="position:relative;min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;"';
+            } else {
+                tableStyleStr = 'style="position:relative;min-width:' + this.contentMinWidth + 'px;"';
+            }
+        }
+    }
+    var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" ' + tableStyleStr + '>';
+    htmlStr += this.createColgroup(createFlag);
+    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_noSCroll_' + idStr + type + '_thead" style="display:none">';
+    htmlStr += this.createThead(createFlag);
+    htmlStr += '</thead>';
+    if ((type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed) || (type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed)) {
+        htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_noScroll_' + idStr + type + '_tbody">';
+        htmlStr += this.createContentRowsSumRow(createFlag);
+        htmlStr += '</tbody>';
+    }
+    htmlStr += '</table>';
+    return htmlStr;*/
+    var leftW, positionStr, idStr;
+    if (createFlag == 'fixed') {
+        leftW = parseInt(this.leftW);
+        positionStr = 'absolute;width:' + this.fixedWidth + 'px;z-index:11;';
+        idStr = 'fixed_';
+    } else {
+        if (this.options.fixedFloat == 'right') {
+            leftW = parseInt(this.leftW);
+        } else {
+            leftW = parseInt(this.leftW) + parseInt(this.fixedWidth);
+        }
+        positionStr = 'relative;';
+        idStr = '';
+        if (this.contentMinWidth > 0) {
+            positionStr += 'width:' + this.contentMinWidth + 'px;';
+        }
+    }
+    if (createFlag == 'fixed' && this.options.fixedFloat == 'right') {
+        var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" style="position:' + positionStr + ';right:0px;">';
+    } else {
+        var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" style="position:' + positionStr + ';left:' + leftW + 'px;">';
+    }
+    htmlStr += this.createColgroup(createFlag);
+    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_noSCroll_' + idStr + type + '_thead" style="display:none">';
+    htmlStr += this.createThead(createFlag);
+    htmlStr += '</thead>';
+    if ((type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed) || (type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed)) {
+        htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_noScroll_' + idStr + type + '_tbody">';
+        htmlStr += this.createContentRowsSumRow(createFlag);
+        htmlStr += '</tbody>';
+    }
+    htmlStr += '</table>';
+    return htmlStr;
+};
+
 /*
  * 重画grid
  */
@@ -299,12 +415,12 @@ const createContentLeft = function() {
     // }else{
     // 	hStr = '';
     // }
-    if (this.options.showSumRow && this.options.sumRowFirst && this.options.sumRowHeight) {
+    if (this.options.showSumRow && this.options.sumRowFirst && !this.options.sumRowFixed && this.options.sumRowHeight) {
         topStr = "top:" + this.options.sumRowHeight + 'px';
     }
     if (this.options.showSumRow) {
         sumRowClass = 'u-grid-content-left-sum';
-        if (this.options.sumRowFirst  && this.dataSourceObj.rows.length > 0) {
+        if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0) {
             sumRowClass += ' u-grid-content-left-sum-first';
         }
     }
@@ -341,12 +457,12 @@ const createContentLeft = function() {
     return htmlStr;
 };
 
-const createContentLeftMultiSelectGroupRows = function(){
-  return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
+const createContentLeftMultiSelectGroupRows = function() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
 };
 
-const createContentLeftNumColGroupRows = function(){
-  return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
+const createContentLeftNumColGroupRows = function() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
 };
 /*
  * 创建内容区左侧区域复选区（一行）
@@ -491,7 +607,7 @@ const createContentRows = function(createFlag) {
     // 遍历生成所有行
     if (this.dataSourceObj.rows) {
         htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_content_' + idStr + 'tbody">';
-        if (this.options.sumRowFirst) {
+        if (this.options.sumRowFirst && !this.options.sumRowFixed) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
         if (this.options.groupField) {
@@ -501,7 +617,7 @@ const createContentRows = function(createFlag) {
                 htmlStr += oThis.createContentOneRow(this, createFlag);
             });
         }
-        if (!this.options.sumRowFirst) {
+        if (!this.options.sumRowFirst && !this.options.sumRowFixed) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
         htmlStr += '</tbody>';
@@ -792,5 +908,10 @@ export const createFunObj = {
     repaintRow: repaintRow,
     createContentOneRowTd: createContentOneRowTd,
     createContentOneRowTdForIE: createContentOneRowTdForIE,
-    repairContent: repairContent
+    repairContent: repairContent,
+    createBeginNoScroll: createBeginNoScroll,
+    createEndNoScroll: createEndNoScroll,
+    createNoScroll: createNoScroll,
+    createNoScrollTableFixed: createNoScrollTableFixed,
+    createNoScrollTable: createNoScrollTable,
 }

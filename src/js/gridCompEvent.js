@@ -52,17 +52,22 @@ const initContentDivEventFun = function() {
     });
     // 同步滚动条
     $('#' + this.options.id + '_content_div').on('scroll', function(e) {
-        var sumRowH = 0;
+        var sumRowH = 0,l;
         oThis.scrollLeft = this.scrollLeft;
         oThis.scrollTop = this.scrollTop;
         if (oThis.options.fixedFloat == 'right') {
-            $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + "px");
+          l =  oThis.leftW - oThis.scrollLeft ;
+
         } else {
-            $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + oThis.fixedWidth + "px");
+          l =  oThis.leftW - oThis.scrollLeft + oThis.fixedWidth ;
+
         }
+        $('#' + oThis.options.id + '_header_table').css('left', l + "px");
+        $('#' + oThis.options.id + '_noScroll_begin_table').css('left', l + "px");
+        $('#' + oThis.options.id + '_noScroll_end_table').css('left', l + "px");
         $('#' + oThis.options.id + '_noRowsShow').css('left', oThis.scrollLeft + "px");
         $('#' + oThis.options.id + '_edit_form').css('left', oThis.scrollLeft + "px");
-        if (oThis.options.showSumRow && oThis.options.sumRowFirst) {
+        if (oThis.options.showSumRow && oThis.options.sumRowFirst && !oThis.options.sumRowFixed) {
             sumRowH = 44;
             if (oThis.options.sumRowHeight)
                 sumRowH = oThis.options.sumRowHeight;

@@ -161,9 +161,11 @@ const initOptions = function() {
         this.leftW += this.multiSelectWidth;
     }
     this.exceptContentHeight = 0; // 内容区域之外的高度
+    this.noScrollHeight = 0;
     if (this.options.showHeader) {
         this.exceptContentHeight += this.headerHeight;
     }
+
     this.fixedWidth = 0;
     if (this.options.maxHeaderLevel > 1) {
         this.options.canSwap = false;
@@ -173,6 +175,14 @@ const initOptions = function() {
     if (this.options.rowHeight && !this.options.sumRowHeight) {
         this.options.sumRowHeight = this.options.rowHeight;
     }
+    if (this.options.sumRowFixed) {
+        this.noScrollHeight += this.options.sumRowHeight;
+        this.exceptContentHeight += this.options.sumRowHeight;
+        // if (!this.options.sumRowFirst) {
+            this.exceptContentHeight += 1;
+        // }
+    }
+
     // 获取缓存id
     var url = window.location.href;
     var index = url.indexOf('?');
