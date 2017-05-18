@@ -16,7 +16,7 @@ const createDivs = function() {
     } else {
         str += 'width:auto;';
     }
-    if (this.options.height) {
+    if (this.options.height) { 
         str += 'height:' + this.options.height + ';';
     } else {
         str += 'height:auto;';
