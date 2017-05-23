@@ -730,6 +730,17 @@ columnMenu区域css begin
 */
 
 .u-grid-column-menu {
+    width: 160px;
+    display: none;
+    overflow: hidden;
+    position: fixed;
+    z-index: 13;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.u-grid-column-menu-border {
     width: 240px;
     display: none;
     overflow: hidden;
@@ -855,6 +866,15 @@ columnMenu columns区域css begin
 
 .u-grid-column-menu-columns-div1 {
     display: block;
+    padding: 0 .8em 0 .8em;
+    line-height: 2.83em;
+    font-size: 0.75em;
+    position: relative;
+    height: 100%;
+}
+
+.u-grid-column-menu-columns-div1-border {
+    display: block;
     line-height: 30px;
     font-size: 12px;
     position: relative;
@@ -862,6 +882,22 @@ columnMenu columns区域css begin
 }
 
 .u-grid-column-menu-columns-div2 {
+    position: absolute;
+    filter: alpha(opacity=70);
+    -moz-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    opacity: .7;
+}
+
+.u-grid-column-menu-columns-span {
+    position: absolute;
+    width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    left: 35px;
+}
+.u-grid-column-menu-columns-div2-border {
     position: absolute;
     /*filter: alpha(opacity=70);
     -moz-opacity: 0.7;
@@ -877,7 +913,7 @@ columnMenu columns区域css begin
     -webkit-box-sizing: border-box;
 }
 
-.u-grid-column-menu-columns-span {
+.u-grid-column-menu-columns-span-border {
     position: absolute;
     width: 136px;
     overflow: hidden;

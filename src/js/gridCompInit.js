@@ -106,6 +106,7 @@ const initDefault = function() {
         groupField: '', // 是否按照某字段进行分组显示
         groupSumRow: false, //是否显示分组小计
         rowHeight: 44, // 行高
+        columnMenuType: 'base'
         // sumRowHeight 合计行行高
         // headerHeight 表头高
     }

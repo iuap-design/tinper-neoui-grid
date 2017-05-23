@@ -10,8 +10,56 @@ const colMenu_initGridCompColumn = function() {
 };
 
 const re_createColumnMenu = function() {
+    if (this.options.columnMenuType == 'base') {
+        return re_createColumnMenu_base.call(this);
+    } else if (this.options.columnMenuType == 'border') {
+        return re_createColumnMenu_border.call(this);
+    }
+}
+
+const re_createColumnMenu_base = function() {
     var oThis = this;
     var htmlStr = '<div class="u-grid-column-menu" id="' + this.options.id + '_column_menu">';
+    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
+
+    // 创建清除设置
+    htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
+    htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_clearSet">';
+    htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_clear_set + '</span>';
+    htmlStr += '</div></li>';
+
+
+    htmlStr += '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
+    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    $.each(this.gridCompColumnArr, function(i) {
+        if (oThis.getString(this.options.title, '') != '') {
+            var styleStr = '';
+            if (!this.options.canVisible)
+                styleStr += ' style="display:none;"';
+            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
+            htmlStr += '<div class="u-grid-column-menu-columns-div1">';
+            var checkedStr = "";
+            if (this.options.visible)
+                checkedStr = ' checked';
+
+            htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
+            htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
+            htmlStr += '</div></li>';
+        }
+    });
+    htmlStr += '</ul></div>';
+
+
+    htmlStr += '</ul></div>';
+
+    // 创建数据列区域
+
+    return htmlStr;
+}
+
+const re_createColumnMenu_border = function() {
+    var oThis = this;
+    var htmlStr = '<div class="u-grid-column-menu-border" id="' + this.options.id + '_column_menu">';
     htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
 
     // 创建清除设置
@@ -30,15 +78,15 @@ const re_createColumnMenu = function() {
             if (!this.options.canVisible)
                 styleStr += ' style="display:none;"';
             columnHtmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
-            columnHtmlStr += '<div class="u-grid-column-menu-columns-div1">';
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
             var checkedStr = "";
             if (this.options.visible)
                 checkedStr = ' checked';
 
             if (this.options.canVisible && !this.options.visible)
                 allCheckFlag = false;
-            columnHtmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
-            columnHtmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label></div>';
+            columnHtmlStr += '<span class="u-grid-column-menu-columns-span-border">' + this.options.title + '</span>';
             columnHtmlStr += '</div></li>';
         }
     });
@@ -47,9 +95,9 @@ const re_createColumnMenu = function() {
     if (allCheckFlag)
         checkedStr = ' checked '
     var headerHtmlStr = '<li class="u-grid-column-menu-columns-li header" role="menuitem">';
-    headerHtmlStr += '<div class="u-grid-column-menu-columns-div1">';
-    headerHtmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
-    headerHtmlStr += '<span class="u-grid-column-menu-columns-span">项目</span>';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
+    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border">项目</span>';
     headerHtmlStr += '</div></li>';
 
     htmlStr += headerHtmlStr;
@@ -82,7 +130,12 @@ const colMenu_initEventFun = function() {
 
 
                     // 根据点击位置来显示column menu区域
-                    var left = e.clientX - 240;
+                    if (oThis.options.columnMenuType == 'base') {
+                        var left = e.clientX - 160;
+                    } else if (oThis.options.columnMenuType == 'border') {
+                        var left = e.clientX - 240;
+                    }
+
                     if (left < 0)
                         left = 0;
                     var top = e.clientY + 10;
