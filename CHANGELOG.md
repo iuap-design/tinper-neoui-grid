@@ -1,3 +1,23 @@
+<a name="3.2.2"></a>
+## [3.2.2](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.1...v3.2.2) (2017-05-23)
+
+
+### Bug Fixes
+
+* 解决内容区鼠标滑动未触发docus状态的问题 ([f6cb5f3](https://github.com/iuap-design/tinper-neoui-grid/commit/f6cb5f3))
+* 解决官网webIDE中拖拽demo拖动后宽度错位的问题 ([53caead](https://github.com/iuap-design/tinper-neoui-grid/commit/53caead))
+* 解决设置overWidthHiddenColumn为true之后当显示的数据列宽度不足时会将开发定义的隐藏列显示出来的问题 ([6917267](https://github.com/iuap-design/tinper-neoui-grid/commit/6917267))
+
+
+### Features
+
+* columnMenu样式支持通过参数columnMenuType来控制 ([3cbeb21](https://github.com/iuap-design/tinper-neoui-grid/commit/3cbeb21))
+* 优化columnMenu的样式 ([3e3a5f7](https://github.com/iuap-design/tinper-neoui-grid/commit/3e3a5f7))
+* 增加参数sumRowFirst、sumRowFixed，支持合计行显示在第一行，并且可脱离内容区，不随纵向滚动条滚动 ([0d97363](https://github.com/iuap-design/tinper-neoui-grid/commit/0d97363))
+* 表格支持分组功能 ([77ac86b](https://github.com/iuap-design/tinper-neoui-grid/commit/77ac86b))
+
+
+
 <a name="3.2.1"></a>
 ## [3.2.1](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.0...v3.2.1) (2017-04-21)
 

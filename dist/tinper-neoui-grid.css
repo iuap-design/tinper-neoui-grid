@@ -447,6 +447,7 @@ content区域css begin
 }
 
 .u-grid-content-left-bottom {
+    display: none;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -739,6 +740,24 @@ columnMenu区域css begin
     box-sizing: content-box;
 }
 
+.u-grid-column-menu-border {
+    width: 240px;
+    display: none;
+    overflow: hidden;
+    position: fixed;
+    z-index: 13;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 20px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cecece;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.20);
+}
+
 .u-grid-column-menu-ul {
     background-color: #fff;
     font-weight: 500;
@@ -805,7 +824,6 @@ columnMenu columns区域css begin
 */
 
 .u-grid-column-menu-columns {
-    width: 160px;
     display: block;
     overflow-y: auto;
     overflow-x: hidden;
@@ -830,7 +848,7 @@ columnMenu columns区域css begin
 
 .u-grid-column-menu-columns-li {
     display: block;
-    height: 2.125em;
+    height: 30px;
     border-width: 0px 1px 0px 1px;
     border-style: solid;
     border-color: #cecece;
@@ -840,11 +858,25 @@ columnMenu columns区域css begin
     cursor: pointer;
 }
 
+.u-grid-column-menu-columns-li.header {
+    background: #F2F9F7;
+    border-top-width: 1px;
+    font-size: 13px;
+}
+
 .u-grid-column-menu-columns-div1 {
     display: block;
     padding: 0 .8em 0 .8em;
     line-height: 2.83em;
     font-size: 0.75em;
+    position: relative;
+    height: 100%;
+}
+
+.u-grid-column-menu-columns-div1-border {
+    display: block;
+    line-height: 30px;
+    font-size: 12px;
     position: relative;
     height: 100%;
 }
@@ -864,6 +896,38 @@ columnMenu columns区域css begin
     text-overflow: ellipsis;
     white-space: nowrap;
     left: 35px;
+}
+.u-grid-column-menu-columns-div2-border {
+    position: absolute;
+    /*filter: alpha(opacity=70);
+    -moz-opacity: 0.7;
+    -khtml-opacity: 0.7;
+    opacity: .7;*/
+    width: 60px;
+    text-align: center;
+    border-width: 0px 1px 1px 0px;
+    border-style: solid;
+    border-color: #cecece;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.u-grid-column-menu-columns-span-border {
+    position: absolute;
+    width: 136px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    left: 60px;
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: #cecece;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 
@@ -1027,3 +1091,24 @@ form展示区域css end
 
 
 /*复选框end*/
+
+.u-grid-noScroll tbody tr:last-child td {
+    border-bottom-width: 1px;
+}
+
+.u-grid-noScroll-wrap {
+    background-color: #FFF;
+}
+
+.u-grid-noScroll-left {
+    z-index: 11;
+    background-color: #FFF;
+    position: absolute;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    border-style: solid;
+    border-color: #cecece;
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}

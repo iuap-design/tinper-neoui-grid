@@ -1,5 +1,5 @@
 /**
- * tinper-neoui-grid v3.2.1
+ * tinper-neoui-grid v3.2.2
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -44,12 +44,15 @@ var basicSortRows = function basicSortRows(field, sortType) {
         dataType = this.gridComp.getColumnByField(field).options.dataType;
     }
     this.rows = new Array();
+    this.groupRows = new Array();
     if (this.options.values) {
         $.each(this.options.values, function (i) {
             var rowObj = {};
             rowObj.value = this;
             rowObj.valueIndex = i;
             oThis.rows.push(rowObj);
+            oThis.gridComp.getGroupIndex(this, i, rowObj);
+            oThis.rows = oThis.getGroupRows();
         });
     }
 };
@@ -86,12 +89,87 @@ var getSumValue = function getSumValue(field, gridCompColumn, gridComp) {
         return '';
     }
 };
+
+var getGroupSumValue = function getGroupSumValue(field, gridCompColumn, groupRow) {
+    var sumValue = null;
+    var gridComp = this.gridComp;
+    if (gridCompColumn.options.sumCol) {
+        $.each(groupRow.rows, function (i) {
+            var v = $(this.value).attr(field);
+            if (gridCompColumn.options.dataType == 'Int') {
+                v = gridComp.getInt(v, 0);
+                sumValue += parseInt(v);
+            } else {
+                v = gridComp.getFloat(v, 0);
+                sumValue = gridComp.accAdd(sumValue, parseFloat(v));
+            }
+        });
+    }
+    // 处理精度
+    if (gridCompColumn.options.dataType == 'Float' && gridCompColumn.options.precision) {
+        var o = {};
+        o.value = sumValue;
+        o.precision = gridCompColumn.options.precision;
+        sumValue = gridComp.DicimalFormater(o);
+    }
+    if (sumValue != null && sumValue != undefined && sumValue != 'null' && sumValue != 'undefined') {
+        return sumValue + '';
+    } else {
+        return '';
+    }
+};
+
+var addOneRowGroup = function addOneRowGroup(rowObj) {
+    var groupField = this.gridComp.options.groupField,
+        hasGroupFlag = false;
+    if (groupField) {
+        var groupValue = this.gridComp.getString($(rowObj.value).attr(groupField), '');
+        if (!this.groupRows) this.groupRows = new Array();
+        //[{value:1,length,rows:[{},{}]},{value:2,rows:[{},{}},{value:3,rows:[{},{}}]
+        $.each(this.groupRows, function (i) {
+            var nowGroup = this;
+            if (nowGroup.value == groupValue) {
+                hasGroupFlag = true;
+                nowGroup.length = parseInt(nowGroup.length) + 1;
+                nowGroup.rows.push(rowObj);
+            }
+        });
+        if (!hasGroupFlag) {
+            var newGroupRow = {
+                value: groupValue,
+                length: 1,
+                rows: [rowObj]
+            };
+            this.groupRows.push(newGroupRow);
+        }
+    }
+};
+
+var getGroupRows = function getGroupRows() {
+    var groupField = this.gridComp.options.groupField,
+        rows = [];
+    if (groupField) {
+        if (this.groupRows && this.groupRows.length > 0) {
+            $.each(this.groupRows, function () {
+                $.each(this.rows, function () {
+                    rows.push(this);
+                });
+            });
+        }
+    } else {
+        rows = this.rows;
+    }
+    return rows;
+};
 var initFunObj = {
     init: init,
     sortRows: sortRows,
     basicSortRows: basicSortRows,
     treeSortRows: treeSortRows,
-    getSumValue: getSumValue
+    getSumValue: getSumValue,
+    getGroupSumValue: getGroupSumValue,
+    addOneRowGroup: addOneRowGroup,
+    getGroupRows: getGroupRows
 };
 
 var sort_initEventFun = function sort_initEventFun() {
@@ -140,9 +218,9 @@ var canSortable = function canSortable(e, ele) {
                 var p = parseInt($el.text());
                 var f = $el.closest('th').attr('field');
                 var st;
-                if ($el.parent().hasClass("uf-arrow-up")) {
+                if ($el.parent().hasClass("uf-arrow-down")) {
                     st = 'asc';
-                } else if ($el.parent().hasClass("uf-arrow-down")) {
+                } else if ($el.parent().hasClass("uf-arrow-up")) {
                     st = 'desc';
                 }
                 prioArray[p - 1] = {
@@ -153,11 +231,11 @@ var canSortable = function canSortable(e, ele) {
             // 页面调整
             /*修改ue将caret调整为caret*/
             var $caret;
-            if (($caret = $ele.find('.uf-arrow-up')).length > 0) {
+            if (($caret = $ele.find('.uf-arrow-down')).length > 0) {
                 var p = parseInt($caret.find('.u-grid-header-sort-priority').text());
                 prioArray[p - 1].sortType = 'desc';
-                $caret.removeClass('uf-arrow-up').addClass('uf-arrow-down');
-            } else if (($caret = $ele.find('.uf-arrow-down')).length > 0) {
+                $caret.removeClass('uf-arrow-down').addClass('uf-arrow-up');
+            } else if (($caret = $ele.find('.uf-arrow-up')).length > 0) {
                 var p = parseInt($caret.find('.u-grid-header-sort-priority').text());
                 for (var i = p; i < prioArray.length; i++) {
                     var $flag = $('[field=' + prioArray[i].field + ']').find('.u-grid-header-sort-priority');
@@ -170,25 +248,25 @@ var canSortable = function canSortable(e, ele) {
                     field: field,
                     sortType: 'asc'
                 });
-                // $ele.first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
-                $ele.first().first().append('<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>');
+                // $ele.first().append('<span class="uf uf-arrow-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">'+prioArray.length+'</span></span>')
+                $ele.first().first().append('<span class="uf uf-arrow-down u-grid-header-sort-span" ></span>');
             }
             // 执行排序逻辑
             this.dataSourceObj.sortRowsByPrio(prioArray);
         } else {
-            if ($(".uf-arrow-up").parent().parent().parent()[0] == ele) {
+            if ($(".uf-arrow-down").parent().parent().parent()[0] == ele) {
                 //原来为升序，本次为降序
-                $(".uf-arrow-up").remove();
-                //$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
-                $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-down u-grid-header-sort-span" ></span>');
+                $(".uf-arrow-down").remove();
+                //$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
+                $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>');
                 if (typeof this.options.onSortFun == 'function') {
                     this.options.onSortFun(field, 'asc');
                 } else {
                     this.dataSourceObj.sortRows(field, "asc");
                 }
-            } else if ($(".uf-arrow-down").parent().parent().parent()[0] == ele) {
+            } else if ($(".uf-arrow-up").parent().parent().parent()[0] == ele) {
                 //原来为降序，本次为不排序
-                $(".uf-arrow-down").remove();
+                $(".uf-arrow-up").remove();
                 if (typeof this.options.onSortFun == 'function') {
                     this.options.onSortFun();
                 } else {
@@ -196,10 +274,10 @@ var canSortable = function canSortable(e, ele) {
                 }
             } else {
                 //本次为升序
-                $(".uf-arrow-up").remove();
                 $(".uf-arrow-down").remove();
-                // $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
-                $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-up u-grid-header-sort-span"></span>');
+                $(".uf-arrow-up").remove();
+                // $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
+                $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-down u-grid-header-sort-span"></span>');
                 if (typeof this.options.onSortFun == 'function') {
                     this.options.onSortFun(field, "desc");
                 } else {
@@ -296,93 +374,39 @@ var sortRowsByPrio = function sortRowsByPrio(prioArray, cancelSort) {
 
     this.rows.sort(eval(evalStr(0)));
 };
+
 /*
  * 将values转化为rows并进行排序(标准)
  */
 var re_basicSortRows = function re_basicSortRows(field, sortType) {
-    var oThis = this;
+    var oThis = this,
+        groupField = this.gridComp.options.groupField;
     var dataType = "";
-    if (field) {
-        dataType = this.gridComp.getColumnByField(field).options.dataType;
-    }
-    if (sortType == "asc") {
-        this.rows.sort(function (a, b) {
-            var v1 = $(b.value).attr(field);
-            var v2 = $(a.value).attr(field);
-            if (dataType == 'Float') {
-                v1 = parseFloat(v1);
-                v2 = parseFloat(v2);
-                if (isNaN(v1)) {
-                    return 1;
-                }
-                if (isNaN(v2)) {
-                    return -1;
-                }
-                return v1 - v2;
-            } else if (dataType == 'Int') {
-                v1 = parseInt(v1);
-                v2 = parseInt(v2);
-                if (isNaN(v1)) {
-                    return 1;
-                }
-                if (isNaN(v2)) {
-                    return -1;
-                }
-                return v1 - v2;
-            } else {
-                v1 = oThis.gridComp.getString(v1, '');
-                v2 = oThis.gridComp.getString(v2, '');
-                try {
-                    return v1.localeCompare(v2);
-                } catch (e) {
-                    return 0;
-                }
-            }
-        });
-    } else if (sortType == "desc") {
-        this.rows.sort(function (a, b) {
-            var v1 = $(a.value).attr(field);
-            var v2 = $(b.value).attr(field);
-            if (dataType == 'Float') {
-                v1 = parseFloat(v1);
-                v2 = parseFloat(v2);
-                if (isNaN(v1)) {
-                    return 1;
-                }
-                if (isNaN(v2)) {
-                    return -1;
-                }
-                return v1 - v2;
-            } else if (dataType == 'Int') {
-                v1 = parseInt(v1);
-                v2 = parseInt(v2);
-                if (isNaN(v1)) {
-                    return 1;
-                }
-                if (isNaN(v2)) {
-                    return -1;
-                }
-                return v1 - v2;
-            } else {
-                v1 = oThis.gridComp.getString(v1, '');
-                v2 = oThis.gridComp.getString(v2, '');
-                try {
-                    return v1.localeCompare(v2);
-                } catch (e) {
-                    return 0;
-                }
-            }
-        });
-    } else {
+
+    if (!field) {
         this.rows = new Array();
+        this.groupRows = new Array();
         if (this.options.values) {
             $.each(this.options.values, function (i) {
                 var rowObj = {};
                 rowObj.value = this;
                 rowObj.valueIndex = i;
                 oThis.rows.push(rowObj);
+                oThis.addOneRowGroup(rowObj);
+                oThis.rows = oThis.getGroupRows();
             });
         }
+        return;
+    }
+    if (groupField && field && groupField != field) {
+        oThis.rows = [];
+        $.each(this.groupRows, function () {
+            var nowGroup = this;
+            nowGroup.rows.sort(oThis.gridComp.SortByFun(field, sortType));
+            oThis.rows = oThis.rows.concat(nowGroup.rows);
+        });
+    } else {
+        this.rows.sort(this.gridComp.SortByFun(field, sortType));
     }
 };
 var sortFunObj = {
@@ -1026,9 +1050,10 @@ var createGridDivs = function createGridDivs() {
     // 为避免重复渲染，在开始清空里面内容
     if ($('#' + this.options.id)[0]) $('#' + this.options.id)[0].innerHTML = '';
     var htmlStr = '<div id="' + this.options.id + '_grid" class="u-grid-grid">';
-    // htmlStr += this.createColumnMenu();
     htmlStr += this.createHeader();
+    htmlStr += this.createBeginNoScroll();
     htmlStr += this.createContent();
+    htmlStr += this.createEndNoScroll();
     htmlStr += '</div>';
     if ($('#' + this.options.id)[0]) $('#' + this.options.id).html(htmlStr);
     $('#' + this.options.id + '_column_menu').remove();
@@ -1040,6 +1065,118 @@ var createGridDivs = function createGridDivs() {
     this.createGridFlag = true;
     this.realtimeTableRows = null;
 };
+
+var createBeginNoScroll = function createBeginNoScroll() {
+    return this.createNoScroll('begin');
+};
+
+var createEndNoScroll = function createEndNoScroll() {
+    return this.createNoScroll('end');
+};
+
+var createNoScroll = function createNoScroll(type) {
+    var htmlStr = '<div id="' + this.options.id + '_noScroll_' + type + '" class="u-grid-noScroll ' + type + '"><div class="u-grid-noScroll-wrap ' + type + '" id="' + this.options.id + '_noScroll_' + type + '_wrap">';
+
+    if ((this.options.multiSelect || this.options.showNumCol) && (type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed || type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed)) {
+        htmlStr += '<div id="' + this.options.id + '_noScroll_left" class="u-grid-noScroll-left" style="width:' + this.leftW + 'px;height:' + this.noScrollHeight + 'px;">';
+        htmlStr += '</div>';
+    }
+    htmlStr += this.createNoScrollTableFixed(type);
+    htmlStr += this.createNoScrollTable(type);
+    htmlStr += '</div></div>';
+    return htmlStr;
+};
+
+var createNoScrollTableFixed = function createNoScrollTableFixed(type) {
+    return this.createNoScrollTable(type, 'fixed');
+};
+
+var createNoScrollTable = function createNoScrollTable(type, createFlag) {
+    /*var leftW, idStr, styleStr, hStr, cssStr, tableStyleStr;
+    hStr = "";
+     if (createFlag == 'fixed') {
+        leftW = parseInt(this.leftW);
+        idStr = 'fixed_';
+        cssStr = 'fixed-';
+        if (this.options.fixedFloat == 'right') {
+            styleStr = 'style="position:absolute;width:' + this.fixedWidth + 'px;right:0px;' + hStr + '"';
+        } else {
+            styleStr = 'style="position:absolute;width:' + this.fixedWidth + 'px;left:' + leftW + 'px;' + hStr + '"';
+        }
+        tableStyleStr = 'style="width:' + this.fixedWidth + 'px;"';
+    } else {
+        if (this.options.fixedFloat == 'right') {
+            leftW = parseInt(this.leftW);
+        } else {
+            leftW = parseInt(this.leftW) + parseInt(this.fixedWidth, 0);
+        }
+        idStr = '';
+        cssStr = '';
+        styleStr = 'style="position:relative;left:' + leftW + 'px;' + hStr;
+        if (this.contentMinWidth > 0) {
+            styleStr += 'width:' + this.contentMinWidth + 'px;';
+        }
+        // 因为添加overflow-x之后会导致纵向也显示不全，后续出现问题通过修改宽度来实现，不再通过overflow来实现
+        if (this.options.noScroll) {
+            styleStr += 'overflow-x:hidden;'
+        }
+        styleStr += '"';
+        tableStyleStr = '';
+        if (this.contentMinWidth > 0) {
+            if (this.contentWidth > 0) {
+                tableStyleStr = 'style="position:relative;min-width:' + this.contentMinWidth + 'px;width:' + this.contentWidth + 'px;"';
+            } else {
+                tableStyleStr = 'style="position:relative;min-width:' + this.contentMinWidth + 'px;"';
+            }
+        }
+    }
+    var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" ' + tableStyleStr + '>';
+    htmlStr += this.createColgroup(createFlag);
+    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_noSCroll_' + idStr + type + '_thead" style="display:none">';
+    htmlStr += this.createThead(createFlag);
+    htmlStr += '</thead>';
+    if ((type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed) || (type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed)) {
+        htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_noScroll_' + idStr + type + '_tbody">';
+        htmlStr += this.createContentRowsSumRow(createFlag);
+        htmlStr += '</tbody>';
+    }
+    htmlStr += '</table>';
+    return htmlStr;*/
+    var leftW, positionStr, idStr;
+    if (createFlag == 'fixed') {
+        leftW = parseInt(this.leftW);
+        positionStr = 'absolute;width:' + this.fixedWidth + 'px;z-index:11;';
+        idStr = 'fixed_';
+    } else {
+        if (this.options.fixedFloat == 'right') {
+            leftW = parseInt(this.leftW);
+        } else {
+            leftW = parseInt(this.leftW) + parseInt(this.fixedWidth);
+        }
+        positionStr = 'relative;';
+        idStr = '';
+        if (this.contentMinWidth > 0) {
+            positionStr += 'width:' + this.contentMinWidth + 'px;';
+        }
+    }
+    if (createFlag == 'fixed' && this.options.fixedFloat == 'right') {
+        var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" style="position:' + positionStr + ';right:0px;">';
+    } else {
+        var htmlStr = '<table role="grid" id="' + this.options.id + '_noScroll_' + idStr + type + '_table" style="position:' + positionStr + ';left:' + leftW + 'px;">';
+    }
+    htmlStr += this.createColgroup(createFlag);
+    htmlStr += '<thead role="rowgroup" id="' + this.options.id + '_noSCroll_' + idStr + type + '_thead" style="display:none">';
+    htmlStr += this.createThead(createFlag);
+    htmlStr += '</thead>';
+    if (type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed || type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed) {
+        htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_noScroll_' + idStr + type + '_tbody">';
+        htmlStr += this.createContentRowsSumRow(createFlag);
+        htmlStr += '</tbody>';
+    }
+    htmlStr += '</table>';
+    return htmlStr;
+};
+
 /*
  * 重画grid
  */
@@ -1265,12 +1402,12 @@ var createContentLeft = function createContentLeft() {
     // }else{
     // 	hStr = '';
     // }
-    if (this.options.showSumRow && this.options.sumRowFirst && this.options.sumRowHeight) {
+    if (this.options.showSumRow && this.options.sumRowFirst && !this.options.sumRowFixed && this.options.sumRowHeight) {
         topStr = "top:" + this.options.sumRowHeight + 'px';
     }
     if (this.options.showSumRow) {
         sumRowClass = 'u-grid-content-left-sum';
-        if (this.options.sumRowFirst) {
+        if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0) {
             sumRowClass += ' u-grid-content-left-sum-first';
         }
     }
@@ -1278,9 +1415,13 @@ var createContentLeft = function createContentLeft() {
         htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
-            $.each(this.dataSourceObj.rows, function (i) {
-                htmlStr += oThis.createContentLeftMultiSelectRow(this);
-            });
+            if (this.options.groupSumRow) {
+                htmlStr += oThis.createContentLeftMultiSelectGroupRows();
+            } else {
+                $.each(this.dataSourceObj.rows, function (i) {
+                    htmlStr += oThis.createContentLeftMultiSelectRow(this);
+                });
+            }
         }
         htmlStr += '</div>';
         left += this.multiSelectWidth;
@@ -1289,13 +1430,25 @@ var createContentLeft = function createContentLeft() {
         htmlStr += '<div class="u-grid-content-left ' + sumRowClass + '" id="' + this.options.id + '_content_numCol" style="width:' + this.numWidth + 'px;left:' + left + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
-            $.each(this.dataSourceObj.rows, function (i, row) {
-                htmlStr += oThis.createContentLeftNumColRow(i, row.value);
-            });
+            if (this.options.groupSumRow) {
+                htmlStr += oThis.createContentLeftNumColGroupRows();
+            } else {
+                $.each(this.dataSourceObj.rows, function (i, row) {
+                    htmlStr += oThis.createContentLeftNumColRow(i, row.value);
+                });
+            }
         }
         htmlStr += '</div>';
     }
     return htmlStr;
+};
+
+var createContentLeftMultiSelectGroupRows = function createContentLeftMultiSelectGroupRows() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
+};
+
+var createContentLeftNumColGroupRows = function createContentLeftNumColGroupRows() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
 };
 /*
  * 创建内容区左侧区域复选区（一行）
@@ -1439,13 +1592,17 @@ var createContentRows = function createContentRows(createFlag) {
     // 遍历生成所有行
     if (this.dataSourceObj.rows) {
         htmlStr += '<tbody role="rowgroup" id="' + this.options.id + '_content_' + idStr + 'tbody">';
-        if (this.options.sumRowFirst) {
+        if (this.options.sumRowFirst && !this.options.sumRowFixed) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
-        $.each(this.dataSourceObj.rows, function (i) {
-            htmlStr += oThis.createContentOneRow(this, createFlag);
-        });
-        if (!this.options.sumRowFirst) {
+        if (this.options.groupField) {
+            htmlStr += oThis.createContentGroupRows(createFlag);
+        } else {
+            $.each(this.dataSourceObj.rows, function (i) {
+                htmlStr += oThis.createContentOneRow(this, createFlag);
+            });
+        }
+        if (!this.options.sumRowFirst && !this.options.sumRowFixed) {
             htmlStr += this.createContentRowsSumRow(createFlag);
         }
         htmlStr += '</tbody>';
@@ -1453,7 +1610,10 @@ var createContentRows = function createContentRows(createFlag) {
     return htmlStr;
 };
 var createContentRowsSumRow = function createContentRowsSumRow() {
-    return '';
+    return '<div>参数设置显示合计行，但是未引入合计行资源</div>';
+};
+var createContentGroupRows = function createContentGroupRows() {
+    return '<div>参数设置显示分组合计行，但是未引入分组合计行资源</div>';
 };
 /*
  * 创建内容区域数据行
@@ -1720,20 +1880,29 @@ var createFunObj = {
     createContentLeft: createContentLeft,
     createContentLeftMultiSelectRow: createContentLeftMultiSelectRow,
     createContentLeftNumColRow: createContentLeftNumColRow,
+    createContentLeftMultiSelectGroupRows: createContentLeftMultiSelectGroupRows,
+    createContentLeftNumColGroupRows: createContentLeftNumColGroupRows,
     createContentTable: createContentTable,
     createContentTableFixed: createContentTableFixed,
     createNoRowsDiv: createNoRowsDiv,
     createContentRows: createContentRows,
     createContentRowsSumRow: createContentRowsSumRow,
+    createContentGroupRows: createContentGroupRows,
     createContentOneRow: createContentOneRow,
     createContentOneRowForIE: createContentOneRowForIE,
     repaintRow: repaintRow,
     createContentOneRowTd: createContentOneRowTd,
     createContentOneRowTdForIE: createContentOneRowTdForIE,
-    repairContent: repairContent
+    repairContent: repairContent,
+    createBeginNoScroll: createBeginNoScroll,
+    createEndNoScroll: createEndNoScroll,
+    createNoScroll: createNoScroll,
+    createNoScrollTableFixed: createNoScrollTableFixed,
+    createNoScrollTable: createNoScrollTable
 };
 
 var trHoverFun = function trHoverFun(index) {
+    if (index < 0) return;
     var oThis = this;
     $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').removeClass('u-grid-move-bg');
     $('#' + oThis.options.id + '_content_fixed_tbody').find('tr[role="row"]').removeClass('u-grid-move-bg');
@@ -1741,7 +1910,7 @@ var trHoverFun = function trHoverFun(index) {
     if (oThis.options.showNumCol) $('#' + oThis.options.id + '_content_numCol').find('div').removeClass('u-grid-move-bg');
     if (index > -1) {
         var $tr = $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').eq(index);
-        if ($tr[0].id && $tr[0].id == oThis.options.id + '_edit_tr') {
+        if ($tr && $tr[0] && $tr[0].id && $tr[0].id == oThis.options.id + '_edit_tr') {
             return;
         }
         $('#' + oThis.options.id + '_content_tbody').find('tr[role="row"]').eq(index).addClass('u-grid-move-bg');
@@ -1808,7 +1977,7 @@ var resetLeftHeight = function resetLeftHeight() {
 
 var resetLeftHeightFun = function resetLeftHeightFun() {
     if (this.options.showNumCol || this.options.multiSelect) {
-        var $trs = $('#' + this.options.id + '_content_tbody tr');
+        var $trs = $('#' + this.options.id + '_content_tbody tr[role="row"]');
         var $leftNums = $('#' + this.options.id + '_content_numCol div');
         var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
         for (var i = 0; i < $trs.length; i++) {
@@ -1824,7 +1993,9 @@ var resetLeftHeightFun = function resetLeftHeightFun() {
             }
         }
     }
+    this.resetLeftHeightGroupSumFun();
 };
+var resetLeftHeightGroupSumFun = function resetLeftHeightGroupSumFun() {};
 /*
  * 处理是否显示无数据行
  */
@@ -1872,7 +2043,8 @@ var createCalFunOjb = {
     afterRepaintGrid: afterRepaintGrid,
     resetScrollLeft: resetScrollLeft,
     hideEditMenu: hideEditMenu,
-    resetLeftHeight: resetLeftHeight
+    resetLeftHeight: resetLeftHeight,
+    resetLeftHeightGroupSumFun: resetLeftHeightGroupSumFun
 };
 
 /*
@@ -1926,17 +2098,21 @@ var initContentDivEventFun = function initContentDivEventFun() {
     });
     // 同步滚动条
     $('#' + this.options.id + '_content_div').on('scroll', function (e) {
-        var sumRowH = 0;
+        var sumRowH = 0,
+            l;
         oThis.scrollLeft = this.scrollLeft;
         oThis.scrollTop = this.scrollTop;
         if (oThis.options.fixedFloat == 'right') {
-            $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + "px");
+            l = oThis.leftW - oThis.scrollLeft;
         } else {
-            $('#' + oThis.options.id + '_header_table').css('left', oThis.leftW - oThis.scrollLeft + oThis.fixedWidth + "px");
+            l = oThis.leftW - oThis.scrollLeft + oThis.fixedWidth;
         }
+        $('#' + oThis.options.id + '_header_table').css('left', l + "px");
+        $('#' + oThis.options.id + '_noScroll_begin_table').css('left', l + "px");
+        $('#' + oThis.options.id + '_noScroll_end_table').css('left', l + "px");
         $('#' + oThis.options.id + '_noRowsShow').css('left', oThis.scrollLeft + "px");
         $('#' + oThis.options.id + '_edit_form').css('left', oThis.scrollLeft + "px");
-        if (oThis.options.showSumRow && oThis.options.sumRowFirst) {
+        if (oThis.options.showSumRow && oThis.options.sumRowFirst && !oThis.options.sumRowFixed) {
             sumRowH = 44;
             if (oThis.options.sumRowHeight) sumRowH = oThis.options.sumRowHeight;
         }
@@ -1972,7 +2148,7 @@ var initContentDivEventFun = function initContentDivEventFun() {
             mousemoveIndex = -1;
         // 首先清除所有的背景
         if ($tr.length > 0) {
-            mousemoveIndex = $('tr', $tr.parent()).index($tr);
+            mousemoveIndex = $('tr[role="row"]', $tr.parent()).index($tr);
         } else if ($div.length > 0 && ($div.hasClass('u-grid-content-multiSelect') || $div.hasClass('u-grid-content-num'))) {
             //左侧复选及数字列
             mousemoveIndex = $('div', $div.parent()).index($div);
@@ -2210,6 +2386,7 @@ var init$2 = function init(ele, options) {
         ml_clear_set: '清除设置',
         ml_no_rows: '无数据',
         ml_sum: '合计:',
+        ml_group_sum: '小计:',
         ml_close: '关闭'
     };
     this.transMap = $.extend({}, this.transDefault, options.transMap);
@@ -2275,6 +2452,7 @@ var initDefault = function initDefault() {
         sortable: true, // 是否可以排序
         showSumRow: false, // 是否显示合计行
         sumRowFirst: false, // 合计行是否显示在第一行，true表示显示在第一行，false表示显示在最后一行
+        sumRowFixed: false, //合计行是否固定在头部，不随滚动条滚动
         canSwap: true, // 是否可以交换列位置
         showTree: false, // 是否显示树表
         autoExpand: true, // 是否默认展开
@@ -2284,7 +2462,13 @@ var initDefault = function initDefault() {
         contentSelect: true, // 点击内容区是否执行选中逻辑
         showEditIcon: false, // 是否显示编辑图标
         contentFocus: true, // 点击内容区是否执行focus逻辑
-        fixedFloat: 'left'
+        fixedFloat: 'left',
+        groupField: '', // 是否按照某字段进行分组显示
+        groupSumRow: false, //是否显示分组小计
+        rowHeight: 44, // 行高
+        columnMenuType: 'base'
+        // sumRowHeight 合计行行高
+        // headerHeight 表头高
     };
 };
 /*
@@ -2325,6 +2509,7 @@ var destroySelf = function destroySelf() {
 var initOptions = function initOptions() {
     this.options.width = this.formatWidth(this.options.width);
     this.options.height = this.formatWidth(this.options.height);
+    this.options.rowHeight = parseInt(this.options.rowHeight);
     if (this.options.height == '100%' || !this.options.height) {
         this.countContentHeight = false;
     }
@@ -2337,9 +2522,11 @@ var initOptions = function initOptions() {
         this.leftW += this.multiSelectWidth;
     }
     this.exceptContentHeight = 0; // 内容区域之外的高度
+    this.noScrollHeight = 0;
     if (this.options.showHeader) {
         this.exceptContentHeight += this.headerHeight;
     }
+
     this.fixedWidth = 0;
     if (this.options.maxHeaderLevel > 1) {
         this.options.canSwap = false;
@@ -2349,6 +2536,14 @@ var initOptions = function initOptions() {
     if (this.options.rowHeight && !this.options.sumRowHeight) {
         this.options.sumRowHeight = this.options.rowHeight;
     }
+    if (this.options.sumRowFixed) {
+        this.noScrollHeight += this.options.sumRowHeight;
+        this.exceptContentHeight += this.options.sumRowHeight;
+        // if (!this.options.sumRowFirst) {
+        this.exceptContentHeight += 1;
+        // }
+    }
+
     // 获取缓存id
     var url = window.location.href;
     var index = url.indexOf('?');
@@ -2518,10 +2713,16 @@ var addOneRow = function addOneRow(row, index) {
         l = this.dataSourceObj.rows.length,
         endFlag = false;
     rowObj.value = row, displayFlag;
+    if (this.options.showTree) {
+        var treeObj = this.addOneRowTree(row, index, rowObj);
+        index = treeObj.index;
+        displayFlag = treeObj.displayFlag;
+    }
 
-    var treeObj = this.addOneRowTree(row, index, rowObj);
-    index = treeObj.index;
-    displayFlag = treeObj.displayFlag;
+    if (this.options.groupField) {
+        index = this.getGroupIndex(row, index, rowObj);
+    }
+
     if (index != 0) {
         if (index && index > 0) {
             if (l < index) index = l;
@@ -2564,24 +2765,23 @@ var addOneRow = function addOneRow(row, index) {
     if (this.showType == 'grid') {
         //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
-
         this.updateEditRowIndex('+', index);
         try {
             var htmlStr = this.createContentOneRow(rowObj, 'normal', displayFlag);
             if (endFlag) {
                 $('#' + this.options.id + '_content_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index];
+                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index - 1];
                 var $$tbody = $('#' + this.options.id + '_content_tbody')[0];
-                if ($$tr) $$tr.insertAdjacentHTML('beforeBegin', htmlStr);else if ($$tbody) $$tbody.insertAdjacentHTML('afterBegin', htmlStr);
+                if ($$tr) $$tr.insertAdjacentHTML('afterEnd', htmlStr);else if ($$tbody) $$tbody.insertAdjacentHTML('afterBegin', htmlStr);
             }
             if ($('#' + this.options.id + '_content_fixed_div').length > 0) {
                 var htmlStr = this.createContentOneRow(rowObj, 'fixed', displayFlag);
                 if (endFlag) {
                     $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
                 } else {
-                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index];
-                    if ($$tr) $$tr.insertAdjacentHTML('beforeBegin', htmlStr);else if ($('#' + this.options.id + '_content_fixed_tbody')[0]) $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
+                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index - 1];
+                    if ($$tr) $$tr.insertAdjacentHTML('afterEnd', htmlStr);else if ($('#' + this.options.id + '_content_fixed_tbody')[0]) $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
                 }
             }
         } catch (e) {
@@ -2596,22 +2796,25 @@ var addOneRow = function addOneRow(row, index) {
             if (endFlag) {
                 $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index];
-                if ($$div) $$div.insertAdjacentHTML('beforeBegin', htmlStr);else $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStr);
+                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index - 1];
+                if ($$div) $$div.insertAdjacentHTML('afterEnd', htmlStr);else $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
+            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
-            var htmlStr = this.createContentLeftNumColRow(l, row);
+            var htmlStr = this.createContentLeftNumColRow(index, row);
             if (endFlag) {
                 $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index];
-                if ($$div) $$div.insertAdjacentHTML('beforeBegin', htmlStr);else $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStr);
+                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index - 1];
+                if ($$div) $$div.insertAdjacentHTML('afterEnd', htmlStr);else $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
+            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
         this.repairSumRow();
+        this.repairGroupSumRow(rowObj);
         this.noRowsShowFun();
         this.updateLastRowFlag();
         this.resetLeftHeight();
@@ -2621,7 +2824,13 @@ var addOneRow = function addOneRow(row, index) {
         this.renderTypeFun(obj);
     }
 };
+
+var repairGroupSumRow = function repairGroupSumRow() {};
 var addOneRowTree = function addOneRowTree(row, index) {
+    return index;
+};
+
+var getGroupIndex = function getGroupIndex(row, index) {
     return index;
 };
 var addOneRowTreeHasChildF = function addOneRowTreeHasChildF() {};
@@ -2632,7 +2841,7 @@ var editClose = function editClose() {};
 var addRows = function addRows(rows, index) {
 
     if (!(this.$ele.data('gridComp') == this)) return;
-    if (this.options.showTree) {
+    if (this.options.showTree || this.options.groupField) {
         // 树表待优化
         var l = rows.length;
         for (var i = 0; i < l; i++) {
@@ -2727,6 +2936,7 @@ var addRows = function addRows(rows, index) {
                 var _content_multiSelect = $('#' + this.options.id + '_content_multiSelect').find('div')[index];
                 if (_content_multiSelect) _content_multiSelect.insertAdjacentHTML('beforeBegin', htmlStrmultiSelect);else $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStrmultiSelect);
             }
+            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
             if (endFlag) {
@@ -2735,6 +2945,7 @@ var addRows = function addRows(rows, index) {
                 var _content_multiSelect = $('#' + this.options.id + '_content_numCol').find('div')[index];
                 if (_content_multiSelect) _content_multiSelect.insertAdjacentHTML('beforeBegin', htmlStrNumCol);else $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStrNumCol);
             }
+            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
@@ -2763,6 +2974,7 @@ var deleteOneRow = function deleteOneRow(index) {
     var row = this.dataSourceObj.rows[index];
     if (!row) return;
     var rowValue = row.value;
+
     if (this.showType == 'grid') {
         //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
@@ -2801,14 +3013,20 @@ var deleteOneRow = function deleteOneRow(index) {
             this.focusRowIndex = this.focusRowIndex - 1;
         }
     }
+    this.deleteOneRowGroup(row);
     if (this.showType == 'grid') {
         //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         $('#' + this.options.id + '_content_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_numCol >.u-grid-content-num:eq(' + index + ')').remove();
+        if (this.dataSourceObj.rows.length == 0) {
+            $('#' + this.options.id + '_content_multiSelect').removeClass('u-grid-content-left-sum-first');
+            $('#' + this.options.id + '_content_numCol').removeClass('u-grid-content-left-sum-first');
+        }
         this.resetNumCol();
         this.repairSumRow();
+        this.repairGroupSumRow(row);
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
     }
@@ -2826,6 +3044,7 @@ var deleteOneRow = function deleteOneRow(index) {
     this.isCheckedHeaderRow();
 };
 var repairSumRow = function repairSumRow() {};
+var deleteOneRowGroupSum = function deleteOneRowGroupSum() {};
 var deleteOneRowTree = function deleteOneRowTree() {};
 /*
  * 删除多行
@@ -2883,7 +3102,7 @@ var updateValueAt = function updateValueAt(rowIndex, field, value, force) {
                 if (!flag) return;
             }
             $(this.dataSourceObj.rows[rowIndex].value).attr(field, value);
-            $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value);
+            // $(this.dataSourceObj.options.values[this.dataSourceObj.rows[rowIndex].valueIndex]).attr(field, value); //grouptest依次执行除删除后不存在分组表头按钮最后修改数据会错误
             if (this.showType == 'grid') {
                 var obj = {};
                 obj.field = field;
@@ -2895,6 +3114,7 @@ var updateValueAt = function updateValueAt(rowIndex, field, value, force) {
                 treeRowIndex = this.updateValueAtTree(rowIndex, field, value, force);
                 this.updateValueAtEdit(rowIndex, field, value, force);
                 this.repairSumRow();
+                this.repairGroupSumRow(this.dataSourceObj.rows[rowIndex]);
             }
             if (typeof this.options.onValueChange == 'function') {
                 var obj = {};
@@ -2926,7 +3146,7 @@ var setRowSelect = function setRowSelect(rowIndex, doms) {
         if (doms && doms['contentTrs']) rowTr = doms['contentTrs'][rowIndex];else rowTr = this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]')[rowIndex];
     }
     if (this.dataSourceObj.rows[rowIndex].checked && u.hasClass(rowTr, "u-grid-content-sel-row")) return true;
-    if (doms && doms['multiSelectDivs']) selectDiv = doms['multiSelectDivs'][rowIndex];else selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').children()[rowIndex];
+    if (doms && doms['multiSelectDivs']) selectDiv = doms['multiSelectDivs'][rowIndex];else selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').find('div')[rowIndex];
     if (typeof this.options.onBeforeRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
@@ -2978,11 +3198,11 @@ var setRowSelect = function setRowSelect(rowIndex, doms) {
             ini++;
         }
         if (this.options.multiSelect) {
-            if (ini != rowIndex) selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').children()[ini];
+            if (ini != rowIndex) selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').find('div')[ini];
             $(selectDiv).addClass('u-grid-content-sel-row');
         }
         if (this.options.showNumCol) {
-            if (doms && doms['numColDivs']) numColDiv = doms['numColDivs'][ini];else numColDiv = this.$ele.find('#' + this.options.id + '_content_numCol').children()[ini];
+            if (doms && doms['numColDivs']) numColDiv = doms['numColDivs'][ini];else numColDiv = this.$ele.find('#' + this.options.id + '_content_numCol').find('div')[ini];
             $(numColDiv).addClass('u-grid-content-sel-row');
         }
     }
@@ -3254,6 +3474,7 @@ var operateRowFunObj = {
     addOneRow: addOneRow,
     addOneRowTree: addOneRowTree,
     addOneRowTreeHasChildF: addOneRowTreeHasChildF,
+    getGroupIndex: getGroupIndex,
     editClose: editClose,
     addRows: addRows,
     createContentOneRowFixed: createContentOneRowFixed,
@@ -3272,7 +3493,9 @@ var operateRowFunObj = {
     setAllRowUnSelect: setAllRowUnSelect,
     setRowFocus: setRowFocus,
     setRowUnFocus: setRowUnFocus,
-    resetNumCol: resetNumCol
+    resetNumCol: resetNumCol,
+    repairGroupSumRow: repairGroupSumRow,
+    deleteOneRowGroupSum: deleteOneRowGroupSum
 };
 
 /*
@@ -3343,14 +3566,15 @@ var renderTypeByColumn = function renderTypeByColumn(gridCompColumn, i, begin, l
     if (length > 0) {
         end = parseInt(begin + length - 1);
     }
-    this.realtimeTableRows = document.getElementById(oThis.options.id + idSuffix).children;
+    this.realtimeTableRows = $('#' + this.options.id + idSuffix).find('tr[role="row"]');
+    // this.realtimeTableRows = document.getElementById(oThis.options.id + idSuffix).children;
     // 记录role不是row的行
     var notRowIndex = -1;
-    for (var k = 0; k < oThis.realtimeTableRows.length; k++) {
-        if (oThis.realtimeTableRows[k].getAttribute("role") != "row") {
-            notRowIndex = k;
-        }
-    }
+    // for (var k = 0; k < oThis.realtimeTableRows.length; k++) {
+    //     if (oThis.realtimeTableRows[k].getAttribute("role") != "row") {
+    //         notRowIndex = k
+    //     }
+    // }
     $.each(oThis.dataSourceObj.rows, function (j) {
         if (begin >= 0 && j >= begin && j <= end || isNaN(begin)) {
             //如果当前修改此列则将变量重置
@@ -3467,6 +3691,7 @@ var renderTypeByColumn = function renderTypeByColumn(gridCompColumn, i, begin, l
                 }
             }
         }
+        oThis.renderTypeGroupSumRow(gridCompColumn, i, isFixedColumn, this);
     });
     this.renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn);
 };
@@ -3494,10 +3719,12 @@ var getRenderOverFlag = function getRenderOverFlag(obj) {
 };
 
 var renderTypeSumRow = function renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn) {};
+var renderTypeGroupSumRow = function renderTypeGroupSumRow() {};
 var renderTypeFunObj = {
     renderTypeFun: renderTypeFun,
     renderTypeByColumn: renderTypeByColumn,
     renderTypeSumRow: renderTypeSumRow,
+    renderTypeGroupSumRow: renderTypeGroupSumRow,
     getRenderOverFlag: getRenderOverFlag
 };
 
@@ -3514,7 +3741,11 @@ var setColumnVisibleByColumn = function setColumnVisibleByColumn(column, visible
 var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
     if (index >= 0) {
         var column = this.gridCompColumnArr[index],
-            visibleIndex = this.getVisibleIndexOfColumn(column);
+            visibleIndex = this.getVisibleIndexOfColumn(column),
+            canVisible = column.options.canVisible;
+        if (!canVisible) {
+            return;
+        }
         // 显示处理
         if (column.options.visible == false && visible) {
             var htmlStr = '<col';
@@ -3548,6 +3779,8 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
+
+            $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = true;
         }
         // 隐藏处理
         if (column.options.visible == true && !visible) {
@@ -3558,6 +3791,7 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content_table tbody tr')).css('display', "none");
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
+            $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = false;
         }
         column.options.visible = visible;
         this.columnsVisibleFun();
@@ -4251,6 +4485,57 @@ String.prototype.substrCH = function (nLen) {
     return this.substr(0, j);
 };
 
+var SortByFun = function SortByFun(field, sortType, eqCall) {
+    var oThis = this;
+    return function (a, b) {
+        var v1 = $(a.value).attr(field);
+        var v2 = $(b.value).attr(field);
+        var dataType = oThis.getColumnByField(field).options.dataType;
+        if (dataType == 'Float') {
+            v1 = parseFloat(v1);
+            v2 = parseFloat(v2);
+            if (isNaN(v1)) {
+                return 1;
+            }
+            if (isNaN(v2)) {
+                return -1;
+            }
+            if (v1 == v2 && eqCall) {
+                return eqCall.apply(oThis, arguments);
+            }
+            return sortType == 'asc' ? v1 - v2 : sortType == 'desc' ? v2 - v1 : 0;
+        } else if (dataType == 'Int') {
+            v1 = parseInt(v1);
+            v2 = parseInt(v2);
+            if (isNaN(v1)) {
+                return 1;
+            }
+            if (isNaN(v2)) {
+                return -1;
+            }
+            if (v1 == v2 && eqCall) {
+                return eqCall.apply(oThis, arguments);
+            }
+            return sortType == 'asc' ? v1 - v2 : sortType == 'desc' ? v2 - v1 : 0;
+        } else {
+            v1 = oThis.getString(v1, '');
+            v2 = oThis.getString(v2, '');
+            try {
+                var rsl = v1.localeCompare(v2);
+                if (rsl === 0 && eqCall) {
+                    return eqCall.apply(oThis, arguments);
+                }
+                if (rsl === 0) {
+                    return 0;
+                }
+                return sortType == 'asc' ? rsl : sortType == 'desc' ? -rsl : 0;
+            } catch (e) {
+                return 0;
+            }
+        }
+    };
+};
+
 var utilFunOjb = {
     formatWidth: formatWidth,
     swapEle: swapEle,
@@ -4261,7 +4546,8 @@ var utilFunOjb = {
     DicimalFormater: DicimalFormater,
     accAdd: accAdd,
     getTrIndex: getTrIndex,
-    getDataTableRowIdByRow: getDataTableRowIdByRow
+    getDataTableRowIdByRow: getDataTableRowIdByRow,
+    SortByFun: SortByFun
 };
 
 var re_initGridCompColumnColumnMenuFun = function re_initGridCompColumnColumnMenuFun(columnOptions) {
@@ -4276,6 +4562,14 @@ var colMenu_initGridCompColumn = function colMenu_initGridCompColumn() {
 };
 
 var re_createColumnMenu = function re_createColumnMenu() {
+    if (this.options.columnMenuType == 'base') {
+        return re_createColumnMenu_base.call(this);
+    } else if (this.options.columnMenuType == 'border') {
+        return re_createColumnMenu_border.call(this);
+    }
+};
+
+var re_createColumnMenu_base = function re_createColumnMenu_base() {
     var oThis = this;
     var htmlStr = '<div class="u-grid-column-menu" id="' + this.options.id + '_column_menu">';
     htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
@@ -4290,17 +4584,67 @@ var re_createColumnMenu = function re_createColumnMenu() {
     htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
     $.each(this.gridCompColumnArr, function (i) {
         if (oThis.getString(this.options.title, '') != '') {
-            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '">';
+            var styleStr = '';
+            if (!this.options.canVisible) styleStr += ' style="display:none;"';
+            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
             htmlStr += '<div class="u-grid-column-menu-columns-div1">';
             var checkedStr = "";
             if (this.options.visible) checkedStr = ' checked';
-            if (!this.options.canVisible) checkedStr += ' style="display:none;"';
+
             htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
             htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
             htmlStr += '</div></li>';
         }
     });
     htmlStr += '</ul></div>';
+
+    htmlStr += '</ul></div>';
+
+    // 创建数据列区域
+
+    return htmlStr;
+};
+
+var re_createColumnMenu_border = function re_createColumnMenu_border() {
+    var oThis = this;
+    var htmlStr = '<div class="u-grid-column-menu-border" id="' + this.options.id + '_column_menu">';
+    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
+
+    // 创建清除设置
+    htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
+    htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_clearSet">';
+    htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_clear_set + '</span>';
+    htmlStr += '</div></li>';
+
+    var columnHtmlStr = '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
+    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    var allCheckFlag = true;
+    $.each(this.gridCompColumnArr, function (i) {
+        if (oThis.getString(this.options.title, '') != '') {
+            var styleStr = '';
+            if (!this.options.canVisible) styleStr += ' style="display:none;"';
+            columnHtmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
+            var checkedStr = "";
+            if (this.options.visible) checkedStr = ' checked';
+
+            if (this.options.canVisible && !this.options.visible) allCheckFlag = false;
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label></div>';
+            columnHtmlStr += '<span class="u-grid-column-menu-columns-span-border">' + this.options.title + '</span>';
+            columnHtmlStr += '</div></li>';
+        }
+    });
+    columnHtmlStr += '</ul></div>';
+    var checkedStr = '';
+    if (allCheckFlag) checkedStr = ' checked ';
+    var headerHtmlStr = '<li class="u-grid-column-menu-columns-li header" role="menuitem">';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
+    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border">项目</span>';
+    headerHtmlStr += '</div></li>';
+
+    htmlStr += headerHtmlStr;
+    htmlStr += columnHtmlStr;
 
     htmlStr += '</ul></div>';
 
@@ -4328,7 +4672,12 @@ var colMenu_initEventFun = function colMenu_initEventFun() {
                     $('#' + oThis.options.id + '_column_menu').css('display', 'block');
 
                     // 根据点击位置来显示column menu区域
-                    var left = e.clientX - 160;
+                    if (oThis.options.columnMenuType == 'base') {
+                        var left = e.clientX - 160;
+                    } else if (oThis.options.columnMenuType == 'border') {
+                        var left = e.clientX - 240;
+                    }
+
                     if (left < 0) left = 0;
                     var top = e.clientY + 10;
                     $('#' + oThis.options.id + '_column_menu').css('left', left);
@@ -4452,6 +4801,14 @@ var colMenu_initGridEventFun = function colMenu_initGridEventFun() {
         var inputDom = $(this).find('input');
         inputDom.click();
     });
+
+    // $('#grid2_column_menu_ul .header input')
+    $('#' + this.options.id + '_column_menu_ul .header input').on('click', function (e) {
+        var nowCheck = $(this)[0].checked;
+        $.each(oThis.gridCompColumnArr, function (i) {
+            oThis.setColumnVisibleByColumn(this, nowCheck);
+        });
+    });
     /*header 按钮处理结束*/
 };
 
@@ -4472,7 +4829,7 @@ var drag_initEventFun = function drag_initEventFun() {
 		}
 
 		oThis.dragFun(e);
-		e.stopPropagation();
+		// e.stopPropagation();
 	});
 	$('#' + this.options.id + '_top').on('mousemove', function (e) {
 		oThis.dragFun(e);
@@ -4861,7 +5218,7 @@ var editRow = function editRow($tr, colIndex) {
  */
 var re_editClose = function re_editClose() {
     var dohideFlag = true; //标记是否执行过hide、blur事件
-    if (this.eidtRowIndex < 0) return;
+    if (this.eidtRowIndex < 0 || this.editColIndex < 0) return;
     var row = this.dataSourceObj.rows[this.eidtRowIndex];
     var editField = this.gridCompColumnArr[this.editColIndex].options.field;
     var inputDom = null;
@@ -5149,6 +5506,9 @@ var edit_initEventFun = function edit_initEventFun() {
                 });
             }
             if ($e.attr('role') == 'grid-for-edit') {
+                flag = false;
+            }
+            if ($e.parent().length == 0) {
                 flag = false;
             }
             if (flag) {
@@ -5639,7 +5999,8 @@ var re_widthChangeGridFunOverWidthHidden = function re_widthChangeGridFunOverWid
             }
             this.columnsVisibleFun();
         } else {
-            for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
+            // 会将隐藏的显示出来
+            /*for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
                 var column = this.gridCompHiddenLevelColumnArr[i];
                 if (!column.options.visible) {
                     columnWholeWidth = parseInt(columnWholeWidth) + parseInt(column.options.width);
@@ -5649,7 +6010,7 @@ var re_widthChangeGridFunOverWidthHidden = function re_widthChangeGridFunOverWid
                     column.options.visible = true;
                 }
             }
-            this.columnsVisibleFun();
+            this.columnsVisibleFun();*/
         }
     }
 };
@@ -5819,7 +6180,7 @@ var re_repairSumRowFun = function re_repairSumRowFun() {
             var table = $('#' + this.options.id + '_content_div table')[0];
             var fixedTable = $('#' + this.options.id + '_content_fixed_div table')[0];
             this.createSumRowForIE(table);
-            this.createSumRowForIE(table, 'fixed');
+            this.createSumRowForIE(fixedTable, 'fixed');
         }
         this.renderSumRow();
     }
@@ -6243,7 +6604,7 @@ var rowDrag_initGridEventFun = function rowDrag_initGridEventFun() {
             oThis.rowDragFun(e);
         }
 
-        e.stopPropagation();
+        // e.stopPropagation();
     });
 
     $('#' + this.options.id + '_content_tbody').on('mouseup', function (e) {
@@ -6367,6 +6728,327 @@ var rowDragFunObj = {
     rowDragFun: rowDragFun,
     rowDragEnd: rowDragEnd,
     setRowDrag: setRowDrag
+};
+
+var createContentGroupRows$1 = function createContentGroupRows(createFlag) {
+    var htmlStr = '',
+        oThis = this;
+    if (this.options.groupField && this.dataSourceObj.groupRows && this.dataSourceObj.groupRows.length > 0) {
+        $.each(this.dataSourceObj.groupRows, function (i) {
+            $.each(this.rows, function () {
+                htmlStr += oThis.createContentOneRow(this, createFlag);
+            });
+            if (oThis.options.groupSumRow) htmlStr += oThis.createContentGroupSumRow(this, createFlag);
+        });
+    }
+    return htmlStr;
+};
+
+var createContentLeftMultiSelectGroupRows$1 = function createContentLeftMultiSelectGroupRows() {
+    var htmlStr = '',
+        oThis = this;
+    if (this.options.groupField && this.dataSourceObj.groupRows && this.dataSourceObj.groupRows.length > 0) {
+        $.each(this.dataSourceObj.groupRows, function (i) {
+            if (this.rows && this.rows.length > 0) {
+                $.each(this.rows, function () {
+                    htmlStr += oThis.createContentLeftMultiSelectRow(this);
+                });
+                if (oThis.options.groupSumRow) htmlStr += oThis.createContentLetGroupSumRow('multiSelect', this.value);
+            }
+        });
+    }
+    return htmlStr;
+};
+
+var createContentLeftNumColGroupRows$1 = function createContentLeftNumColGroupRows() {
+    var htmlStr = '',
+        oThis = this,
+        index = 0;
+    if (this.options.groupField && this.dataSourceObj.groupRows && this.dataSourceObj.groupRows.length > 0) {
+        $.each(this.dataSourceObj.groupRows, function (i) {
+            if (this.rows && this.rows.length > 0) {
+                $.each(this.rows, function () {
+                    htmlStr += oThis.createContentLeftNumColRow(index);
+                    index++;
+                });
+                if (oThis.options.groupSumRow) htmlStr += oThis.createContentLetGroupSumRow('numCol', this.value);
+            }
+        });
+    }
+    return htmlStr;
+};
+
+var re_getGroupIndex = function re_getGroupIndex(row, index, rowObj) {
+    var groupField = this.options.groupField,
+        oThis = this;
+
+    if (groupField) {
+        // 对于已经渲染之后可以哦天哪过此方式处理
+        // if (this.showType == 'grid') {
+        //     var value = this.getString($(row).attr(groupField), '');
+        //     var $tds = $("td:contains(" + value + ")");
+        //     if ($tds.length > 0) {
+        //         var td = $tds[$tds.length - 1];
+        //         var $tr = $(td).closest('tr');
+        //         var $table = $tr.closest('table');
+        //         var index = $table.find('tr[role="row"]').index($tr[0]);
+        //         return index;
+        //     }
+        // }else{
+        var value = this.getString($(row).attr(groupField), '');
+        var nowIndex = -1;
+        this.dataSourceObj.addOneRowGroup(rowObj);
+
+        $.each(this.dataSourceObj.rows, function (i) {
+            var nowRow = this;
+            var nowValue = oThis.getString($(nowRow.value).attr(groupField), '');
+            if (value == nowValue) {
+                nowIndex = i;
+            } else {
+                if (nowIndex > -1) {
+                    return false;
+                }
+            }
+        });
+        if (nowIndex > -1) {
+            return nowIndex + 1;
+        } else {
+            return nowIndex = this.dataSourceObj.rows.length;
+        }
+        // }
+    }
+    return index;
+};
+
+var getGroupRowByGroupValue = function getGroupRowByGroupValue(groupValue) {
+    var groupRow;
+    if (this.dataSourceObj.groupRows && this.dataSourceObj.groupRows.length > 0) {
+        $.each(this.dataSourceObj.groupRows, function () {
+            var nowGroupRow = this;
+            if (nowGroupRow.value == groupValue) {
+                groupRow = this;
+                return false;
+            }
+        });
+        return groupRow;
+    }
+};
+
+var deleteOneRowGroup = function deleteOneRowGroup(rowObj) {
+    var groupField = this.options.groupField,
+        groupValue = rowObj.value[groupField];
+    var groupRow = this.getGroupRowByGroupValue(groupValue);
+    if (groupRow) {
+        var index = groupRow.rows.indexOf(rowObj);
+        groupRow.rows.splice(index, 1);
+        if (groupRow.rows.length == 0) {
+            var groupIndex = this.dataSourceObj.groupRows.indexOf(groupRow);
+            this.dataSourceObj.groupRows.splice(groupIndex, 1);
+        }
+    }
+};
+var groupFunObj = {
+    createContentGroupRows: createContentGroupRows$1,
+    createContentLeftMultiSelectGroupRows: createContentLeftMultiSelectGroupRows$1,
+    createContentLeftNumColGroupRows: createContentLeftNumColGroupRows$1,
+    getGroupIndex: re_getGroupIndex,
+    getGroupRowByGroupValue: getGroupRowByGroupValue,
+    deleteOneRowGroup: deleteOneRowGroup
+};
+
+// 后续和createSumRow整合
+var createContentGroupSumRow = function createContentGroupSumRow(groupRow, createFlag) {
+    if (this.options.groupSumRow) {
+        var oThis = this,
+            idStr,
+            groupValue = groupRow.value;
+        if (createFlag == 'fixed') {
+            idStr = 'fixed_';
+        } else {
+            idStr = '';
+        }
+        var htmlStr = '<tr role="groupsumrow" groupValue="' + groupValue + '" class="u-grid-content-group-sum-row" id="' + this.options.id + '_content_' + idStr + 'group_sum_row_' + groupValue + '">';
+        htmlStr += createContentGroupSumRowTd.call(this, groupRow, createFlag);
+        htmlStr += '</tr>';
+        return htmlStr;
+    }
+};
+
+var createContentGroupSumRowTd = function createContentGroupSumRowTd(groupRow, createFlag) {
+    var htmlStr = '',
+        oThis = this,
+        gridCompColumnArr;
+    if (createFlag == 'fixed') {
+        gridCompColumnArr = this.gridCompColumnFixedArr;
+    } else {
+        gridCompColumnArr = this.gridCompColumnArr;
+    }
+    $.each(gridCompColumnArr, function () {
+        var f = this.options.field;
+        var precision = this.options.precision;
+        var dataType = this.options.dataType;
+        var sumValue = oThis.dataSourceObj.getGroupSumValue(f, this, groupRow);
+        if (dataType == 'float') {
+            var o = {};
+            o.value = sumValue;
+            o.precision = precision ? precision : 2;
+            sumValue = oThis.DicimalFormater(o);
+        }
+        var tdStyle = '';
+        if (!this.options.visible) {
+            tdStyle = 'style="display:none;';
+            if (oThis.options.rowHeight) {
+                tdStyle += 'height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;';
+            }
+            tdStyle += '"';
+        } else {
+            if (oThis.options.rowHeight) {
+                tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;"';
+            }
+        }
+        htmlStr += '<td role="groupsumrowcell"  title="' + sumValue + '" ' + tdStyle + '>';
+        if (this.firstColumn) {
+            htmlStr += '<div class="u-gird-centent-group-sum-div"><span>' + oThis.transMap.ml_group_sum + '</span></div>';
+        }
+        var contentStyle = '';
+        if (this.options.dataType == 'integer' || this.options.dataType == 'float') {
+            contentStyle = 'style="text-align: right;"';
+        }
+        htmlStr += '<div class="u-grid-content-td-div" ' + contentStyle + '><span value="' + sumValue + '">' + sumValue + '</span></div></td>';
+    });
+    return htmlStr;
+};
+
+var createContentLetGroupSumRow = function createContentLetGroupSumRow(type, groupValue) {
+    var w;
+    if (type == 'multiSelect') w = this.multiSelectWidth;
+    if (type == 'numCol') w = this.numWidth;
+    var wStr = 'width:' + w + 'px;';
+    var html = '<span groupValue="' + groupValue + '" class="u-grid-content-group-sum-left" style=" ' + wStr + '"></span>';
+    return html;
+};
+
+var repairGroupSumRow$1 = function repairGroupSumRow(rowObj) {
+    if (this.options.groupSumRow) {
+        var oThis = this,
+            groupField = this.options.groupField,
+            groupValue = rowObj.value[groupField];
+        if (!this.repairGroupSumRowArr) {
+            this.repairGroupSumRowArr = [];
+        }
+        if (this.repairGroupSumRowArr.indexOf(groupValue) < 0) {
+            this.repairGroupSumRowArr.push(groupValue);
+        }
+        if (this.re_repairGroupSumRowSetTimeout) clearTimeout(this.re_repairGroupSumRowSetTimeout);
+        this.re_repairGroupSumRowSetTimeout = setTimeout(function () {
+            repairGroupSumRowFun.call(oThis);
+        }, 200);
+    }
+};
+
+var repairGroupSumRowFun = function repairGroupSumRowFun() {
+    var oThis = this;
+    if (this.repairGroupSumRowArr && this.repairGroupSumRowArr.length > 0 && this.options.groupSumRow) {
+        $.each(this.repairGroupSumRowArr, function () {
+            var groupValue = this,
+                groupRow = oThis.getGroupRowByGroupValue(groupValue);
+            if (groupRow) {
+                var $tr = $('#' + oThis.options.id + '_content_tbody').find('tr[groupValue=' + groupValue + ']');
+                if ($tr.length > 0) {
+                    var htmlStr = createContentGroupSumRowTd.call(oThis, groupRow);
+                    $tr.html(htmlStr);
+                } else {
+                    var htmlStr = oThis.createContentGroupSumRow(groupRow);
+                    var $tds = $('#' + oThis.options.id + '_content_tbody').find("td:contains(" + groupValue + ")");
+                    if ($tds.length > 0) {
+                        var td = $tds[$tds.length - 1];
+                        var $tr = $(td).closest('tr');
+                        var index = $tr.parent().find('tr[role="row"]').index($tr[0]);
+                        $tr[0].insertAdjacentHTML('afterEnd', htmlStr);
+                        if (oThis.options.multiSelect) {
+                            var mulStr = oThis.createContentLetGroupSumRow('multiSelect', groupValue);
+                            var muldiv = $('#' + oThis.options.id + '_content_multiSelect').find('div')[index];
+                            muldiv.insertAdjacentHTML('afterEnd', mulStr);
+                        }
+                        if (oThis.options.showNumCol) {
+                            var numStr = oThis.createContentLetGroupSumRow('numCol', groupValue);
+                            var numdiv = $('#' + oThis.options.id + '_content_numCol').find('div')[index];
+                            numdiv.insertAdjacentHTML('afterEnd', numStr);
+                        }
+                    }
+                }
+            } else {
+                var $tr = $('#' + oThis.options.id + '_content_tbody').find('tr[groupValue=' + groupValue + ']');
+                if ($tr.length > 0) {
+                    $tr.remove();
+                    if (oThis.options.showNumCol) {
+                        var $span = $('#' + oThis.options.id + '_content_numCol').find('span[groupValue=' + groupValue + ']');
+                        $span.remove();
+                    }
+                    if (oThis.options.multiSelect) {
+                        var $span = $('#' + oThis.options.id + '_content_multiSelect').find('span[groupValue=' + groupValue + ']');
+                        $span.remove();
+                    }
+                }
+            }
+        });
+        this.resetLeftHeightGroupSumFun();
+    }
+    this.repairGroupSumRowArr = [];
+};
+
+var resetLeftHeightGroupSumFun$1 = function resetLeftHeightGroupSumFun() {
+    if ((this.options.showNumCol || this.options.multiSelect) && this.options.groupSumRow) {
+        var $trs = $('#' + this.options.id + '_content_tbody tr[role="groupsumrow"]');
+        var $leftNums = $('#' + this.options.id + '_content_numCol span');
+        var $leftSelects = $('#' + this.options.id + '_content_multiSelect > span');
+        for (var i = 0; i < $trs.length; i++) {
+            var nowRowHeight = $trs[i].offsetHeight;
+            if ($leftNums[i]) {
+                $leftNums[i].style.height = nowRowHeight + 'px';
+                // $leftNums[i].style.lineHeight = nowRowHeight + 'px';
+            }
+
+            if ($leftSelects[i]) {
+                $leftSelects[i].style.height = nowRowHeight + 'px';
+                // $leftSelects[i].style.lineHeight = nowRowHeight + 'px';
+            }
+        }
+    }
+};
+
+var renderTypeGroupSumRow$1 = function renderTypeGroupSumRow(gridCompColumn, i, isFixedColumn, rowObj) {
+    var oThis = this;
+    var sumCol = gridCompColumn.options.sumCol;
+    var groupField = this.options.groupField;
+    if (sumCol && groupField) {
+        var groupValue = this.getString($(rowObj.value).attr(groupField), '');
+        var groupSumRenderType = gridCompColumn.options.groupSumRenderType;
+        var dataType = gridCompColumn.options.dataType;
+        var idStr = isFixedColumn === true ? 'fixed_' : '';
+        var sumSpans = $('#' + this.options.id + '_content_' + idStr + 'group_sum_row_' + groupValue).find('td').eq(i).find('span');
+        var sumSpan = sumSpans[sumSpans.length - 1];
+        if (sumSpan) {
+            if (typeof groupSumRenderType == 'function') {
+                var sumV = $(sumSpan).attr('value');
+                var obj = {};
+                obj.value = sumV;
+                obj.element = sumSpan;
+                obj.gridObj = oThis;
+                obj.gridCompColumn = gridCompColumn;
+                groupSumRenderType.call(oThis, obj);
+            } else if (dataType == 'integer' || dataType == 'float') {
+                sumSpan.style.textAlign = 'right';
+            }
+        }
+    }
+};
+var groupSumRowFunObj = {
+    createContentGroupSumRow: createContentGroupSumRow,
+    createContentLetGroupSumRow: createContentLetGroupSumRow,
+    repairGroupSumRow: repairGroupSumRow$1,
+    resetLeftHeightGroupSumFun: resetLeftHeightGroupSumFun$1,
+    renderTypeGroupSumRow: renderTypeGroupSumRow$1
 };
 
 var gridComp = function gridComp(ele, options) {
@@ -6565,6 +7247,16 @@ gridCompProto.initGridEventFun = function () {
  * tree
  */
 Object.assign(gridCompProto, treeFunObj);
+
+/*
+ * group
+ */
+Object.assign(gridCompProto, groupFunObj);
+
+/*
+ * groupsum
+ */
+Object.assign(gridCompProto, groupSumRowFunObj);
 
 /*
  * 对象所支持的属性及默认值
