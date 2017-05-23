@@ -34,7 +34,8 @@ const re_widthChangeGridFunOverWidthHidden = function() {
             }
             this.columnsVisibleFun();
         } else {
-            for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
+            // 会将隐藏的显示出来
+            /*for (var i = this.gridCompHiddenLevelColumnArr.length - 1; i > -1; i--) {
                 var column = this.gridCompHiddenLevelColumnArr[i];
                 if (!column.options.visible) {
                     columnWholeWidth = parseInt(columnWholeWidth) + parseInt(column.options.width);
@@ -44,7 +45,7 @@ const re_widthChangeGridFunOverWidthHidden = function() {
                     column.options.visible = true;
                 }
             }
-            this.columnsVisibleFun();
+            this.columnsVisibleFun();*/
         }
     }
 };
