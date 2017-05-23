@@ -21,26 +21,39 @@ const re_createColumnMenu = function() {
     htmlStr += '</div></li>';
 
 
-    htmlStr += '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
-    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    var columnHtmlStr = '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
+    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    var allCheckFlag = true;
     $.each(this.gridCompColumnArr, function(i) {
         if (oThis.getString(this.options.title, '') != '') {
             var styleStr = '';
             if (!this.options.canVisible)
                 styleStr += ' style="display:none;"';
-            htmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
-            htmlStr += '<div class="u-grid-column-menu-columns-div1">';
+            columnHtmlStr += '<li class="u-grid-column-menu-columns-li" role="menuitem" index="' + i + '" ' + styleStr + '>';
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div1">';
             var checkedStr = "";
             if (this.options.visible)
                 checkedStr = ' checked';
 
-            htmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
-            htmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
-            htmlStr += '</div></li>';
+            if (this.options.canVisible && !this.options.visible)
+                allCheckFlag = false;
+            columnHtmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label></div>';
+            columnHtmlStr += '<span class="u-grid-column-menu-columns-span">' + this.options.title + '</span>';
+            columnHtmlStr += '</div></li>';
         }
     });
-    htmlStr += '</ul></div>';
+    columnHtmlStr += '</ul></div>';
+    var checkedStr = '';
+    if (allCheckFlag)
+        checkedStr = ' checked '
+    var headerHtmlStr = '<li class="u-grid-column-menu-columns-li header" role="menuitem">';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div1">';
+    headerHtmlStr += '<div class="u-grid-column-menu-columns-div2"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
+    headerHtmlStr += '<span class="u-grid-column-menu-columns-span">项目</span>';
+    headerHtmlStr += '</div></li>';
 
+    htmlStr += headerHtmlStr;
+    htmlStr += columnHtmlStr;
 
     htmlStr += '</ul></div>';
 
@@ -69,7 +82,7 @@ const colMenu_initEventFun = function() {
 
 
                     // 根据点击位置来显示column menu区域
-                    var left = e.clientX - 160;
+                    var left = e.clientX - 240;
                     if (left < 0)
                         left = 0;
                     var top = e.clientY + 10;
@@ -200,6 +213,14 @@ const colMenu_initGridEventFun = function() {
     $('#' + this.options.id + '_column_menu_columns_ul li').on('click', function(e) {
         var inputDom = $(this).find('input');
         inputDom.click();
+    });
+
+    // $('#grid2_column_menu_ul .header input')
+    $('#' + this.options.id + '_column_menu_ul .header input').on('click', function(e) {
+        var nowCheck = $(this)[0].checked;
+        $.each(oThis.gridCompColumnArr, function(i) {
+            oThis.setColumnVisibleByColumn(this, nowCheck);
+        });
     });
     /*header 按钮处理结束*/
 };
