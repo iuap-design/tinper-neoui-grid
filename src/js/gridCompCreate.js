@@ -16,7 +16,7 @@ const createDivs = function() {
     } else {
         str += 'width:auto;';
     }
-    if (this.options.height) { 
+    if (this.options.height) {
         str += 'height:' + this.options.height + ';';
     } else {
         str += 'height:auto;';
@@ -343,7 +343,11 @@ const createThead = function(createFlag) {
                 headerH = 'height:' + oThis.options.headerHeight + 'px;line-height:' + oThis.options.headerHeight + 'px;';
             colorStype = 'style="' + headerC + headerH + '"';
         }
-        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + '</div>';
+        var requiredHtml = '';
+        if (this.options.required) {
+            requiredHtml = '<span style="color:red;">*</span>';
+        }
+        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + requiredHtml + '</div>';
         /*if(oThis.options.columnMenu && createFlag != 'fixed'){
             // 创建右侧按钮图标
             htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light " field="' + this.options.field + '" style="display:none;"></div>';
