@@ -153,9 +153,9 @@ const addOneRow = function(row, index) {
         this.updateLastRowFlag();
         this.resetLeftHeight();
         if (this.dataSourceObj.rows.length > 0) {
-            $('.u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('.u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
         }
         var obj = {};
         obj.begin = index;
@@ -307,9 +307,9 @@ const addRows = function(rows, index) {
         }
         this.repairSumRow();
         if (this.dataSourceObj.rows.length > 0) {
-            $('.u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('.u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
         }
         this.noRowsShowFun();
         var obj = {};
@@ -390,9 +390,9 @@ const deleteOneRow = function(index) {
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
         if (this.dataSourceObj.rows.length > 0) {
-            $('.u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('.u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
         }
     }
 

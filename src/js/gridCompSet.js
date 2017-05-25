@@ -129,9 +129,9 @@ const setDataSource = function(dataSource) {
     if (this.showType == 'grid') {
         this.widthChangeGridFun();
         if (this.dataSourceObj.rows.length > 0) {
-            $('#' + this.options.id +' .u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id +'_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('.u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
         }
     }
 
