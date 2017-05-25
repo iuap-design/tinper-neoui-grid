@@ -65,13 +65,25 @@ const setColumnVisibleByIndex = function(index, visible) {
 
         }
         column.options.visible = visible;
-        /*
         var w = this.contentWidthChange(newContentW);
         this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
         this.contentWidth = w;
         this.resetThVariable();
-        this.saveGridCompColumnArrToLocal();*/
-        this.widthChangeGridFun();
+        this.noScrollWidthReset();
+        this.contentMinWidth = parseInt(this.wholeWidth) - parseInt(this.leftW) - parseInt(this.fixedWidth);
+        if (this.contentMinWidth < 0) this.contentMinWidth = 0;
+        if (this.contentRealWidth < this.contentMinWidth) {
+            this.contentWidth = this.contentMinWidth;
+            var oldWidth = this.lastVisibleColumn.options.width;
+            this.lastVisibleColumnWidth = oldWidth + (this.contentMinWidth - this.contentRealWidth);
+            // modfied by tianxq1 最后一列自动扩展
+            // this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+            this.setColumnWidth(this.lastVisibleColumn, this.lastVisibleColumnWidth);
+        } else {
+            this.contentWidth = this.contentRealWidth;
+        }
+
+        this.saveGridCompColumnArrToLocal();
     }
 };
 
@@ -117,7 +129,7 @@ const setDataSource = function(dataSource) {
     if (this.showType == 'grid') {
         this.widthChangeGridFun();
         if (this.dataSourceObj.rows.length > 0) {
-            $('.u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id +' .u-grid-noScroll-left').css('display', "block");
         } else {
             $('.u-grid-noScroll-left').css('display', "none");
         }
