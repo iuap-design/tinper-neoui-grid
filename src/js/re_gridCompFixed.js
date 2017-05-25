@@ -46,6 +46,7 @@ const fixed_columnsVisibleFun = function() {
         }
     });
     this.fixedRealWidth = fixW;
+    this.fixedWidth = fixW;
 };
 
 const re_createHeaderTableFixed = function() {

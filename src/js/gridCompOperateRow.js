@@ -34,8 +34,8 @@ const addOneRow = function(row, index) {
         displayFlag = treeObj.displayFlag;
     }
 
-    if(this.options.groupField){
-        index = this.getGroupIndex(row,index,rowObj);
+    if (this.options.groupField) {
+        index = this.getGroupIndex(row, index, rowObj);
     }
 
 
@@ -89,7 +89,7 @@ const addOneRow = function(row, index) {
             if (endFlag) {
                 $('#' + this.options.id + '_content_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index-1];
+                var $$tr = $('#' + this.options.id + '_content_tbody').find('tr[role="row"]')[index - 1];
                 var $$tbody = $('#' + this.options.id + '_content_tbody')[0];
                 if ($$tr)
                     $$tr.insertAdjacentHTML('afterEnd', htmlStr);
@@ -101,7 +101,7 @@ const addOneRow = function(row, index) {
                 if (endFlag) {
                     $('#' + this.options.id + '_content_fixed_tbody')[0].insertAdjacentHTML('beforeEnd', htmlStr);
                 } else {
-                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index-1]
+                    var $$tr = $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]')[index - 1]
                     if ($$tr)
                         $$tr.insertAdjacentHTML('afterEnd', htmlStr);
                     else if ($('#' + this.options.id + '_content_fixed_tbody')[0])
@@ -122,26 +122,28 @@ const addOneRow = function(row, index) {
             if (endFlag) {
                 $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index -1]
+                var $$div = $('#' + this.options.id + '_content_multiSelect').find('div')[index - 1]
                 if ($$div)
                     $$div.insertAdjacentHTML('afterEnd', htmlStr);
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
-            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
+            if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0)
+                $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
             var htmlStr = this.createContentLeftNumColRow(index, row);
             if (endFlag) {
                 $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('beforeEnd', htmlStr);
             } else {
-                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index-1]
+                var $$div = $('#' + this.options.id + '_content_numCol').find('div')[index - 1]
                 if ($$div)
                     $$div.insertAdjacentHTML('afterEnd', htmlStr);
                 else
                     $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStr);
             }
-            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
+            if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0)
+                $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
@@ -150,6 +152,11 @@ const addOneRow = function(row, index) {
         this.noRowsShowFun();
         this.updateLastRowFlag();
         this.resetLeftHeight();
+        if (this.dataSourceObj.rows.length > 0) {
+            $('.u-grid-noScroll-left').css('display', "block");
+        } else {
+            $('.u-grid-noScroll-left').css('display', "none");
+        }
         var obj = {};
         obj.begin = index;
         obj.length = 1;
@@ -158,15 +165,15 @@ const addOneRow = function(row, index) {
 
 };
 
-const repairGroupSumRow = function(){
+const repairGroupSumRow = function() {
 
 };
 const addOneRowTree = function(row, index) {
     return index;
 };
 
-const getGroupIndex = function(row, index){
-  return index;
+const getGroupIndex = function(row, index) {
+    return index;
 };
 const addOneRowTreeHasChildF = function() {};
 const editClose = function() {};
@@ -280,7 +287,8 @@ const addRows = function(rows, index) {
                 else
                     $('#' + this.options.id + '_content_multiSelect')[0].insertAdjacentHTML('afterBegin', htmlStrmultiSelect);
             }
-            $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
+            if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0)
+                $('#' + this.options.id + '_content_multiSelect').addClass('u-grid-content-left-sum-first');
         }
         if (this.options.showNumCol) {
             if (endFlag) {
@@ -292,11 +300,17 @@ const addRows = function(rows, index) {
                 else
                     $('#' + this.options.id + '_content_numCol')[0].insertAdjacentHTML('afterBegin', htmlStrNumCol);
             }
-            $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
+            if (this.options.sumRowFirst && !this.options.sumRowFixed && this.dataSourceObj.rows.length > 0)
+                $('#' + this.options.id + '_content_numCol').addClass('u-grid-content-left-sum-first');
             this.resetNumCol();
             this.updateNumColLastRowFlag();
         }
         this.repairSumRow();
+        if (this.dataSourceObj.rows.length > 0) {
+            $('.u-grid-noScroll-left').css('display', "block");
+        } else {
+            $('.u-grid-noScroll-left').css('display', "none");
+        }
         this.noRowsShowFun();
         var obj = {};
         obj.begin = index;
@@ -366,15 +380,20 @@ const deleteOneRow = function(index) {
         $('#' + this.options.id + '_content_fixed_div tbody tr[role="row"]:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + index + ')').remove();
         $('#' + this.options.id + '_content_numCol >.u-grid-content-num:eq(' + index + ')').remove();
-        if(this.dataSourceObj.rows.length == 0){
-          $('#' + this.options.id + '_content_multiSelect').removeClass('u-grid-content-left-sum-first');
-          $('#' + this.options.id + '_content_numCol').removeClass('u-grid-content-left-sum-first');
+        if (this.dataSourceObj.rows.length == 0) {
+            $('#' + this.options.id + '_content_multiSelect').removeClass('u-grid-content-left-sum-first');
+            $('#' + this.options.id + '_content_numCol').removeClass('u-grid-content-left-sum-first');
         }
         this.resetNumCol();
         this.repairSumRow();
         this.repairGroupSumRow(row);
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
+        if (this.dataSourceObj.rows.length > 0) {
+            $('.u-grid-noScroll-left').css('display', "block");
+        } else {
+            $('.u-grid-noScroll-left').css('display', "none");
+        }
     }
 
     this.deleteOneRowTree();
@@ -863,6 +882,6 @@ export const operateRowFunObj = {
     setRowFocus: setRowFocus,
     setRowUnFocus: setRowUnFocus,
     resetNumCol: resetNumCol,
-    repairGroupSumRow:repairGroupSumRow,
+    repairGroupSumRow: repairGroupSumRow,
     deleteOneRowGroupSum: deleteOneRowGroupSum
 }

@@ -65,12 +65,13 @@ const setColumnVisibleByIndex = function(index, visible) {
 
         }
         column.options.visible = visible;
-        this.columnsVisibleFun();
+        /*
         var w = this.contentWidthChange(newContentW);
         this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
         this.contentWidth = w;
         this.resetThVariable();
-        this.saveGridCompColumnArrToLocal();
+        this.saveGridCompColumnArrToLocal();*/
+        this.widthChangeGridFun();
     }
 };
 
@@ -113,8 +114,15 @@ const setDataSource = function(dataSource) {
     this.initDataSourceVariable();
     this.options.dataSource = dataSource;
     this.initDataSource();
-    this.repairContent();
-    this.afterGridDivsCreate();
+    if (this.showType == 'grid') {
+        this.widthChangeGridFun();
+        if (this.dataSourceObj.rows.length > 0) {
+            $('.u-grid-noScroll-left').css('display', "block");
+        } else {
+            $('.u-grid-noScroll-left').css('display', "none");
+        }
+    }
+
 };
 /*
  * 设置数据源 格式为：

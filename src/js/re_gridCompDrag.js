@@ -86,11 +86,13 @@ const dragFun = function(e) {
 
 				column.options.width = newWidth;
 				column.options.realWidth = newWidth;
+				column.options.optionsWidth = newWidth;
 				if(this.options.noScroll){
 					$('#' + this.options.id + '_header_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
 					$('#' + this.options.id + '_content_table col:eq(' + nextVisibleThIndex + ')').css('width', nextNewWidth + "px");
 					nextColumn.options.width = nextNewWidth;
 					nextColumn.options.realWidth = nextNewWidth;
+					nextColumn.options.optionsWidth = nextNewWidth;
 				}
 			}
 		}
