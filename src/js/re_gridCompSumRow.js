@@ -155,8 +155,8 @@ const re_repairSumRowFun = function() {
                         $('#' + this.options.id + '_noScroll_fixed_begin_table tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
                     }
                 } catch (e) {
-                    var table = $('#' + this.options.id + '_noScroll_begin_table table')[0];
-                    var fixedTable = $('#' + this.options.id + '_noScroll_fixed_begin_table table')[0];
+                    var table = $('#' + this.options.id + '_noScroll_begin_table')[0];
+                    var fixedTable = $('#' + this.options.id + '_noScroll_fixed_begin_table')[0];
                     this.createSumRowForIE(table);
                     this.createSumRowForIE(fixedTable, 'fixed');
                 }
@@ -171,8 +171,8 @@ const re_repairSumRowFun = function() {
                         $('#' + this.options.id + '_noScroll_fixed_end_table tbody')[0].insertAdjacentHTML('afterBegin', htmlStr);
                     }
                 } catch (e) {
-                    var table = $('#' + this.options.id + '_noScroll_end_table table')[0];
-                    var fixedTable = $('#' + this.options.id + '_noScroll_fixed_end_table table')[0];
+                    var table = $('#' + this.options.id + '_noScroll_end_table')[0];
+                    var fixedTable = $('#' + this.options.id + '_noScroll_fixed_end_table')[0];
                     this.createSumRowForIE(table);
                     this.createSumRowForIE(fixedTable, 'fixed');
                 }
