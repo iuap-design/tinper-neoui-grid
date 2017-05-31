@@ -63,13 +63,17 @@ const createContentGroupSumRowTd = function(groupRow, createFlag) {
 
 
 const createContentLetGroupSumRow = function(type, groupValue) {
-    var w;
+    var w, hStr = '';
     if (type == 'multiSelect')
         w = this.multiSelectWidth;
     if (type == 'numCol')
         w = this.numWidth;
     var wStr = 'width:' + w + 'px;';
-    var html = '<span groupValue="' + groupValue + '" class="u-grid-content-group-sum-left" style=" ' + wStr + '"></span>';
+
+    if (!this.options.needResetHeight) {
+        hStr = 'height:' + (this.options.rowHeight + 1) + 'px;';
+    }
+    var html = '<span groupValue="' + groupValue + '" class="u-grid-content-group-sum-left" style=" ' + wStr + hStr + '"></span>';
     return html;
 };
 
@@ -170,7 +174,7 @@ const resetLeftHeightGroupSumFun = function() {
     }
 };
 
-const renderTypeGroupSumRow = function(gridCompColumn, i,isFixedColumn, rowObj) {
+const renderTypeGroupSumRow = function(gridCompColumn, i, isFixedColumn, rowObj) {
     var oThis = this;
     var sumCol = gridCompColumn.options.sumCol;
     var groupField = this.options.groupField;

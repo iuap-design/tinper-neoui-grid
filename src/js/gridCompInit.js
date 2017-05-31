@@ -69,6 +69,7 @@ const getBooleanOptions = function() {
     this.options.cancelSelect = this.getBoolean(this.options.cancelSelect);
     this.options.contentSelect = this.getBoolean(this.options.contentSelect);
     this.options.contentFocus = this.getBoolean(this.options.contentFocus);
+    this.options.needResetHeight = this.getBoolean(this.options.needResetHeight);
 
 };
 /*
@@ -106,7 +107,8 @@ const initDefault = function() {
         groupField: '', // 是否按照某字段进行分组显示
         groupSumRow: false, //是否显示分组小计
         rowHeight: 44, // 行高
-        columnMenuType: 'base'
+        columnMenuType: 'base',
+        needResetHeight: false // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
         // sumRowHeight 合计行行高
         // headerHeight 表头高
     }

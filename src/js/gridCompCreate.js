@@ -84,7 +84,7 @@ const createEndNoScroll = function() {
 };
 
 const createNoScroll = function(type) {
-    var htmlStr = '<div id="' + this.options.id + '_noScroll_' + type + '" class="u-grid-noScroll ' + type + '"><div class="u-grid-noScroll-wrap ' +type+ '" id="' + this.options.id + '_noScroll_' +type+'_wrap">';
+    var htmlStr = '<div id="' + this.options.id + '_noScroll_' + type + '" class="u-grid-noScroll ' + type + '"><div class="u-grid-noScroll-wrap ' + type + '" id="' + this.options.id + '_noScroll_' + type + '_wrap">';
 
     if ((this.options.multiSelect || this.options.showNumCol) && ((type == 'begin' && this.options.sumRowFirst && this.options.sumRowFixed) || (type == 'end' && !this.options.sumRowFirst && this.options.sumRowFixed))) {
         htmlStr += '<div id="' + this.options.id + '_noScroll_left" class="u-grid-noScroll-left" style="width:' + this.leftW + 'px;height:' + this.noScrollHeight + 'px;">';
@@ -484,15 +484,20 @@ const createContentLeftMultiSelectRow = function(row, displayFlag) {
     var rootObj = row.value;
     var objAry = this.selectRows;
     var re = objCompare(rootObj, objAry);
+    var heightStr = '';
+
+    if (!this.options.needResetHeight) {
+        heightStr = 'height:' + (this.options.rowHeight + 1) + 'px;';
+    }
 
     if (gridBrowser.isIE8) {
         //var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ></div>'
-        var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+        var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect " ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
     } else {
         if (re) {
-            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-sel-row" ><span class="u-grid-checkbox-outline  is-checked" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-sel-row" ><span class="u-grid-checkbox-outline  is-checked" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
         } else {
-            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
         }
         //var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ><label for="checkbox'+tmpcheck+'"></label></div>'
     }
@@ -507,10 +512,15 @@ const createContentLeftNumColRow = function(index) {
     var objAry = this.selectRows;
     var re = objCompare(rootObj, objAry);
     var htmlStr;
+    var heightStr = '';
+
+    if (!this.options.needResetHeight) {
+        heightStr = 'height:' + (this.options.rowHeight + 1) + 'px;';
+    }
     if (re) {
-        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num  u-grid-content-sel-row">' + (index + 1) + '</div>';
+        htmlStr = '<div style="width:' + this.numWidth + 'px;' + heightStr + '" class="u-grid-content-num  u-grid-content-sel-row">' + (index + 1) + '</div>';
     } else {
-        htmlStr = '<div style="width:' + this.numWidth + 'px;" class="u-grid-content-num">' + (index + 1) + '</div>';
+        htmlStr = '<div style="width:' + this.numWidth + 'px;' + heightStr + '" class="u-grid-content-num">' + (index + 1) + '</div>';
 
     }
     return htmlStr;

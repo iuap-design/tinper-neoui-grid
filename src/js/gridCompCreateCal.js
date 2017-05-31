@@ -71,6 +71,9 @@ const countRowHeight = function() {
  * 根据内容区的高度调整左侧区域的高度
  */
 const resetLeftHeight = function() {
+    if (!this.options.needResetHeight) {
+        return;
+    }
     var self = this;
     if (this.resetLeftHeightSetTimeout)
         clearTimeout(this.resetLeftHeightSetTimeout)

@@ -691,8 +691,8 @@ const setAllRowSelect = function() {
         }
     }
     // 把需要的dom在循环外获取出来
-    var multiSelectDivs = this.$ele.find('#' + this.options.id + '_content_multiSelect').children(),
-        numColDivs = this.$ele.find('#' + this.options.id + '_content_numCol').children(),
+    var multiSelectDivs = this.$ele.find('#' + this.options.id + '_content_multiSelect >div'),
+        numColDivs = this.$ele.find('#' + this.options.id + '_content_numCol >div'),
         contentTrs = this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]'),
         fixContentTrs = this.$ele.find('#' + this.options.id + '_content_fixed_tbody tr[role="row"]');
     this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]')
