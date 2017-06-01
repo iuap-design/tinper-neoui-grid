@@ -141,7 +141,7 @@ const getRowIndexByValue = function(field, value) {
     var index = -1;
     $.each(this.dataSourceObj.rows, function(i) {
         // var v = $(this.value).attr(field);
-        var v = this.value.field;
+        var v = this.value[field];
         if (v == value) {
             index = i;
         }
