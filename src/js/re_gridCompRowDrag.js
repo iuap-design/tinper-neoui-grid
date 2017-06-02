@@ -148,6 +148,19 @@ const rowDragEnd = function(e) {
 
         }
 
+        // 刷新选中行 后续优化
+        var selectRows = [];
+        selectRows = selectRows.concat(this.getSelectRows())
+        this.setAllRowUnSelect();
+        if (this.options.multiSelect)
+            $('#' + this.options.id + '_content_multiSelect').find('.u-grid-content-sel-row').removeClass('u-grid-content-sel-row')
+        if (this.options.showNumCol)
+            $('#' + this.options.id + '_content_numCol').find('.u-grid-content-sel-row').removeClass('u-grid-content-sel-row')
+        for (var i = 0; i < selectRows.length; i++) {
+            var selectRow = selectRows[i];
+            var selectIndex = this.getRowIndexByValue('$_#_@_id', selectRow['$_#_@_id']);
+            this.setRowSelect(selectIndex);
+        }
     }
     // 删除之前行，插入新行
 

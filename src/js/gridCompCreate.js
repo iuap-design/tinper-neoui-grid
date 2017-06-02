@@ -392,8 +392,8 @@ const createContent = function() {
         } else {
             lbw = this.leftW + this.fixedWidth;
         }
-        htmlStr += '<div class="u-grid-content-left-bottom" id="' + this.options.id + '_content_left_bottom" style="width:' + lbw + 'px;' + displayStr + '">';
-        htmlStr += '</div>';
+        // htmlStr += '<div class="u-grid-content-left-bottom" id="' + this.options.id + '_content_left_bottom" style="width:' + lbw + 'px;' + displayStr + '">';
+        // htmlStr += '</div>';
     }
     htmlStr += this.createContentTableFixed();
     htmlStr += this.createContentTable();
