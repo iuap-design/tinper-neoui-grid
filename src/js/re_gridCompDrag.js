@@ -108,7 +108,7 @@ const dragEnd = function(e) {
 		this.saveGridCompColumnArrToLocal();
 	}
 	this.dragNextClomunWidth = -1;
-	this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+	// this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
 	if(this.dragW)
 		this.contentWidth = this.dragW;
 	$('#' + this.options.id + '_resize_handle')[0].nowTh = null;

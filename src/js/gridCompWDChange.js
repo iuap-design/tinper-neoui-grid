@@ -115,13 +115,13 @@ const noScrollWidthReset = function() {
             if (nowWidth.indexOf('%') > 0) {
                 var newWidth = parseInt(nowWidth.replace('%', '') * whole / 100);
             } else {
-                var newWidth = nowWidth;
+                var newWidth = parseInt(nowWidth);
             }
             if (newWidth < this.minColumnWidth) {
                 newWidth = this.minColumnWidth;
             }
             if (column.options.visible) {
-                nowW += newWidth;
+                nowW += parseInt(newWidth);
             }
             this.setColumnWidth(column, newWidth);
         }
