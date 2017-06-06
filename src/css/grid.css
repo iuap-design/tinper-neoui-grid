@@ -376,6 +376,13 @@ content区域css begin
     line-height: inherit;
 }
 
+.u-grid-content-td-div.height-auto{
+  height:auto;
+  white-space: normal;
+  overflow: visible;
+  /*line-height: 1;*/
+}
+
 .u-grid-edit-div .u-grid-content-td-div {
     margin: 0 1em 0 1em;
     line-height: 3.5em;
