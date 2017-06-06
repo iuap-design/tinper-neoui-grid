@@ -197,7 +197,7 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
 
             }
         }
-        oThis.renderTypeGroupSumRow(gridCompColumn,i, isFixedColumn,this);
+        oThis.renderTypeGroupSumRow(gridCompColumn, i, isFixedColumn, this);
     });
     this.renderTypeSumRow(gridCompColumn, i, begin, length, isFixedColumn);
 
@@ -205,24 +205,26 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
 
 const getRenderOverFlag = function(obj) {
     // 影响性能，不再支持此方式，按照maxLength来处理
-    return;
-    var span = obj.span;
-    var nowHeight = span.offsetHeight;
-    var nowWidth = span.offsetWidth;
-    var newSpan = $(span).clone()[0];
-    var overFlag = false;
-    obj.span.parentNode.appendChild(newSpan);
-    var oldDisplay = span.style.display;
-    span.style.display = 'none';
-    newSpan.style.height = '';
-    newSpan.style.maxHeight = '999999px';
-    var newHeight = newSpan.offsetHeight;
-    if (newHeight > nowHeight) {
-        overFlag = true;
+    if (this.options.heightAuto && this.options.maxHeight > 40) {
+        var span = obj.span;
+        var nowHeight = span.offsetHeight;
+        var nowWidth = span.offsetWidth;
+        var newSpan = $(span).clone()[0];
+        var overFlag = false;
+        obj.span.parentNode.appendChild(newSpan);
+        var oldDisplay = span.style.display;
+        span.style.display = 'none';
+        newSpan.style.height = '';
+        newSpan.style.maxHeight = '999999px';
+        var newHeight = newSpan.offsetHeight;
+        if (newHeight > nowHeight) {
+            overFlag = true;
+        }
+        obj.span.parentNode.removeChild(newSpan);
+        span.style.display = oldDisplay;
+        return overFlag;
     }
-    obj.span.parentNode.removeChild(newSpan);
-    span.style.display = oldDisplay;
-    return overFlag;
+
 };
 
 const renderTypeSumRow = function(gridCompColumn, i, begin, length, isFixedColumn) {};

@@ -70,6 +70,8 @@ const getBooleanOptions = function() {
     this.options.contentSelect = this.getBoolean(this.options.contentSelect);
     this.options.contentFocus = this.getBoolean(this.options.contentFocus);
     this.options.needResetHeight = this.getBoolean(this.options.needResetHeight);
+    this.options.treeAsync = this.getBoolean(this.options.treeAsync);
+    this.options.heightAuto = this.getBoolean(this.options.heightAuto);
 
 };
 /*
@@ -108,9 +110,12 @@ const initDefault = function() {
         groupSumRow: false, //是否显示分组小计
         rowHeight: 44, // 行高
         columnMenuType: 'base',
-        needResetHeight: false // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
+        needResetHeight: false, // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
+        treeAsync: false, //树表异步加载数据
+        heightAuto: false, // 内容自动撑高
         // sumRowHeight 合计行行高
         // headerHeight 表头高
+        // maxHeight heightAuto为true时的最大高度
     }
 };
 /*
@@ -182,8 +187,13 @@ const initOptions = function() {
         this.noScrollHeight += this.options.sumRowHeight;
         this.exceptContentHeight += this.options.sumRowHeight;
         // if (!this.options.sumRowFirst) {
-            this.exceptContentHeight += 1;
+        this.exceptContentHeight += 1;
         // }
+    }
+    if (this.options.heightAuto) {
+        this.options.needResetHeight = true;
+    } else {
+        this.options.maxHeight = 0;
     }
 
     // 获取缓存id

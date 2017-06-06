@@ -106,6 +106,7 @@ const dragEnd = function(e) {
 	if (this.dragFlag) {
 		this.resetThVariable();
 		this.saveGridCompColumnArrToLocal();
+		this.resetLeftHeight();
 	}
 	this.dragNextClomunWidth = -1;
 	// this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;

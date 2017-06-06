@@ -81,7 +81,7 @@ const addOneRow = function(row, index) {
         this.dataSourceObj.options.values.splice(index, 0, row);
     }
 
-    if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
+    if (this.showType == 'grid' && !this.hasChildF) { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
         this.updateEditRowIndex('+', index);
         try {

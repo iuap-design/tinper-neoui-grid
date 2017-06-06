@@ -91,12 +91,13 @@ const resetLeftHeightFun = function() {
             var nowRowHeight = $trs[i].offsetHeight;
             if ($leftNums[i]) {
                 $leftNums[i].style.height = nowRowHeight + 'px';
-                // $leftNums[i].style.lineHeight = nowRowHeight + 'px';
+                $leftNums[i].style.lineHeight = nowRowHeight + 'px';
             }
 
             if ($leftSelects[i]) {
                 $leftSelects[i].style.height = nowRowHeight + 'px';
-                // $leftSelects[i].style.lineHeight = nowRowHeight + 'px';
+                $leftSelects[i].style.lineHeight = nowRowHeight + 'px';
+                $($leftSelects[i]).find('.u-grid-checkbox-outline').css('top',(nowRowHeight-14)/2)
             }
 
         }

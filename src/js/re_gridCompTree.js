@@ -8,6 +8,11 @@ const re_initOptionsTree = function() {
     if (this.options.showTree) {
         this.options.showNumCol = false;
     }
+    if(this.options.treeAsync){
+      if (typeof this.options.onTreeExpandFun != 'function') {
+        alert('treeAsync 为true必须定义onTreeExpandFun');
+      }
+    }
 };
 const re_clickFunTree = function(e) {
     var oThis = this,
@@ -44,6 +49,15 @@ const re_clickFunTree = function(e) {
                     }
                 } else if (plus.length > 0) {
                     // 展开
+                    if (this.options.treeAsync && row.value.isParent) {
+                        var obj = {}
+                        obj.row = row;
+                        obj.gridObj = this;
+                        var keyField = this.options.keyField;
+                        var keyValue = this.getString(row.value[keyField], '');
+                        obj.keyValue = keyValue;
+                        this.options.onTreeExpandFun.call(this, obj);
+                    }
                     plus.removeClass('uf-add-s-o').addClass('uf-reduce-s-o');
                     if (rowChildIndex.length > 0) {
                         $.each(rowChildIndex, function() {
@@ -91,7 +105,7 @@ const re_addOneRowTree = function(row, index, rowObj) {
                 if (!oThis.options.needTreeSort)
                     return false;
             }
-            if (nowParentKeyValue == keyValue) {
+            if (nowParentKeyValue == keyValue && keyValue != '') {
                 oThis.hasChildF = true;
             }
             if (oThis.hasParent && oThis.hasChildF)
@@ -108,12 +122,17 @@ const re_addOneRowTree = function(row, index, rowObj) {
         if (this.hasParent) {
             var $pTr = $('#' + this.options.id + '_content_div').find('tbody').find('tr[role="row"]').eq(oThis.addRowParentIndex);
             $pTr.removeClass('u-grid-content-leaf-row').addClass('u-grid-content-parent-row');
+
+            var openDiv = $('.uf-add-s-o', $pTr);
+            if (!(openDiv.length > 0)) {
+                displayFlag = 'block';
+            }
             if (parentChildLength > 0) {
                 // 如果存在父项并且父项存在子项则需要判断父项是否展开
-                var openDiv = $('.uf-add-s-o', $pTr);
-                if (!(openDiv.length > 0)) {
-                    displayFlag = 'block';
-                }
+                // var openDiv = $('.uf-add-s-o', $pTr);
+                // if (!(openDiv.length > 0)) {
+                //     displayFlag = 'block';
+                // }
             } else {
                 // 如果存在父项并且父项原来没有子项则需要添加图标
                 if (this.options.autoExpand) {

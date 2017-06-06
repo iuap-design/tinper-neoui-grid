@@ -764,11 +764,12 @@ const createContentOneRowTd = function(row, createFlag) {
         var iconStr = '';
         var vStr = '';
         var tdStyle = '';
+        var cssStr = '';
         if (oThis.options.showTree && this.firstColumn) {
             var l = parseInt(oThis.treeLeft) * parseInt(row.level);
             treeStyle = 'style="position:relative;';
-            if (row.hasChild) {
-                if (oThis.options.autoExpand) {
+            if (row.hasChild || value.isParent) {
+                if (oThis.options.autoExpand && !value.isParent) {
                     spanStr = '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>';
                 } else {
                     spanStr = '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>';
@@ -777,10 +778,17 @@ const createContentOneRowTd = function(row, createFlag) {
                 l += 16;
             }
             treeStyle += 'text-align:' + this.options.textAlign + ';';
+            if (oThis.options.maxHeight > 40) {
+                treeStyle += 'max-height:' + oThis.options.maxHeight + 'px;';
+            }
             treeStyle += 'left:' + l + 'px;"';
 
         } else {
-            treeStyle += 'style="text-align:' + this.options.textAlign + '";';
+            if (oThis.options.maxHeight > 40) {
+                treeStyle += 'style="text-align:' + this.options.textAlign + ';max-height:' + oThis.options.maxHeight + 'px;"';
+            } else {
+                treeStyle += 'style="text-align:' + this.options.textAlign + ';"';
+            }
         }
 
         if (!this.options.visible) {
@@ -798,8 +806,11 @@ const createContentOneRowTd = function(row, createFlag) {
         if (this.options.icon) {
             iconStr = '<span class="' + this.options.icon + '"></span>';
         }
+        if (oThis.options.heightAuto) {
+            cssStr = 'height-auto';
+        }
         // title="' + v + '" 创建td的时候不在设置title，在renderType中设置,处理现实xml的情况
-        htmlStr += '<td role="rowcell"  ' + tdStyle + ' ><div class="u-grid-content-td-div" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
+        htmlStr += '<td role="rowcell"  ' + tdStyle + ' ><div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
     });
     return htmlStr;
 };
@@ -827,22 +838,34 @@ const createContentOneRowTdForIE = function(row, rowObj, createFlag) {
             iconStr = '',
             vStr = '',
             htmlStr = '',
-            newCell = row.insertCell();
+            newCell = row.insertCell(),
+            cssStr = '';
         newCell.setAttribute("role", "rowcell");
         // newCell.title = v.replace(/\</g,'\<').replace(/\>/g,'\>');
         if (oThis.options.showTree && this.firstColumn) {
-            var l = parseInt(oThis.treeLeft) * parseInt(rowObj.level);
+            var l = parseInt(oThis.treeLeft) * parseInt(row.level);
             treeStyle = 'style="position:relative;';
-            if (rowObj.hasChild) {
-                if (oThis.options.autoExpand) {
+            if (row.hasChild || value.isParent) {
+                if (oThis.options.autoExpand && !value.isParent) {
                     spanStr = '<span class=" uf uf-reduce-s-o u-grid-content-tree-span"></span>';
                 } else {
                     spanStr = '<span class=" uf uf-add-s-o u-grid-content-tree-span"></span>';
                 }
             } else {
-                l += 18;
+                l += 16;
+            }
+            treeStyle += 'text-align:' + this.options.textAlign + ';';
+            if (oThis.options.maxHeight > 40) {
+                treeStyle += 'max-height:' + oThis.options.maxHeight + 'px;';
             }
             treeStyle += 'left:' + l + 'px;"';
+
+        } else {
+            if (oThis.options.maxHeight > 40) {
+                treeStyle += 'style="text-align:' + this.options.textAlign + ';max-height:' + oThis.options.maxHeight + 'px;"';
+            } else {
+                treeStyle += 'style="text-align:' + this.options.textAlign + ';"';
+            }
         }
         if (!this.options.visible) {
             newCell.style.display = "none";
@@ -854,7 +877,10 @@ const createContentOneRowTdForIE = function(row, rowObj, createFlag) {
         if (this.options.icon) {
             iconStr = '<span class="' + this.options.icon + '"></span>';
         }
-        htmlStr += '<div class="u-grid-content-td-div" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div>';
+        if (oThis.options.heightAuto) {
+            cssStr = 'height-auto';
+        }
+        htmlStr += '<div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div>';
         newCell.insertAdjacentHTML('afterBegin', htmlStr);
     });
 };
