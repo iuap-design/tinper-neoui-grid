@@ -342,6 +342,11 @@ content区域css begin
     border-bottom-width: 0px;
 }
 
+.u-grid tbody tr:last-child td.u-grid-content-td-group-field {
+    border-bottom-width: 0px;
+}
+
+
 .u-grid-content-left>div:last-child {
     border-bottom-width: 0px;
 }
@@ -365,6 +370,24 @@ content区域css begin
     border-top: 0px !important;
 }
 
+.u-grid td.u-grid-content-td-group-field {
+    background: #fff;
+    overflow: visible;
+    border-width: 0px;
+}
+
+.u-grid td.u-grid-content-td-group-field.no-text > div {
+    display: none;
+}
+
+.u-grid td.u-grid-content-td-group-field.group-last {
+    border-width: 0px 0px 1px 0px;
+}
+
+.u-grid-content-td-group-field>div {
+    overflow: visible;
+}
+
 .u-grid-content-td-div {
     height: inherit;
     margin: 0 2em 0 0.833333333em;
@@ -376,11 +399,11 @@ content区域css begin
     line-height: inherit;
 }
 
-.u-grid-content-td-div.height-auto{
-  height:auto;
-  white-space: normal;
-  overflow: visible;
-  /*line-height: 1;*/
+.u-grid-content-td-div.height-auto {
+    height: auto;
+    white-space: normal;
+    overflow: visible;
+    /*line-height: 1;*/
 }
 
 .u-grid-edit-div .u-grid-content-td-div {
@@ -904,6 +927,7 @@ columnMenu columns区域css begin
     white-space: nowrap;
     left: 35px;
 }
+
 .u-grid-column-menu-columns-div2-border {
     position: absolute;
     /*filter: alpha(opacity=70);

@@ -161,7 +161,16 @@ const addOneRow = function(row, index) {
         obj.begin = index;
         obj.length = 1;
         this.renderTypeFun(obj);
+        if(this.options.groupField){
+          var groupValue = row[this.options.groupField];
+          this.resetGroupFieldTd(groupValue);
+        }
+
     }
+
+};
+
+const resetGroupFieldTd = function(){
 
 };
 
@@ -393,6 +402,10 @@ const deleteOneRow = function(index) {
             $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
         } else {
             $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
+        }
+        if(this.options.groupField){
+          var groupValue = row.value[this.options.groupField];
+          this.resetGroupFieldTd(groupValue);
         }
     }
 
@@ -883,5 +896,6 @@ export const operateRowFunObj = {
     setRowUnFocus: setRowUnFocus,
     resetNumCol: resetNumCol,
     repairGroupSumRow: repairGroupSumRow,
-    deleteOneRowGroupSum: deleteOneRowGroupSum
+    deleteOneRowGroupSum: deleteOneRowGroupSum,
+    resetGroupFieldTd:resetGroupFieldTd
 }

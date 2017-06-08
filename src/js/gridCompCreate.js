@@ -765,6 +765,8 @@ const createContentOneRowTd = function(row, createFlag) {
         var vStr = '';
         var tdStyle = '';
         var cssStr = '';
+        var classStr = '';
+        var rowHeight = oThis.options.rowHeight;
         if (oThis.options.showTree && this.firstColumn) {
             var l = parseInt(oThis.treeLeft) * parseInt(row.level);
             treeStyle = 'style="position:relative;';
@@ -791,17 +793,7 @@ const createContentOneRowTd = function(row, createFlag) {
             }
         }
 
-        if (!this.options.visible) {
-            tdStyle = 'style="display:none;';
-            if (oThis.options.rowHeight) {
-                tdStyle += 'height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;';
-            }
-            tdStyle += '"';
-        } else {
-            if (oThis.options.rowHeight) {
-                tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + oThis.options.rowHeight + 'px;"';
-            }
-        }
+
 
         if (this.options.icon) {
             iconStr = '<span class="' + this.options.icon + '"></span>';
@@ -810,7 +802,37 @@ const createContentOneRowTd = function(row, createFlag) {
             cssStr = 'height-auto';
         }
         // title="' + v + '" 创建td的时候不在设置title，在renderType中设置,处理现实xml的情况
-        htmlStr += '<td role="rowcell"  ' + tdStyle + ' ><div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
+        if (oThis.options.groupField && f == oThis.options.groupField) {
+            classStr = 'class="u-grid-content-td-group-field';
+            if (oThis.nowGroupValue == v) {
+                classStr += ' no-text';
+                oThis.nowGroupIndex++;
+            } else {
+                oThis.nowGroupIndex = 1;
+                oThis.nowGroupValue = v;
+                oThis.nowGroupRow = oThis.getGroupRowByGroupValue(v);
+                oThis.nowGroupRowCount = oThis.nowGroupRow.rows.length;
+            }
+            if (oThis.nowGroupIndex == oThis.nowGroupRowCount) {
+                classStr += ' group-last';
+            }
+            classStr += '"';
+            if (oThis.nowGroupIndex == 1)
+                rowHeight = oThis.options.rowHeight * oThis.nowGroupRowCount;
+        }
+
+        if (!this.options.visible) {
+            tdStyle = 'style="display:none;';
+            if (oThis.options.rowHeight) {
+                tdStyle += 'height:' + oThis.options.rowHeight + 'px;line-height:' + rowHeight + 'px;';
+            }
+            tdStyle += '"';
+        } else {
+            if (oThis.options.rowHeight) {
+                tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + rowHeight + 'px;"';
+            }
+        }
+        htmlStr += '<td role="rowcell"  ' + tdStyle + classStr + ' realValue="' +v+ '" ><div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
     });
     return htmlStr;
 };

@@ -119,11 +119,20 @@ const deleteOneRowGroup = function(rowObj) {
     }
 
 };
+
+const resetGroupFieldTd = function(groupValue){
+    var $tds = $('#' + this.options.id + '_content_table').find('td[realValue='+groupValue+']');
+    var l = $tds.length;
+    $tds.addClass('u-grid-content-td-group-field').addClass('no-text').removeClass('group-last');
+    $($tds[l-1]).addClass('group-last');
+    $($tds[0]).css('line-height',l * this.options.rowHeight + 'px').removeClass('no-text');
+};
 export const groupFunObj = {
     createContentGroupRows: createContentGroupRows,
     createContentLeftMultiSelectGroupRows: createContentLeftMultiSelectGroupRows,
     createContentLeftNumColGroupRows: createContentLeftNumColGroupRows,
     getGroupIndex: re_getGroupIndex,
     getGroupRowByGroupValue: getGroupRowByGroupValue,
-    deleteOneRowGroup: deleteOneRowGroup
+    deleteOneRowGroup: deleteOneRowGroup,
+    resetGroupFieldTd:resetGroupFieldTd
 }
