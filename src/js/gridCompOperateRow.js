@@ -153,24 +153,24 @@ const addOneRow = function(row, index) {
         this.updateLastRowFlag();
         this.resetLeftHeight();
         if (this.dataSourceObj.rows.length > 0) {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "none");
         }
         var obj = {};
         obj.begin = index;
         obj.length = 1;
         this.renderTypeFun(obj);
-        if(this.options.groupField){
-          var groupValue = row[this.options.groupField];
-          this.resetGroupFieldTd(groupValue);
+        if (this.options.groupField) {
+            var groupValue = row[this.options.groupField];
+            this.resetGroupFieldTd(groupValue);
         }
 
     }
 
 };
 
-const resetGroupFieldTd = function(){
+const resetGroupFieldTd = function() {
 
 };
 
@@ -316,9 +316,9 @@ const addRows = function(rows, index) {
         }
         this.repairSumRow();
         if (this.dataSourceObj.rows.length > 0) {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "none");
         }
         this.noRowsShowFun();
         var obj = {};
@@ -399,13 +399,13 @@ const deleteOneRow = function(index) {
         this.noRowsShowFun();
         this.updateNumColLastRowFlag();
         if (this.dataSourceObj.rows.length > 0) {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "none");
         }
-        if(this.options.groupField){
-          var groupValue = row.value[this.options.groupField];
-          this.resetGroupFieldTd(groupValue);
+        if (this.options.groupField) {
+            var groupValue = row.value[this.options.groupField];
+            this.resetGroupFieldTd(groupValue);
         }
     }
 
@@ -529,8 +529,14 @@ const setRowSelect = function(rowIndex, doms) {
         else
             rowTr = this.$ele.find('#' + this.options.id + '_content_tbody tr[role="row"]')[rowIndex]
     }
-    if (this.dataSourceObj.rows[rowIndex].checked && u.hasClass(rowTr, "u-grid-content-sel-row"))
-        return true;
+    if (this.dataSourceObj.rows[rowIndex].checked) {
+        if (this.showType == 'grid') {
+            if (u.hasClass(rowTr, "u-grid-content-sel-row"))
+                return true;
+        } else {
+            return true;
+        }
+    }
     if (doms && doms['multiSelectDivs'])
         selectDiv = doms['multiSelectDivs'][rowIndex]
     else
@@ -897,5 +903,5 @@ export const operateRowFunObj = {
     resetNumCol: resetNumCol,
     repairGroupSumRow: repairGroupSumRow,
     deleteOneRowGroupSum: deleteOneRowGroupSum,
-    resetGroupFieldTd:resetGroupFieldTd
+    resetGroupFieldTd: resetGroupFieldTd
 }

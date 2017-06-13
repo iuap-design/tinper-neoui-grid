@@ -109,7 +109,7 @@ const initDefault = function() {
         groupField: '', // 是否按照某字段进行分组显示
         groupSumRow: false, //是否显示分组小计
         rowHeight: 44, // 行高
-        columnMenuType: 'base',
+        columnMenuType: 'base', // border表示存在边线
         needResetHeight: false, // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
         treeAsync: false, //树表异步加载数据
         heightAuto: false, // 内容自动撑高

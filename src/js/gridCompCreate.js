@@ -429,7 +429,7 @@ const createContentLeft = function() {
         }
     }
     if (this.options.multiSelect) {
-        htmlStr += '<div class="u-grid-content-left u-grid-content-left-multi' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + topStr + '">';
+        htmlStr += '<div class="u-grid-content-left u-grid-content-left-multi ' + sumRowClass + '" id="' + this.options.id + '_content_multiSelect" style="width:' + this.multiSelectWidth + 'px;' + hStr + topStr + '">';
         // 遍历生成所有行
         if (this.dataSourceObj.rows) {
             if (this.options.groupSumRow) {
