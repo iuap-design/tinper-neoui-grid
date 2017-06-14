@@ -8,10 +8,10 @@ const re_initOptionsTree = function() {
     if (this.options.showTree) {
         this.options.showNumCol = false;
     }
-    if(this.options.treeAsync){
-      if (typeof this.options.onTreeExpandFun != 'function') {
-        alert('treeAsync 为true必须定义onTreeExpandFun');
-      }
+    if (this.options.treeAsync) {
+        if (typeof this.options.onTreeExpandFun != 'function') {
+            alert('treeAsync 为true必须定义onTreeExpandFun');
+        }
     }
 };
 const re_clickFunTree = function(e) {
@@ -236,10 +236,12 @@ const getAllChildRow = function(row) {
     return row.allChildRow;
 };
 const re_getChildRowIndex = function(row) {
-    var result = [];
+    var result = [],
+        oThis = this;
     if (row.childRow && row.childRow.length > 0) {
         $.each(row.childRow, function() {
-            result.push(this.valueIndex)
+            var index = oThis.getRowIndexByValue(oThis.options.keyField, this.keyValue)
+            result.push(index)
         });
     }
     return result;

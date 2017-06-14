@@ -55,7 +55,7 @@ const createGridDivs = function() {
     // 为避免重复渲染，在开始清空里面内容
     if ($('#' + this.options.id)[0])
         $('#' + this.options.id)[0].innerHTML = '';
-    var htmlStr = '<div id="' + this.options.id + '_grid" class="u-grid-grid">';
+    var htmlStr = '<div id="' + this.options.id + '_grid" class="u-grid">';
     htmlStr += this.createHeader();
     htmlStr += this.createBeginNoScroll();
     htmlStr += this.createContent();
