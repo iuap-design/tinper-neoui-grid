@@ -74,6 +74,7 @@ const resetLeftHeight = function() {
     if (!this.options.needResetHeight) {
         return;
     }
+    this.resetLeftHeightTimes  = 0;
     var self = this;
     if (this.resetLeftHeightSetTimeout)
         clearTimeout(this.resetLeftHeightSetTimeout)
@@ -84,11 +85,18 @@ const resetLeftHeight = function() {
 
 const resetLeftHeightFun = function() {
     if (this.options.showNumCol || this.options.multiSelect) {
+      var self = this;
         var $trs = $('#' + this.options.id + '_content_tbody tr[role="row"]');
         var $leftNums = $('#' + this.options.id + '_content_numCol div');
         var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
         for (var i = 0; i < $trs.length; i++) {
             var nowRowHeight = $trs[i].offsetHeight;
+            if(nowRowHeight == 0 && this.resetLeftHeightTimes < 50){
+              this.resetLeftHeightTimes++
+              this.resetLeftHeightSetTimeout = setTimeout(function() {
+                  resetLeftHeightFun.call(self);
+              }, 100)
+            }
             if ($leftNums[i]) {
                 $leftNums[i].style.height = nowRowHeight + 'px';
                 $leftNums[i].style.lineHeight = nowRowHeight + 'px';
