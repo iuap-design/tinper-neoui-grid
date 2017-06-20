@@ -240,8 +240,8 @@ const re_getChildRowIndex = function(row) {
         oThis = this;
     //优先取childRowIndex--胡玥修改
     if(row.childRowIndex && row.childRowIndex.length > 0){
-        for (var i = 0; i < array.length; i++) {
-            result.push(array[i]);
+        for (var i = 0; i < row.childRowIndex.length; i++) {
+            result.push(row.childRowIndex[i]);
         }
     }else if (row.childRow && row.childRow.length > 0) {
         $.each(row.childRow, function() {
