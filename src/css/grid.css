@@ -390,7 +390,7 @@ content区域css begin
 
 .u-grid-content-td-div {
     height: inherit;
-    margin: 0 2em 0 0.833333333em;
+    padding: 0 2em 0 0.833333333em;
     font-size: 0.75em !important;
     overflow: hidden;
     white-space: nowrap;
@@ -997,7 +997,7 @@ form展示区域css begin
     color: #333;
 }
 
-.u-grid-content-td-div .eType-input>input {
+.u-grid-content-td-div .eType-input>input, .u-grid-content-td-div .eType-input>textArea{
     width: 100%;
     height: 100%;
     line-height: normal;

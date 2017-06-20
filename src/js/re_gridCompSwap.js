@@ -22,7 +22,7 @@ const swap_initEventFun = function() {
             oThis.swapColumnFlag = true;
         }
         oThis.swapColumnFun(e);
-        e.stopPropagation();
+        // e.stopPropagation();
     });
 
     $('#' + this.options.id + '_top').on('mousemove', function(e) {

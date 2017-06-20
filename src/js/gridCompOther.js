@@ -49,6 +49,29 @@ const columnsVisibleFun = function() {
     });
     this.contentRealWidth = w;
 };
+
+const resetLastVisibleColumnWidth = function() {
+    var allVisibleColumns = this.getAllVisibleColumns();
+    var w = 0;
+    var lastW = 0;
+    for (var i = 0; i < allVisibleColumns.length; i++) {
+        var column = allVisibleColumns[i];
+        if (i < (allVisibleColumns.length - 1)) {
+            w += column.options.width;
+        } else {
+            lastW = column.options.realWidth;
+        }
+    }
+    if (w < this.contentMinWidth) {
+        var lw = this.contentMinWidth - w
+        if (lw > lastW)
+            lastW = lw;
+    }
+    this.lastVisibleColumnWidth = lastW;
+    this.lastVisibleColumn.options.width = lastW;
+    $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+    $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+};
 /*
  * 创建完成之后处理变量
  */
@@ -152,5 +175,6 @@ export const otherFunObj = {
     setMultiSelect: setMultiSelect,
     setShowNumCol: setShowNumCol,
     isGridShow: isGridShow,
+    resetLastVisibleColumnWidth: resetLastVisibleColumnWidth,
     getBoolean: getBoolean,
 }

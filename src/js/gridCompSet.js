@@ -23,13 +23,13 @@ const setColumnVisibleByIndex = function(index, visible) {
                 htmlStr += ' style="width:' + this.formatWidth(column.options.width) + '"';
             }
             htmlStr += '>';
-
+            // 当前列之后的显示列的index
+            var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
             $('#' + this.options.id + '_header_table th:eq(' + index + ')').css('display', "");
             $('#' + this.options.id + '_content_table th:eq(' + index + ')').css('display', "");
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
-            // 当前列之后的显示列的index
-            var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
             if (nextVisibleIndex < 1) {
+                this.lastVisibleColumn = column;
                 // 添加在最后面
                 try {
                     $('#' + this.options.id + '_header_table col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
@@ -62,7 +62,10 @@ const setColumnVisibleByIndex = function(index, visible) {
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
             $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = false;
-
+            if (this.lastVisibleColumn == column) {
+                var allVisibleColumns = this.getAllVisibleColumns();
+                this.lastVisibleColumn = allVisibleColumns[allVisibleColumns.length - 1]
+            }
         }
         column.options.visible = visible;
         var w = this.contentWidthChange(newContentW);
@@ -77,15 +80,26 @@ const setColumnVisibleByIndex = function(index, visible) {
             var oldWidth = this.lastVisibleColumn.options.width;
             this.lastVisibleColumnWidth = oldWidth + (this.contentMinWidth - this.contentRealWidth);
             // modfied by tianxq1 最后一列自动扩展
-            // this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
-            this.setColumnWidth(this.lastVisibleColumn, this.lastVisibleColumnWidth);
+            this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+            // this.setColumnWidth(this.lastVisibleColumn, this.lastVisibleColumnWidth);
         } else {
             this.contentWidth = this.contentRealWidth;
         }
-
+        this.resetColumnWidthByRealWidth();
         this.saveGridCompColumnArrToLocal();
     }
 };
+
+
+const resetColumnWidthByRealWidth = function() {
+    var oThis = this;
+    $.each(this.gridCompColumnArr, function() {
+        if (this.options.realWidth != this.options.width) {
+            oThis.setColumnWidth(this, this.options.realWidth);
+        }
+    })
+    this.resetLastVisibleColumnWidth();
+}
 
 /*
  * 根据field设置宽度
@@ -98,23 +112,22 @@ const setCoulmnWidthByField = function(field, newWidth) {
  * 根据column对象设置宽度
  */
 const setColumnWidth = function(column, newWidth) {
-    // if(column != this.lastVisibleColumn){
-    if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
-        var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
-            oldWidth = column.options.width,
-            changeWidth = newWidth - oldWidth,
-            cWidth = this.contentWidth + changeWidth;
-        this.contentWidth = this.contentWidthChange(cWidth);
-        $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-        $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-
-        column.options.width = newWidth;
-        column.options.realWidth = newWidth;
-
-        this.resetThVariable();
-        this.saveGridCompColumnArrToLocal();
-    }
-    this.columnsVisibleFun();
+    // if (column != this.lastVisibleColumn) {
+        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
+            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
+                oldWidth = column.options.width,
+                changeWidth = newWidth - oldWidth,
+                cWidth = this.contentWidth + changeWidth;
+            this.contentWidth = this.contentWidthChange(cWidth);
+            $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+            $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+            column.options.width = newWidth;
+            column.options.realWidth = newWidth;
+            this.resetThVariable();
+            this.saveGridCompColumnArrToLocal();
+        }
+        this.resetLastVisibleColumnWidth();
+        this.columnsVisibleFun();
     // }
 };
 /*
@@ -129,9 +142,9 @@ const setDataSource = function(dataSource) {
     if (this.showType == 'grid') {
         this.widthChangeGridFun();
         if (this.dataSourceObj.rows.length > 0) {
-            $('#' + this.options.id +'_grid .u-grid-noScroll-left').css('display', "block");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "block");
         } else {
-            $('#' + this.options.id+'_grid .u-grid-noScroll-left').css('display', "none");
+            $('#' + this.options.id + '_grid .u-grid-noScroll-left').css('display', "none");
         }
     }
 
@@ -175,4 +188,5 @@ export const setFunObj = {
     setColumnWidth: setColumnWidth,
     setDataSource: setDataSource,
     setDataSourceFun1: setDataSourceFun1,
+    resetColumnWidthByRealWidth: resetColumnWidthByRealWidth
 }

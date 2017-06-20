@@ -172,6 +172,18 @@ const getColumnByVisibleIndex = function(index) {
 }
 
 
+const getAllVisibleColumns = function() {
+    var index = -1;
+    var j = 0;
+    var allVisibleColumns = [];
+    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+        if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+          allVisibleColumns.push(this.gridCompColumnArr[i])
+        }
+    }
+    return allVisibleColumns;
+};
+
 export const getFunObj = {
     getColumnAttr: getColumnAttr,
     getColumnByField: getColumnByField,
@@ -187,4 +199,5 @@ export const getFunObj = {
     getRowIndexByValue: getRowIndexByValue,
     getChildRowIndex: getChildRowIndex,
     getColumnByVisibleIndex: getColumnByVisibleIndex,
+    getAllVisibleColumns:getAllVisibleColumns
 }
