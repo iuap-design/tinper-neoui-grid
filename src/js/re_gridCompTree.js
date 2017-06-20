@@ -238,7 +238,12 @@ const getAllChildRow = function(row) {
 const re_getChildRowIndex = function(row) {
     var result = [],
         oThis = this;
-    if (row.childRow && row.childRow.length > 0) {
+    //优先取childRowIndex--胡玥修改
+    if(row.childRowIndex && row.childRowIndex.length > 0){
+        for (var i = 0; i < array.length; i++) {
+            result.push(array[i]);
+        }
+    }else if (row.childRow && row.childRow.length > 0) {
         $.each(row.childRow, function() {
             var index = oThis.getRowIndexByValue(oThis.options.keyField, this.keyValue)
             result.push(index)
