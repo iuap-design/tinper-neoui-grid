@@ -12,8 +12,9 @@ const setColumnVisibleByIndex = function(index, visible) {
     if (index >= 0) {
         var column = this.gridCompColumnArr[index],
             visibleIndex = this.getVisibleIndexOfColumn(column),
-            canVisible = column.options.canVisible;
-        if (!canVisible) {
+            canVisible = column.options.canVisible,
+            l = $('input:checked', $('#' + this.options.id + '_column_menu_columns_ul')).length;
+        if (!canVisible || (l == 1 && visible == false)) {
             return;
         }
         // 显示处理
@@ -87,6 +88,18 @@ const setColumnVisibleByIndex = function(index, visible) {
         }
         this.resetColumnWidthByRealWidth();
         this.saveGridCompColumnArrToLocal();
+
+
+        var columnAllCheck = $('input', $('#' + this.options.id + '_column_menu_ul .header'));
+        if (columnAllCheck.length > 0) {
+            var lll = $('input:not(:checked)', $('#' + this.options.id + '_column_menu_columns_ul')).length;
+            if (lll > 0) {
+                columnAllCheck[0].checked = false;
+            } else {
+                columnAllCheck[0].checked = true;
+            }
+        }
+
     }
 };
 
@@ -113,21 +126,21 @@ const setCoulmnWidthByField = function(field, newWidth) {
  */
 const setColumnWidth = function(column, newWidth) {
     // if (column != this.lastVisibleColumn) {
-        if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
-            var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
-                oldWidth = column.options.width,
-                changeWidth = newWidth - oldWidth,
-                cWidth = this.contentWidth + changeWidth;
-            this.contentWidth = this.contentWidthChange(cWidth);
-            $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-            $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-            column.options.width = newWidth;
-            column.options.realWidth = newWidth;
-            this.resetThVariable();
-            this.saveGridCompColumnArrToLocal();
-        }
-        this.resetLastVisibleColumnWidth();
-        this.columnsVisibleFun();
+    if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
+        var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
+            oldWidth = column.options.width,
+            changeWidth = newWidth - oldWidth,
+            cWidth = this.contentWidth + changeWidth;
+        this.contentWidth = this.contentWidthChange(cWidth);
+        $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+        $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
+        column.options.width = newWidth;
+        column.options.realWidth = newWidth;
+        this.resetThVariable();
+        this.saveGridCompColumnArrToLocal();
+    }
+    this.resetLastVisibleColumnWidth();
+    this.columnsVisibleFun();
     // }
 };
 /*

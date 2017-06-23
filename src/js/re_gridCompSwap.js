@@ -210,8 +210,10 @@ const swapColumnEnd = function(e) {
                 this.gridCompColumnArr.splice(parseInt(swapColumnIndex), 1);
             else
                 this.gridCompColumnArr.splice(parseInt(swapColumnIndex) + 1, 1);
+
             this.saveGridCompColumnArrToLocal();
             this.repaintGridDivs();
+            this.resetColumnWidthByRealWidth();
         }
         $('#' + this.options.id + '_clue').remove();
         $('#' + this.options.id + '_swap_top').css('display', 'none');

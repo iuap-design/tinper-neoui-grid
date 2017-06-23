@@ -113,6 +113,7 @@ const initDefault = function() {
         needResetHeight: false, // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
         treeAsync: false, //树表异步加载数据
         heightAuto: false, // 内容自动撑高
+        expandColumnIndex: 0,
         // sumRowHeight 合计行行高
         // headerHeight 表头高
         // maxHeight heightAuto为true时的最大高度

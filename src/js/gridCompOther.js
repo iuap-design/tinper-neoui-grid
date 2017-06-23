@@ -52,14 +52,16 @@ const columnsVisibleFun = function() {
 
 const resetLastVisibleColumnWidth = function() {
     var allVisibleColumns = this.getAllVisibleColumns();
+    var l = allVisibleColumns.length;
     var w = 0;
     var lastW = 0;
     for (var i = 0; i < allVisibleColumns.length; i++) {
         var column = allVisibleColumns[i];
-        if (i < (allVisibleColumns.length - 1)) {
-            w += column.options.width;
-        } else {
+        if (i == l - 1 - this.options.expandColumnIndex) {
             lastW = column.options.realWidth;
+            this.lastVisibleColumn = column;
+        } else {
+            w += column.options.width;
         }
     }
     if (w < this.contentMinWidth) {
@@ -69,8 +71,15 @@ const resetLastVisibleColumnWidth = function() {
     }
     this.lastVisibleColumnWidth = lastW;
     this.lastVisibleColumn.options.width = lastW;
-    $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
-    $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+    if (this.options.expandColumnIndex == 0) {
+        $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+        $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+    }else{
+      var eqIndex = l - this.options.expandColumnIndex -1;
+      $('#' + this.options.id + '_header_table col:eq(' + eqIndex + ')').css('width', this.lastVisibleColumnWidth + "px");
+      $('#' + this.options.id + '_content_table col:eq(' + eqIndex + ')').css('width', this.lastVisibleColumnWidth + "px");
+    }
+
 };
 /*
  * 创建完成之后处理变量

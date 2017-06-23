@@ -89,14 +89,14 @@ const canSortable = function(e, ele) {
                 //$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
                 $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>');
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun(field, 'asc')
+                    this.options.onSortFun.call(this, field, 'asc')
                 } else {
                     this.dataSourceObj.sortRows(field, "asc");
                 }
             } else if ($(".uf-arrow-up").parent().parent().parent()[0] == ele) { //原来为降序，本次为不排序
                 $(".uf-arrow-up").remove();
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun();
+                    this.options.onSortFun.call(this);
                 } else {
                     this.dataSourceObj.sortRows();
                 }
@@ -107,7 +107,7 @@ const canSortable = function(e, ele) {
                 // $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
                 $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-down u-grid-header-sort-span"></span>');
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun(field, "desc");
+                    this.options.onSortFun.call(this, field, "desc");
                 } else {
                     this.dataSourceObj.sortRows(field, "desc");
                 }

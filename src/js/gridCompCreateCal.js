@@ -54,6 +54,7 @@ const afterGridDivsCreate = function() {
     this.hideEditMenu();
     this.resetLeftHeight();
     this.isCheckedHeaderRow();
+    this.resetColumnWidthByRealWidth();
     if (typeof this.options.afterCreate == 'function') {
         this.options.afterCreate.call(this);
     }
