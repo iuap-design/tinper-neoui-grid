@@ -60,17 +60,13 @@ const re_createColumnMenu_base = function() {
 const re_createColumnMenu_border = function() {
     var oThis = this;
     var htmlStr = '<div class="u-grid-column-menu-border" id="' + this.options.id + '_column_menu">';
-    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
+    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul-border" id="' + this.options.id + '_column_menu_ul">';
 
-    // 创建清除设置
-    htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
-    htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_clearSet">';
-    htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_clear_set + '</span>';
-    htmlStr += '</div></li>';
+
 
 
     var columnHtmlStr = '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
-    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul-border" id="' + this.options.id + '_column_menu_columns_ul">';
     var allCheckFlag = true;
     $.each(this.gridCompColumnArr, function(i) {
         if (oThis.getString(this.options.title, '') != '') {
@@ -97,13 +93,18 @@ const re_createColumnMenu_border = function() {
     var headerHtmlStr = '<li class="u-grid-column-menu-columns-li header" role="menuitem">';
     headerHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
     headerHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
-    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border">项目</span>';
+    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border" style="text-align:center;">项目名称</span>';
     headerHtmlStr += '</div></li>';
 
     htmlStr += headerHtmlStr;
     htmlStr += columnHtmlStr;
 
-    htmlStr += '</ul></div>';
+    htmlStr += '</ul>';
+    // 创建清除设置
+    htmlStr += '<div class="u-grid-column-menu-div1-border" id="' + this.options.id + '_clearSet">';
+    htmlStr += '<span class="u-grid-column-menu-span-border">' + this.transMap.ml_clear_set + '</span>';
+    htmlStr += '</div>';
+    htmlStr += '</div>';
 
     // 创建数据列区域
 
