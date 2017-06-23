@@ -1,5 +1,5 @@
 /**
- * tinper-neoui-grid v3.2.2
+ * tinper-neoui-grid v3.2.3
  * grid
  * author : yonyou FED
  * homepage : https://github.com/iuap-design/tinper-neoui-grid#readme
@@ -260,7 +260,7 @@ var canSortable = function canSortable(e, ele) {
                 //$(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-up u-grid-header-sort-span" ><span class="u-grid-header-sort-priority">1</span></span>');
                 $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-up u-grid-header-sort-span" ></span>');
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun(field, 'asc');
+                    this.options.onSortFun.call(this, field, 'asc');
                 } else {
                     this.dataSourceObj.sortRows(field, "asc");
                 }
@@ -268,7 +268,7 @@ var canSortable = function canSortable(e, ele) {
                 //原来为降序，本次为不排序
                 $(".uf-arrow-up").remove();
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun();
+                    this.options.onSortFun.call(this);
                 } else {
                     this.dataSourceObj.sortRows();
                 }
@@ -279,7 +279,7 @@ var canSortable = function canSortable(e, ele) {
                 // $(ele.firstChild)[0].insertAdjacentHTML('beforeEnd','<span class="uf uf-arrow-down u-grid-header-sort-span"><span class="u-grid-header-sort-priority">1</span></span>');
                 $(ele.firstChild.firstChild)[0].insertAdjacentHTML('beforeEnd', '<span class="uf uf-arrow-down u-grid-header-sort-span"></span>');
                 if (typeof this.options.onSortFun == 'function') {
-                    this.options.onSortFun(field, "desc");
+                    this.options.onSortFun.call(this, field, "desc");
                 } else {
                     this.dataSourceObj.sortRows(field, "desc");
                 }
@@ -654,8 +654,8 @@ var re_getChildRowIndex = function re_getChildRowIndex(row) {
         oThis = this;
     //优先取childRowIndex--胡玥修改
     if (row.childRowIndex && row.childRowIndex.length > 0) {
-        for (var i = 0; i < array.length; i++) {
-            result.push(array[i]);
+        for (var i = 0; i < row.childRowIndex.length; i++) {
+            result.push(row.childRowIndex[i]);
         }
     } else if (row.childRow && row.childRow.length > 0) {
         $.each(row.childRow, function () {
@@ -2041,6 +2041,7 @@ var afterGridDivsCreate = function afterGridDivsCreate() {
     this.hideEditMenu();
     this.resetLeftHeight();
     this.isCheckedHeaderRow();
+    this.resetColumnWidthByRealWidth();
     if (typeof this.options.afterCreate == 'function') {
         this.options.afterCreate.call(this);
     }
@@ -2061,6 +2062,7 @@ var resetLeftHeight = function resetLeftHeight() {
     if (!this.options.needResetHeight) {
         return;
     }
+    this.resetLeftHeightTimes = 0;
     var self = this;
     if (this.resetLeftHeightSetTimeout) clearTimeout(this.resetLeftHeightSetTimeout);
     this.resetLeftHeightSetTimeout = setTimeout(function () {
@@ -2070,11 +2072,18 @@ var resetLeftHeight = function resetLeftHeight() {
 
 var resetLeftHeightFun = function resetLeftHeightFun() {
     if (this.options.showNumCol || this.options.multiSelect) {
+        var self = this;
         var $trs = $('#' + this.options.id + '_content_tbody tr[role="row"]');
         var $leftNums = $('#' + this.options.id + '_content_numCol div');
         var $leftSelects = $('#' + this.options.id + '_content_multiSelect > div');
         for (var i = 0; i < $trs.length; i++) {
             var nowRowHeight = $trs[i].offsetHeight;
+            if (nowRowHeight == 0 && this.resetLeftHeightTimes < 50) {
+                this.resetLeftHeightTimes++;
+                this.resetLeftHeightSetTimeout = setTimeout(function () {
+                    resetLeftHeightFun.call(self);
+                }, 100);
+            }
             if ($leftNums[i]) {
                 $leftNums[i].style.height = nowRowHeight + 'px';
                 $leftNums[i].style.lineHeight = nowRowHeight + 'px';
@@ -2448,6 +2457,18 @@ var getColumnByVisibleIndex = function getColumnByVisibleIndex(index) {
     return null;
 };
 
+var getAllVisibleColumns = function getAllVisibleColumns() {
+    var index = -1;
+    var j = 0;
+    var allVisibleColumns = [];
+    for (var i = 0; i < this.gridCompColumnArr.length; i++) {
+        if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+            allVisibleColumns.push(this.gridCompColumnArr[i]);
+        }
+    }
+    return allVisibleColumns;
+};
+
 var getFunObj = {
     getColumnAttr: getColumnAttr,
     getColumnByField: getColumnByField,
@@ -2462,7 +2483,8 @@ var getFunObj = {
     getRowByIndex: getRowByIndex,
     getRowIndexByValue: getRowIndexByValue,
     getChildRowIndex: getChildRowIndex,
-    getColumnByVisibleIndex: getColumnByVisibleIndex
+    getColumnByVisibleIndex: getColumnByVisibleIndex,
+    getAllVisibleColumns: getAllVisibleColumns
 };
 
 /*
@@ -2567,7 +2589,8 @@ var initDefault$1 = function initDefault() {
         columnMenuType: 'base', // border表示存在边线
         needResetHeight: false, // 是否需要根据右侧内容高度调整左侧高度，目前为false，后续提供方案之后再处理此参数
         treeAsync: false, //树表异步加载数据
-        heightAuto: false // 内容自动撑高
+        heightAuto: false, // 内容自动撑高
+        expandColumnIndex: 0
         // sumRowHeight 合计行行高
         // headerHeight 表头高
         // maxHeight heightAuto为true时的最大高度
@@ -3882,8 +3905,9 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
     if (index >= 0) {
         var column = this.gridCompColumnArr[index],
             visibleIndex = this.getVisibleIndexOfColumn(column),
-            canVisible = column.options.canVisible;
-        if (!canVisible) {
+            canVisible = column.options.canVisible,
+            l = $('input:checked', $('#' + this.options.id + '_column_menu_columns_ul')).length;
+        if (!canVisible || l == 1 && visible == false) {
             return;
         }
         // 显示处理
@@ -3893,13 +3917,13 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
                 htmlStr += ' style="width:' + this.formatWidth(column.options.width) + '"';
             }
             htmlStr += '>';
-
+            // 当前列之后的显示列的index
+            var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
             $('#' + this.options.id + '_header_table th:eq(' + index + ')').css('display', "");
             $('#' + this.options.id + '_content_table th:eq(' + index + ')').css('display', "");
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
-            // 当前列之后的显示列的index
-            var nextVisibleIndex = this.getNextVisibleInidexOfColumn(column);
             if (nextVisibleIndex < 1) {
+                this.lastVisibleColumn = column;
                 // 添加在最后面
                 try {
                     $('#' + this.options.id + '_header_table col:last')[0].insertAdjacentHTML('afterEnd', htmlStr);
@@ -3932,6 +3956,10 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
             $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = false;
+            if (this.lastVisibleColumn == column) {
+                var allVisibleColumns = this.getAllVisibleColumns();
+                this.lastVisibleColumn = allVisibleColumns[allVisibleColumns.length - 1];
+            }
         }
         column.options.visible = visible;
         var w = this.contentWidthChange(newContentW);
@@ -3946,14 +3974,34 @@ var setColumnVisibleByIndex = function setColumnVisibleByIndex(index, visible) {
             var oldWidth = this.lastVisibleColumn.options.width;
             this.lastVisibleColumnWidth = oldWidth + (this.contentMinWidth - this.contentRealWidth);
             // modfied by tianxq1 最后一列自动扩展
-            // this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
-            this.setColumnWidth(this.lastVisibleColumn, this.lastVisibleColumnWidth);
+            this.lastVisibleColumn.options.width = this.lastVisibleColumnWidth;
+            // this.setColumnWidth(this.lastVisibleColumn, this.lastVisibleColumnWidth);
         } else {
             this.contentWidth = this.contentRealWidth;
         }
-
+        this.resetColumnWidthByRealWidth();
         this.saveGridCompColumnArrToLocal();
+
+        var columnAllCheck = $('input', $('#' + this.options.id + '_column_menu_ul .header'));
+        if (columnAllCheck.length > 0) {
+            var lll = $('input:not(:checked)', $('#' + this.options.id + '_column_menu_columns_ul')).length;
+            if (lll > 0) {
+                columnAllCheck[0].checked = false;
+            } else {
+                columnAllCheck[0].checked = true;
+            }
+        }
     }
+};
+
+var resetColumnWidthByRealWidth = function resetColumnWidthByRealWidth() {
+    var oThis = this;
+    $.each(this.gridCompColumnArr, function () {
+        if (this.options.realWidth != this.options.width) {
+            oThis.setColumnWidth(this, this.options.realWidth);
+        }
+    });
+    this.resetLastVisibleColumnWidth();
 };
 
 /*
@@ -3967,7 +4015,7 @@ var setCoulmnWidthByField = function setCoulmnWidthByField(field, newWidth) {
  * 根据column对象设置宽度
  */
 var setColumnWidth = function setColumnWidth(column, newWidth) {
-    // if(column != this.lastVisibleColumn){
+    // if (column != this.lastVisibleColumn) {
     if (newWidth > this.minColumnWidth || newWidth == this.minColumnWidth) {
         var nowVisibleThIndex = this.getVisibleIndexOfColumn(column),
             oldWidth = column.options.width,
@@ -3976,13 +4024,12 @@ var setColumnWidth = function setColumnWidth(column, newWidth) {
         this.contentWidth = this.contentWidthChange(cWidth);
         $('#' + this.options.id + '_header_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
         $('#' + this.options.id + '_content_table col:eq(' + nowVisibleThIndex + ')').css('width', newWidth + "px");
-
         column.options.width = newWidth;
         column.options.realWidth = newWidth;
-
         this.resetThVariable();
         this.saveGridCompColumnArrToLocal();
     }
+    this.resetLastVisibleColumnWidth();
     this.columnsVisibleFun();
     // }
 };
@@ -4041,7 +4088,8 @@ var setFunObj = {
     setCoulmnWidthByField: setCoulmnWidthByField,
     setColumnWidth: setColumnWidth,
     setDataSource: setDataSource,
-    setDataSourceFun1: setDataSourceFun1
+    setDataSourceFun1: setDataSourceFun1,
+    resetColumnWidthByRealWidth: resetColumnWidthByRealWidth
 };
 
 /*
@@ -4404,6 +4452,36 @@ var columnsVisibleFun = function columnsVisibleFun() {
     });
     this.contentRealWidth = w;
 };
+
+var resetLastVisibleColumnWidth = function resetLastVisibleColumnWidth() {
+    var allVisibleColumns = this.getAllVisibleColumns();
+    var l = allVisibleColumns.length;
+    var w = 0;
+    var lastW = 0;
+    for (var i = 0; i < allVisibleColumns.length; i++) {
+        var column = allVisibleColumns[i];
+        if (i == l - 1 - this.options.expandColumnIndex) {
+            lastW = column.options.realWidth;
+            this.lastVisibleColumn = column;
+        } else {
+            w += column.options.width;
+        }
+    }
+    if (w < this.contentMinWidth) {
+        var lw = this.contentMinWidth - w;
+        if (lw > lastW) lastW = lw;
+    }
+    this.lastVisibleColumnWidth = lastW;
+    this.lastVisibleColumn.options.width = lastW;
+    if (this.options.expandColumnIndex == 0) {
+        $('#' + this.options.id + '_header_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+        $('#' + this.options.id + '_content_table col:last').css('width', this.lastVisibleColumnWidth + "px");
+    } else {
+        var eqIndex = l - this.options.expandColumnIndex - 1;
+        $('#' + this.options.id + '_header_table col:eq(' + eqIndex + ')').css('width', this.lastVisibleColumnWidth + "px");
+        $('#' + this.options.id + '_content_table col:eq(' + eqIndex + ')').css('width', this.lastVisibleColumnWidth + "px");
+    }
+};
 /*
  * 创建完成之后处理变量
  */
@@ -4504,6 +4582,7 @@ var otherFunObj = {
     setMultiSelect: setMultiSelect,
     setShowNumCol: setShowNumCol,
     isGridShow: isGridShow,
+    resetLastVisibleColumnWidth: resetLastVisibleColumnWidth,
     getBoolean: getBoolean
 };
 
@@ -4767,16 +4846,10 @@ var re_createColumnMenu_base = function re_createColumnMenu_base() {
 var re_createColumnMenu_border = function re_createColumnMenu_border() {
     var oThis = this;
     var htmlStr = '<div class="u-grid-column-menu-border" id="' + this.options.id + '_column_menu">';
-    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul" id="' + this.options.id + '_column_menu_ul">';
-
-    // 创建清除设置
-    htmlStr += '<li class="u-grid-column-menu-li" role="menuitem">';
-    htmlStr += '<div class="u-grid-column-menu-div1" id="' + this.options.id + '_clearSet">';
-    htmlStr += '<span class="u-grid-column-menu-span">' + this.transMap.ml_clear_set + '</span>';
-    htmlStr += '</div></li>';
+    htmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-ul-border" id="' + this.options.id + '_column_menu_ul">';
 
     var columnHtmlStr = '<div class="u-grid-column-menu-columns" id="' + this.options.id + '_column_menu_columns">';
-    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul" id="' + this.options.id + '_column_menu_columns_ul">';
+    columnHtmlStr += '<ul data-role="menu" role="menubar" class="u-grid-column-menu-columns-ul-border" id="' + this.options.id + '_column_menu_columns_ul">';
     var allCheckFlag = true;
     $.each(this.gridCompColumnArr, function (i) {
         if (oThis.getString(this.options.title, '') != '') {
@@ -4799,13 +4872,18 @@ var re_createColumnMenu_border = function re_createColumnMenu_border() {
     var headerHtmlStr = '<li class="u-grid-column-menu-columns-li header" role="menuitem">';
     headerHtmlStr += '<div class="u-grid-column-menu-columns-div1-border">';
     headerHtmlStr += '<div class="u-grid-column-menu-columns-div2-border"><input type="checkbox" ' + checkedStr + '><label></label>&nbsp;显示</div>';
-    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border">项目</span>';
+    headerHtmlStr += '<span class="u-grid-column-menu-columns-span-border" style="text-align:center;">项目名称</span>';
     headerHtmlStr += '</div></li>';
 
     htmlStr += headerHtmlStr;
     htmlStr += columnHtmlStr;
 
-    htmlStr += '</ul></div>';
+    htmlStr += '</ul>';
+    // 创建清除设置
+    htmlStr += '<div class="u-grid-column-menu-div1-border" id="' + this.options.id + '_clearSet">';
+    htmlStr += '<span class="u-grid-column-menu-span-border">' + this.transMap.ml_clear_set + '</span>';
+    htmlStr += '</div>';
+    htmlStr += '</div>';
 
     // 创建数据列区域
 
@@ -6580,7 +6658,7 @@ var swap_initEventFun = function swap_initEventFun() {
             oThis.swapColumnFlag = true;
         }
         oThis.swapColumnFun(e);
-        e.stopPropagation();
+        // e.stopPropagation();
     });
 
     $('#' + this.options.id + '_top').on('mousemove', function (e) {
@@ -6765,8 +6843,10 @@ var swapColumnEnd = function swapColumnEnd(e) {
                 swapGridCompColumn = this.gridCompColumnArr[swapColumnIndex];
             this.gridCompColumnArr.splice(parseInt(swapToColumnIndex) + 1, 0, swapGridCompColumn);
             if (parseInt(swapColumnIndex) < parseInt(swapToColumnIndex)) this.gridCompColumnArr.splice(parseInt(swapColumnIndex), 1);else this.gridCompColumnArr.splice(parseInt(swapColumnIndex) + 1, 1);
+
             this.saveGridCompColumnArrToLocal();
             this.repaintGridDivs();
+            this.resetColumnWidthByRealWidth();
         }
         $('#' + this.options.id + '_clue').remove();
         $('#' + this.options.id + '_swap_top').css('display', 'none');

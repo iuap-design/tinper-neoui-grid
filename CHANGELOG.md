@@ -1,3 +1,20 @@
+<a name="3.2.3"></a>
+## [3.2.3](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.2...v3.2.3) (2017-06-23)
+
+
+### Bug Fixes
+
+* 修改获取rowIndex的bug ([50b5096](https://github.com/iuap-design/tinper-neoui-grid/commit/50b5096))
+
+
+### Features
+
+* grid树表情况下支持异步加载 ([f0cadf4](https://github.com/iuap-design/tinper-neoui-grid/commit/f0cadf4))
+* 优化columnMenuType为border情况下的操作区展示 ([28d7a43](https://github.com/iuap-design/tinper-neoui-grid/commit/28d7a43))
+* 增加参数支持整体宽度大于所有显示列宽度时非最后一列也可以自动扩展宽度 ([175e98d](https://github.com/iuap-design/tinper-neoui-grid/commit/175e98d))
+
+
+
 <a name="3.2.2"></a>
 ## [3.2.2](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.1...v3.2.2) (2017-05-23)
 
