@@ -8,6 +8,9 @@ class column {
     }
 };
 var gridCompColumnProto = column.prototype;
+if(!Object.assign){
+	Object.assign = u.extend;
+}
 Object.assign(gridCompColumnProto, initFunObj);
 
 /*

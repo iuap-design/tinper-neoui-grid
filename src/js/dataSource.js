@@ -12,6 +12,9 @@ class dataSource {
 };
 
 var dataSourceProto = dataSource.prototype;
+if(!Object.assign){
+	Object.assign = u.extend;
+}
 Object.assign(dataSourceProto, initFunObj);
 
 

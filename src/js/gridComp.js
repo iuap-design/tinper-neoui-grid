@@ -55,6 +55,9 @@ class gridComp {
 
 };
 var gridCompProto = gridComp.prototype;
+if(!Object.assign){
+	Object.assign = u.extend;
+}
 Object.assign(gridCompProto, createFunObj);
 Object.assign(gridCompProto, createCalFunOjb);
 Object.assign(gridCompProto, eventFunObj);
