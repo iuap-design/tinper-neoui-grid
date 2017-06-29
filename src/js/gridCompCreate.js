@@ -490,14 +490,31 @@ const createContentLeftMultiSelectRow = function(row, displayFlag) {
         heightStr = 'height:' + (this.options.rowHeight + 1) + 'px;';
     }
 
+    var createFlag = true;
+    if (typeof this.options.onBeforeCreateLeftMul == 'function') {
+        var obj = {
+            gridObj: this,
+            rowObj: row
+        }
+        createFlag = this.options.onBeforeCreateLeftMul.call(this, obj);
+    }
     if (gridBrowser.isIE8) {
         //var	htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect " ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ></div>'
-        var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect " ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+        var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect " >';
+        if (createFlag)
+            htmlStr += '<span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span>';
+        htmlStr += '</div>';
     } else {
         if (re) {
-            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-sel-row" ><span class="u-grid-checkbox-outline  is-checked" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success u-grid-content-sel-row" >';
+            if (createFlag)
+                htmlStr += '<span class="u-grid-checkbox-outline  is-checked" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span>';
+            htmlStr += '</div>';
         } else {
-            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span></div>'
+            var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + heightStr + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" >';
+            if (createFlag)
+                htmlStr += '<span class="u-grid-checkbox-outline" id="checkbox' + tmpcheck + '" value="1"><span class="u-grid-checkbox-tick-outline"></span></span>';
+            htmlStr += '</div>'
         }
         //var htmlStr = '<div style="width:' + this.multiSelectWidth + 'px;' + displayStr + '" class="u-grid-content-multiSelect checkbox check-success" ><input class="u-grid-multi-input" id="checkbox'+tmpcheck+'" type="checkbox" value="1" ><label for="checkbox'+tmpcheck+'"></label></div>'
     }
@@ -832,7 +849,7 @@ const createContentOneRowTd = function(row, createFlag) {
                 tdStyle += 'style="height:' + oThis.options.rowHeight + 'px;line-height:' + rowHeight + 'px;"';
             }
         }
-        htmlStr += '<td role="rowcell"  ' + tdStyle + classStr + ' realValue="' +v+ '" ><div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
+        htmlStr += '<td role="rowcell"  ' + tdStyle + classStr + ' realValue="' + v + '" ><div class="u-grid-content-td-div ' + cssStr + '" ' + treeStyle + '>' + spanStr + iconStr + '<span>' + v.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') + '</span></div></td>';
     });
     return htmlStr;
 };
