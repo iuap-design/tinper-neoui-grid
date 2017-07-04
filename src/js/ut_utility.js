@@ -191,6 +191,22 @@ const SortByFun = function(field, sortType, eqCall) {
     }
 };
 
+const getGridRow = function(row) {
+    var obj = {};
+    var nullField = this.options.nullField;
+    if (nullField) {
+        if (nullField.indexOf(';') > 0) {
+            var nullFields = nullField.split(';');
+            for (var i = 0; i < nullFields.length; i++) {
+                var f = nullFields[i];
+                row[f] = null;
+            }
+        } else {
+            row[nullField] = null;
+        }
+    }
+    return row;
+};
 
 export const utilFunOjb = {
     formatWidth: formatWidth,
@@ -203,5 +219,6 @@ export const utilFunOjb = {
     accAdd: accAdd,
     getTrIndex: getTrIndex,
     getDataTableRowIdByRow: getDataTableRowIdByRow,
-    SortByFun: SortByFun
+    SortByFun: SortByFun,
+    getGridRow: getGridRow
 }

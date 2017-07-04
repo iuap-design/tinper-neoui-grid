@@ -16,10 +16,12 @@ const isCheckedHeaderRow = function() {
  * 添加一行
  */
 const addOneRow = function(row, index) {
+
     if (typeof this.options.filterDataFun == 'function') {
         var rows = this.options.filterDataFun.call(this, [row]);
         row = rows[0];
     }
+    row = this.getGridRow(row);
     var oThis = this,
         displayFlag = 'none',
         rowObj = {},
@@ -203,6 +205,7 @@ const addRows = function(rows, index) {
     if (typeof this.options.filterDataFun == 'function') {
         rows = this.options.filterDataFun.call(this, rows);
     }
+
     this.editClose();
     var htmlStr = '',
         htmlStrmultiSelect = '',
@@ -211,6 +214,11 @@ const addRows = function(rows, index) {
         oThis = this,
         l = this.dataSourceObj.rows.length,
         endFlag = false;
+    var newRows = [];
+    $.each(rows, function() {
+        newRows.push(oThis.getGridRow(this))
+    })
+    rows = newRows;
     if (index != 0) {
         if (index && index > 0) {
             if (l < index)
@@ -346,7 +354,7 @@ const deleteOneRow = function(index) {
         return;
     var rowValue = row.value;
 
-    if (this.showType == 'grid') { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
+    if (this.showType == 'grid' && this.eidtRowIndex != index) { //只有grid展示的时候才处理div，针对隐藏情况下还要添加数据
         this.editClose();
     }
     this.dataSourceObj.rows.splice(index, 1);
@@ -541,18 +549,29 @@ const setRowSelect = function(rowIndex, doms) {
         selectDiv = doms['multiSelectDivs'][rowIndex]
     else
         selectDiv = this.$ele.find('#' + this.options.id + '_content_multiSelect').find('div')[rowIndex]
+
+    var beforeSelectFlag = true;
     if (typeof this.options.onBeforeRowSelected == 'function') {
         var obj = {};
         obj.gridObj = this;
         obj.rowObj = this.dataSourceObj.rows[rowIndex];
         obj.rowIndex = rowIndex;
-        if (!this.options.onBeforeRowSelected(obj)) {
-            if (this.options.multiSelect) {
-                var _input = selectDiv.children[0];
-                _input.checked = false;
-            }
-            return false;
+        beforeSelectFlag = this.options.onBeforeRowSelected(obj)
+    }
+    if (beforeSelectFlag && typeof this.options.onBeforeCreateLeftMul == 'function') {
+        var obj = {
+            gridObj: this,
+            rowObj: this.dataSourceObj.rows[rowIndex]
         }
+        beforeSelectFlag = this.options.onBeforeCreateLeftMul.call(this, obj);
+    }
+    if (!beforeSelectFlag) {
+        if (this.options.multiSelect) {
+            var _input = selectDiv.children[0];
+            if (_input)
+                _input.checked = false;
+        }
+        return false;
     }
     if (!this.options.multiSelect) {
         if (this.selectRowsObj && this.selectRowsObj.length > 0) {

@@ -50,8 +50,10 @@ const setColumnVisibleByIndex = function(index, visible) {
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
+            if(this.showType == 'grid'){
+                $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = true;
+            }
 
-            $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = true;
         }
         // 隐藏处理
         if (column.options.visible == true && !visible) {
