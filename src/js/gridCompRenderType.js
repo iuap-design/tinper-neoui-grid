@@ -132,7 +132,7 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
                             span.title = v;
                         } else if (dataType == 'Int') {
                             v = parseInt(v);
-                            if (v) {
+                            if (!isNaN(v)) {
                                 span.innerHTML = v;
                                 span.title = v;
                             } else {
@@ -148,7 +148,7 @@ const renderTypeByColumn = function(gridCompColumn, i, begin, length, isFixedCol
                             } else {
                                 v = parseFloat(v);
                             }
-                            if (v) {
+                            if (!isNaN(v)) {
                                 span.innerHTML = v;
                                 span.title = v;
                             } else {
