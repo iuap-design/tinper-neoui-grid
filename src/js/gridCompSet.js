@@ -50,7 +50,7 @@ const setColumnVisibleByIndex = function(index, visible) {
                 }
             }
             var newContentW = this.contentWidth + parseInt(column.options.width);
-            if(this.showType == 'grid'){
+            if (this.showType == 'grid') {
                 $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = true;
             }
 
@@ -64,7 +64,9 @@ const setColumnVisibleByIndex = function(index, visible) {
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content_table tbody tr')).css('display', "none");
             // 隐藏之后需要判断总体宽度是否小于内容区最小宽度，如果小于需要将最后一列进行扩展
             var newContentW = this.contentWidth - parseInt(column.options.width);
-            $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = false;
+            if (this.showType == 'grid') {
+                $('#' + this.options.id + '_column_menu_columns_ul li input:eq(' + index + ')')[0].checked = false;
+            }
             if (this.lastVisibleColumn == column) {
                 var allVisibleColumns = this.getAllVisibleColumns();
                 this.lastVisibleColumn = allVisibleColumns[allVisibleColumns.length - 1]
