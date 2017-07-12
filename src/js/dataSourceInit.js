@@ -22,14 +22,16 @@ const sortRows = function(field, sortType) {
         this.basicSortRows(field, sortType);
     }
     this.gridComp.eidtRowIndex = -1;
-    $.each(this.rows, function() {
-        var row = this;
-        $.each(self.gridComp.selectRows, function() {
-            var selectRow = this;
-            if (row.value['$_#_@_id'] == selectRow['$_#_@_id'])
-                row.checked = true;
+    if (self.gridComp && self.gridComp.selectRows && self.gridComp.selectRows.length > 0) {
+        $.each(this.rows, function() {
+            var row = this;
+            $.each(self.gridComp.selectRows, function() {
+                var selectRow = this;
+                if (row.value['$_#_@_id'] == selectRow['$_#_@_id'])
+                    row.checked = true;
+            })
         })
-    })
+    }
 };
 /*
  * 将values转化为rows并进行排序(标准)

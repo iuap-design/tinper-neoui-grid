@@ -838,6 +838,26 @@ const createContentOneRowTd = function(row, createFlag) {
                 rowHeight = oThis.options.rowHeight * oThis.nowGroupRowCount;
         }
 
+        if (oThis.options.groupShowField && f == oThis.options.groupShowField) {
+            var groupV = row.value[oThis.options.groupField];
+            classStr = 'class="u-grid-content-td-group-field';
+            if (oThis.nowGroupShowValue == v) {
+                classStr += ' no-text';
+                oThis.nowGroupShowIndex++;
+            } else {
+                oThis.nowGroupShowIndex = 1;
+                oThis.nowGroupShowValue = v;
+                oThis.nowGroupShowRow = oThis.getGroupRowByGroupValue(groupV);
+                oThis.nowGroupShowRowCount = oThis.nowGroupShowRow.rows.length;
+            }
+            if (oThis.nowGroupShowIndex == oThis.nowGroupShowRowCount) {
+                classStr += ' group-last';
+            }
+            classStr += '"';
+            if (oThis.nowGroupShowIndex == 1)
+                rowHeight = oThis.options.rowHeight * oThis.nowGroupShowRowCount;
+        }
+
         if (!this.options.visible) {
             tdStyle = 'style="display:none;';
             if (oThis.options.rowHeight) {
