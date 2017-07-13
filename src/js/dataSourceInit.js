@@ -13,6 +13,7 @@ const init = function(options, gridComp) {
  * 将values转化为rows并进行排序
  */
 const sortRows = function(field, sortType) {
+    var self = this;
     if (typeof this.gridComp.options.filterDataFun == 'function') {
         this.options.values = this.gridComp.options.filterDataFun.call(this, this.options.values);
     }
