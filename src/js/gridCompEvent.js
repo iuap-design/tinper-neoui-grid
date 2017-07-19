@@ -52,14 +52,15 @@ const initContentDivEventFun = function() {
     });
     // 同步滚动条
     $('#' + this.options.id + '_content_div').on('scroll', function(e) {
-        var sumRowH = 0,l;
+        var sumRowH = 0,
+            l;
         oThis.scrollLeft = this.scrollLeft;
         oThis.scrollTop = this.scrollTop;
         if (oThis.options.fixedFloat == 'right') {
-          l =  oThis.leftW - oThis.scrollLeft ;
+            l = oThis.leftW - oThis.scrollLeft;
 
         } else {
-          l =  oThis.leftW - oThis.scrollLeft + oThis.fixedWidth ;
+            l = oThis.leftW - oThis.scrollLeft + oThis.fixedWidth;
 
         }
         $('#' + oThis.options.id + '_header_table').css('left', l + "px");
@@ -74,7 +75,7 @@ const initContentDivEventFun = function() {
         }
         $('#' + oThis.options.id + '_content_multiSelect').css('top', -oThis.scrollTop + sumRowH + "px");
         $('#' + oThis.options.id + '_content_numCol').css('top', -oThis.scrollTop + sumRowH + "px");
-        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop  + "px");
+        $('#' + oThis.options.id + '_content_fixed_div').css('top', -oThis.scrollTop + "px");
         if (gridBrowser.isIE10 || gridBrowser.isIPAD) {
             //ie10下示例系统中的档案节点新增数据之后前两次无法输入，因为此处会关闭输入控件
         } else {
@@ -84,21 +85,39 @@ const initContentDivEventFun = function() {
     });
     // 数据行相关事件
     $('#' + this.options.id + '_content_tbody').on('click', function(e) {
-        // 双击处理
-        if (typeof oThis.options.onDblClickFun == 'function') {
-            oThis.isDblEvent('tbodyClick', oThis.dblClickFun, e, oThis.clickFun, e);
-        } else {
+        // // 双击处理
+        // if (typeof oThis.options.onDblClickFun == 'function') {
+        //     oThis.isDblEvent('tbodyClick', oThis.dblClickFun, e, oThis.clickFun, e);
+        // } else {
+        //     oThis.clickFun(e);
+        // }
+
+        oThis.clickTimeout = setTimeout(function() {
             oThis.clickFun(e);
-        }
+        }, 300);
     });
+
+    $('#' + this.options.id + '_content_tbody').dblclick(function(e) {
+        if (oThis.clickTimeout)
+            clearTimeout(oThis.clickTimeout)
+        oThis.dblClickFun(e);
+    })
     $('#' + this.options.id + '_content_fixed_tbody').on('click', function(e) {
         // 双击处理
-        if (typeof oThis.options.onDblClickFun == 'function') {
-            oThis.isDblEvent('tbodyClick', oThis.dblClickFun, e, oThis.clickFun, e);
-        } else {
+        // if (typeof oThis.options.onDblClickFun == 'function') {
+        //     oThis.isDblEvent('tbodyClick', oThis.dblClickFun, e, oThis.clickFun, e);
+        // } else {
+        //     oThis.clickFun(e);
+        // }
+        oThis.clickTimeout = setTimeout(function() {
             oThis.clickFun(e);
-        }
+        }, 300);
     });
+    $('#' + this.options.id + '_content_fixed_tbody').dblclick(function(e) {
+        if (oThis.clickTimeout)
+            clearTimeout(oThis.clickTimeout)
+        oThis.dblClickFun(e);
+    })
     $('#' + this.options.id + '_content').on('mousemove', function(e) {
         var $tr = $(e.target).closest('tr'),
             $div = $(e.target).closest('div'),

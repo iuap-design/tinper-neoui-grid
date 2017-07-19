@@ -2,9 +2,11 @@
  * 双击/单击处理
  */
 const isDblEvent = function(eventname, dbFun, dbArg, Fun, Arg) {
-    if (this.currentEventName != null && this.currentEventName == eventname) {
+    var nowTarget = dbArg.target;
+    if (this.currentEventName != null && this.currentEventName == eventname && this.currentTarget != null && this.currentTarget == nowTarget) {
         dbFun.call(this, dbArg);
         this.currentEventName = null;
+        this.currentTarget = null;
         if (this.cleanCurrEventName)
             clearTimeout(this.cleanCurrEventName);
     } else {
@@ -12,8 +14,10 @@ const isDblEvent = function(eventname, dbFun, dbArg, Fun, Arg) {
         if (this.cleanCurrEventName)
             clearTimeout(this.cleanCurrEventName);
         this.currentEventName = eventname;
+        this.currentTarget = nowTarget;
         this.cleanCurrEventName = setTimeout(function() {
             oThis.currentEventName = null;
+            this.currentTarget = null;
             Fun.call(oThis, Arg);
         }, 250);
     }
