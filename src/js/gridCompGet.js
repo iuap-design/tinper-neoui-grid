@@ -52,12 +52,12 @@ const getVisibleIndexOfColumn = function(column) {
     var j = 0;
     for (var i = 0; i < this.gridCompColumnArr.length; i++) {
         if (this.gridCompColumnArr[i] == column) {
-            if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+            if (!($('#' + this.options.id + '_header_table').find('th').eq(i).css('display') == 'none')) {
                 index = j;
             }
             break;
         }
-        if (!($('#' + this.options.id + '_header').find('th').eq(i).css('display') == 'none')) {
+        if (!($('#' + this.options.id + '_header_table').find('th').eq(i).css('display') == 'none')) {
             j++;
         }
     }
