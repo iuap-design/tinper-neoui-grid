@@ -10,7 +10,6 @@
     </tr>
     <tr>
     	  <td>function</td>
-    	  
     	  <td>在数据行被选中之前触发，可在function中决定是否选中数据行，return true则继续当前操作，return false则取消当前操作，调用时传入参数为object，object属性说明如下</td>
     </tr>
 </table>

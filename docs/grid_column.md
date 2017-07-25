@@ -1,6 +1,6 @@
 # Grid 列属性API
 
-## ﻿field
+## field
 
 <table>
     <tr>

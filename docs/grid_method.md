@@ -1,6 +1,6 @@
 # Grid 方法API
 
-## ﻿setRequired
+## setRequired
 
 **说明**
 
