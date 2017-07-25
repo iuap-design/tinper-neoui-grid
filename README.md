@@ -8,7 +8,7 @@
 表格控件将数据以表格的方式进行展示，同时提供了排序、交换列、数字列、复选、合计、自定义渲染、修改等复杂功能，满足了复杂场景下数据展示的需求。
 
 ## 快速上手
-[控件使用说明](https://github.com/iuap-design/grid/blob/master/docs/README.md)
+[控件使用说明](https://github.com/iuap-design/grid/blob/release/docs/README.md)
 
 ## 目录说明
 
