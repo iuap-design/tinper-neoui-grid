@@ -91,16 +91,21 @@ const initContentDivEventFun = function() {
         // } else {
         //     oThis.clickFun(e);
         // }
-
-        oThis.clickTimeout = setTimeout(function() {
+        if (typeof oThis.options.onDblClickFun == 'function') {
+            oThis.clickTimeout = setTimeout(function() {
+                oThis.clickFun(e);
+            }, 300);
+        } else {
             oThis.clickFun(e);
-        }, 300);
+        }
     });
 
     $('#' + this.options.id + '_content_tbody').dblclick(function(e) {
-        if (oThis.clickTimeout)
-            clearTimeout(oThis.clickTimeout)
-        oThis.dblClickFun(e);
+        if (typeof oThis.options.onDblClickFun == 'function') {
+            if (oThis.clickTimeout)
+                clearTimeout(oThis.clickTimeout)
+            oThis.dblClickFun(e);
+        }
     })
     $('#' + this.options.id + '_content_fixed_tbody').on('click', function(e) {
         // 双击处理
@@ -109,14 +114,20 @@ const initContentDivEventFun = function() {
         // } else {
         //     oThis.clickFun(e);
         // }
-        oThis.clickTimeout = setTimeout(function() {
+        if (typeof oThis.options.onDblClickFun == 'function') {
+            oThis.clickTimeout = setTimeout(function() {
+                oThis.clickFun(e);
+            }, 300);
+        } else {
             oThis.clickFun(e);
-        }, 300);
+        }
     });
     $('#' + this.options.id + '_content_fixed_tbody').dblclick(function(e) {
-        if (oThis.clickTimeout)
-            clearTimeout(oThis.clickTimeout)
-        oThis.dblClickFun(e);
+        if (typeof oThis.options.onDblClickFun == 'function') {
+            if (oThis.clickTimeout)
+                clearTimeout(oThis.clickTimeout)
+            oThis.dblClickFun(e);
+        }
     })
     $('#' + this.options.id + '_content').on('mousemove', function(e) {
         var $tr = $(e.target).closest('tr'),

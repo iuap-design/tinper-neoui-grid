@@ -676,7 +676,7 @@ const setRowUnselect = function(rowIndex) {
     }
     if (this.options.multiSelect) {
         // $('#' + this.options.id + '_content_multiSelect input:eq(' + rowIndex+ ')')[0].checked = false;
-        $('#' + this.options.id + '_content_multiSelect .u-grid-checkbox-outline:eq(' + rowIndex + ')').removeClass('is-checked');
+        $('#' + this.options.id + '_content_multiSelect .u-grid-content-multiSelect:eq(' + rowIndex + ')').find('.u-grid-checkbox-outline').removeClass('is-checked');
     }
     var ini = rowIndex;
     if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && this.options.editType == 'form') {

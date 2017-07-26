@@ -470,7 +470,7 @@ const _getNextEditColIndex = function(gridObj, nowIndex, $tr) {
             beforeFlag = false
         }
     }
-    if (!column.options.visible || !column.options.editable || !beforeFlag) {
+    if ((column && column.options && !column.options.visible) || (column && column.options && !column.options.editable) || !beforeFlag) {
         colIndex = _getNextEditColIndex(gridObj, nowIndex + 1, $tr);
     } else {
         colIndex = nowIndex;
@@ -583,7 +583,7 @@ const edit_initEventFun = function() {
             if ($e.attr('role') == 'grid-for-edit') {
                 flag = false;
             }
-            if($e.parent().length == 0){
+            if ($e.parent().length == 0) {
                 flag = false;
             }
             if (flag) {
