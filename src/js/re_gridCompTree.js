@@ -239,11 +239,7 @@ const re_getChildRowIndex = function(row) {
     var result = [],
         oThis = this;
     //优先取childRowIndex--胡玥修改
-    if(row.childRowIndex && row.childRowIndex.length > 0){
-        for (var i = 0; i < row.childRowIndex.length; i++) {
-            result.push(row.childRowIndex[i]);
-        }
-    }else if (row.childRow && row.childRow.length > 0) {
+    if (row.childRow && row.childRow.length > 0) {
         $.each(row.childRow, function() {
             var index = oThis.getRowIndexByValue(oThis.options.keyField, this.keyValue)
             result.push(index)
