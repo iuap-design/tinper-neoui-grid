@@ -138,6 +138,9 @@ const setShowHeader = function(showHeader) {
         $('#' + this.options.id + '_header').css('display', "none");
     }
 };
+/*
+ * 设置数据列的精度
+ */
 const setColumnPrecision = function(field, precision) {
     var gridColumn = this.getColumnByField(field);
     gridColumn.options.precision = precision;
