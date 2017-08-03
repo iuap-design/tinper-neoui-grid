@@ -347,7 +347,7 @@ const createThead = function(createFlag) {
         if (this.options.required) {
             requiredHtml = '<span style="color:red;">*</span>';
         }
-        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  ' + colorStype + '>' + this.options.title + requiredHtml + '</div>';
+        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  style="text-align:' + this.options.textAlign + '" ' + colorStype + '>' + this.options.title + requiredHtml + '</div>';
         /*if(oThis.options.columnMenu && createFlag != 'fixed'){
             // 创建右侧按钮图标
             htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light " field="' + this.options.field + '" style="display:none;"></div>';
