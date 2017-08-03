@@ -14,7 +14,7 @@ const setColumnVisibleByIndex = function(index, visible) {
             visibleIndex = this.getVisibleIndexOfColumn(column),
             canVisible = column.options.canVisible,
             l = $('input:checked', $('#' + this.options.id + '_column_menu_columns_ul')).length;
-        if (!canVisible || (l == 1 && visible == false)) {
+        if (!canVisible && visible == false) {
             return;
         }
         // 显示处理
@@ -29,7 +29,7 @@ const setColumnVisibleByIndex = function(index, visible) {
             $('#' + this.options.id + '_header_table th:eq(' + index + ')').css('display', "");
             $('#' + this.options.id + '_content_table th:eq(' + index + ')').css('display', "");
             $('td:eq(' + index + ')', $('#' + this.options.id + '_content tbody tr')).css('display', "");
-            if (nextVisibleIndex < 1) {
+            if (nextVisibleIndex < 0) {
                 this.lastVisibleColumn = column;
                 // 添加在最后面
                 try {
