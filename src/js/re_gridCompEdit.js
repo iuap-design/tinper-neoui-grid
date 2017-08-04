@@ -66,7 +66,7 @@ const editRow = function($tr, colIndex) {
     this.editRowObj = this.cloneObj(row);
     if (this.options.editType == 'default') {
         var column = isFixedCol ? this.gridCompColumnFixedArr[colIndex] : this.gridCompColumnArr[colIndex]
-        if (column.options.editable) {
+        if (column && column.options.editable) {
             var td = $('td:eq(' + colIndex + ')', $tr)[0];
             var field = column.options.field;
             var value = $(row).attr(field);
@@ -450,7 +450,25 @@ const nextEditShow = function() {
 
 
     colIndex = _getNextEditColIndex(this, colIndex, $tr);
-    this.editRowFun($tr, colIndex);
+    var column = this.gridCompColumnArr[colIndex];
+    if (column) {
+        this.editRowFun($tr, colIndex);
+    } else {
+        var $nextTr = $tr.next('tr')
+        if ($nextTr.length > 0) {
+            $tr = $nextTr;
+            colIndex = 0;
+            $tr.click(); //触发下一行的焦点
+        } else {
+            return;
+        }
+        colIndex = _getNextEditColIndex(this, colIndex, $tr);
+        var column = this.gridCompColumnArr[colIndex];
+        if (column) {
+            this.editRowFun($tr, colIndex);
+        }
+    }
+
 };
 
 const _getNextEditColIndex = function(gridObj, nowIndex, $tr) {
