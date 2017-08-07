@@ -1,3 +1,21 @@
+<a name="3.2.4"></a>
+## [3.2.4](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.3...v3.2.4) (2017-08-04)
+
+
+### Bug Fixes
+
+* 修复inter和float的数值为0时就设置为空字符串的bug ([d66e10e](https://github.com/iuap-design/tinper-neoui-grid/commit/d66e10e))
+* 修改显示和隐藏grid菜单的时候列的计算宽度bug ([48478ad](https://github.com/iuap-design/tinper-neoui-grid/commit/48478ad))
+
+
+### Features
+
+* grid增加参数nullField用于过滤datatable中存在但是grid中不应存在的字段（主要针对主子表情况下的子表字段） ([e303507](https://github.com/iuap-design/tinper-neoui-grid/commit/e303507))
+* grid增加接口onBeforeCreateLeftMul支持是否创建数据行前的复选框 ([5e2686b](https://github.com/iuap-design/tinper-neoui-grid/commit/5e2686b))
+* 增加grid列支持通过参数来配置文字对齐方式 ([5f28bb7](https://github.com/iuap-design/tinper-neoui-grid/commit/5f28bb7))
+
+
+
 <a name="3.2.3"></a>
 ## [3.2.3](https://github.com/iuap-design/tinper-neoui-grid/compare/v3.2.2...v3.2.3) (2017-06-23)
 
