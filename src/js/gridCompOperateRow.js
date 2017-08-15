@@ -682,10 +682,10 @@ const setRowUnselect = function(rowIndex) {
     if (this.eidtRowIndex > -1 && this.eidtRowIndex < rowIndex && this.options.editType == 'form') {
         ini++;
     }
-    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
-    $('#' + this.options.id + '_content_fixed_tbody tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_tbody').find('tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_tbody').find('tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]:eq(' + ini + ') a').removeClass("u-grid-content-sel-row");
     if (this.options.multiSelect) {
         $('#' + this.options.id + '_content_multiSelect >div:eq(' + ini + ')').removeClass("u-grid-content-sel-row");
     }
@@ -764,9 +764,29 @@ const setAllRowUnSelect = function() {
             return;
         }
     }
-    for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
-        this.setRowUnselect(i);
+    // for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
+    //     this.setRowUnselect(i);
+    // }
+    if (this.options.multiSelect) {
+        $('#' + this.options.id + '_content_multiSelect .u-grid-content-multiSelect').find('.u-grid-checkbox-outline').removeClass('is-checked');
     }
+    $('#' + this.options.id + '_content_tbody').find('tr[role="row"]').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_tbody').find('tr[role="row"] a').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"]').removeClass("u-grid-content-sel-row");
+    $('#' + this.options.id + '_content_fixed_tbody').find('tr[role="row"] a').removeClass("u-grid-content-sel-row");
+    if (this.options.multiSelect) {
+        $('#' + this.options.id + '_content_multiSelect >div').removeClass("u-grid-content-sel-row");
+    }
+    if (this.options.showNumCol) {
+        $('#' + this.options.id + '_content_numCol >div').removeClass("u-grid-content-sel-row");
+    }
+    oThis.selectRows = [];
+    oThis.selectRowsObj = [];
+    oThis.selectRowsIndex = [];
+    $.each(this.dataSourceObj.rows, function() {
+        this.checked = false;
+    })
+    $('#' + this.options.id + '_header_multi_input').removeClass('is-checked');
     this.hasChecked = false;
     if (typeof this.options.onAllRowUnSelected == 'function') {
         var obj = {};
