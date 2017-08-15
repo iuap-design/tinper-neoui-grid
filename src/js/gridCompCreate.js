@@ -337,17 +337,17 @@ const createThead = function(createFlag) {
         if (this.options.headerColor || oThis.options.headerHeight) {
             var headerC = '';
             var headerH = '';
-            if (this.options.headerColor)
-                headerC = 'color:' + this.options.headerColor + ';';
-            if (oThis.options.headerHeight)
-                headerH = 'height:' + oThis.options.headerHeight + 'px;line-height:' + oThis.options.headerHeight + 'px;';
-            colorStype = 'style="' + headerC + headerH + '"';
+            if (this.options.headerColor) headerC = 'color:' + this.options.headerColor + ';';
+            if (oThis.options.headerHeight) headerH = 'height:' + oThis.options.headerHeight + 'px;line-height:' + oThis.options.headerHeight + 'px;';
+            colorStype = 'style="' + headerC + headerH + ';text-align:' + this.options.textAlign + ';"';
+        }else{
+            colorStype = 'style="text-align:' + this.options.textAlign + '"';
         }
         var requiredHtml = '';
         if (this.options.required) {
             requiredHtml = '<span style="color:red;">*</span>';
         }
-        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '"  style="text-align:' + this.options.textAlign + '" ' + colorStype + '>' + this.options.title + requiredHtml + '</div>';
+        htmlStr += '<div class="u-grid-header-link" field="' + this.options.field + '" ' + colorStype + '>' + this.options.title + requiredHtml + '</div>';
         /*if(oThis.options.columnMenu && createFlag != 'fixed'){
             // 创建右侧按钮图标
             htmlStr += '<div class="u-grid-header-columnmenu uf uf-navmenu-light " field="' + this.options.field + '" style="display:none;"></div>';
