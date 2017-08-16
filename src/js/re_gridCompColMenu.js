@@ -272,8 +272,11 @@ const colMenu_initGridEventFun = function() {
     // $('#grid2_column_menu_ul .header input')
     $('#' + this.options.id + '_column_menu_ul .header input').on('click', function(e) {
         var nowCheck = $(this)[0].checked;
-        $.each(oThis.gridCompColumnArr, function(i) {
-            oThis.setColumnVisibleByColumn(this, nowCheck);
+        $.each(oThis.gridCompColumnArr, function (i) {
+            //当全部取消选中的时候，第一个不会取消选中--胡玥
+            if(nowCheck || i !== 0){
+                oThis.setColumnVisibleByColumn(this, nowCheck);
+            }
         });
     });
     /*header 按钮处理结束*/
