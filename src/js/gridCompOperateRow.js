@@ -780,9 +780,9 @@ const setAllRowUnSelect = function() {
     if (this.options.showNumCol) {
         $('#' + this.options.id + '_content_numCol >div').removeClass("u-grid-content-sel-row");
     }
-    oThis.selectRows = [];
-    oThis.selectRowsObj = [];
-    oThis.selectRowsIndex = [];
+    this.selectRows = [];
+    this.selectRowsObj = [];
+    this.selectRowsIndex = [];
     $.each(this.dataSourceObj.rows, function() {
         this.checked = false;
     })
