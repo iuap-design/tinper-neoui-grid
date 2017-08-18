@@ -401,6 +401,7 @@ content区域css begin
 
 .u-grid-content-td-div.height-auto {
     height: auto;
+    min-height: 44px;
     white-space: normal;
     overflow: visible;
     /*line-height: 1;*/
