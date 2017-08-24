@@ -37,14 +37,21 @@ const re_initGridCompFixedColumn = function() {
 const fixed_columnsVisibleFun = function() {
     // 扩展方法
     var oThis = this,
-        fixW = 0;
+        fixW = 0,
+        fixW_R = 0;
     $.each(this.gridCompColumnFixedArr, function() {
         if (this.options.visible) {
+             //NC轻量化在fixedFloat为right的时候，会导致没法拖拽宽度
+             if(oThis.options.fixedFloat!=="right"){
+                fixW_R += parseInt(this.options.width);
+            }
             fixW += parseInt(this.options.width);
             this.firstColumn = oThis.firstColumn;
             oThis.firstColumn = false;
         }
     });
+    //新增加fixedWidth_R为mousemove
+    this.fixedWidth_R = fixW_R;
     this.fixedRealWidth = fixW;
     this.fixedWidth = fixW;
 };

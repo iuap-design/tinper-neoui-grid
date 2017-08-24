@@ -127,7 +127,12 @@ const dragEnd = function(e) {
 const headerThDrag = function(e, ele) {
     if (!this.dragFlag && !this.swapColumnFlag && ele && ele.gridCompColumn && ele.gridCompColumn.options.canDrag && $('#' + this.options.id + '_resize_handle')[0].nowTh != ele) {
         var $ele = $(ele);
-        $('#' + this.options.id + '_resize_handle').css('left', ele.attrRightTotalWidth - this.scrollLeft - 4 + this.leftW + this.fixedWidth);
+        //当fixedFloat为right的时候，计算拖拽位置有问题-NC轻量化-huyue
+        if(this.options.fixedFloat === 'right'){
+            $('#' + this.options.id + '_resize_handle').css('left', ele.attrRightTotalWidth - this.scrollLeft - 4 + this.leftW + this.fixedWidth_R);
+        }else{
+            $('#' + this.options.id + '_resize_handle').css('left', ele.attrRightTotalWidth - this.scrollLeft - 4 + this.leftW + this.fixedWidth);
+        }
         $('#' + this.options.id + '_resize_handle')[0].nowTh = ele;
     }
 };
