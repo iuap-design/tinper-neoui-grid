@@ -752,6 +752,7 @@ const setAllRowSelect = function() {
 };
 /*
  * 反选所有行
+ * 所有行取消选中--huyue
  */
 const setAllRowUnSelect = function() {
     // $('#' + this.options.id + '_header_multi_input').attr('checked', false)
@@ -764,9 +765,11 @@ const setAllRowUnSelect = function() {
             return;
         }
     }
-    // for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
-    //     this.setRowUnselect(i);
-    // }
+    // begin-在调用该方式时需要将row对象更新，否则会导致虽然点击取消全选但是获取到的还是全选的row--huyue
+    for (var i = 0; i < this.dataSourceObj.rows.length; i++) {
+        this.setRowUnselect(i);
+    }
+    // end
     if (this.options.multiSelect) {
         $('#' + this.options.id + '_content_multiSelect .u-grid-content-multiSelect').find('.u-grid-checkbox-outline').removeClass('is-checked');
     }
