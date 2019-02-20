@@ -1183,3 +1183,14 @@ form展示区域css end
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
 }
+
+
+.u-grid-header-link .u-grid-require-span{
+    max-width: calc(100% - 10px);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 1em;
+    line-height: 1em;
+}
